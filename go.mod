@@ -23,3 +23,5 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+require github.com/caarlos0/env/v6 v6.7.1 // indirect
