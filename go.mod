@@ -24,4 +24,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-require github.com/caarlos0/env/v6 v6.7.1 // indirect
+require (
+	github.com/caarlos0/env/v6 v6.7.1 // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
+)

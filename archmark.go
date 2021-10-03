@@ -8,6 +8,7 @@ import (
 
 	"github.com/chromedp/chromedp"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/sparkymat/archmark/config"
 )
 
@@ -32,7 +33,7 @@ func retrieve(cfg config.API, url string) string {
 		log.Print(err)
 		return ""
 	}
-	return body
+	return ""
 }
 
 const ConfigKey = "config"
@@ -45,6 +46,11 @@ func ConfigMiddleware(cfg config.API) gin.HandlerFunc {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Print("Error loading .env file. Expecting ENV to be set")
+	}
+
 	cfg := config.New()
 	log.Printf("%+v", cfg)
 
