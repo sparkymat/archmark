@@ -3,7 +3,7 @@ module github.com/sparkymat/archmark
 go 1.17
 
 require (
-	github.com/chromedp/cdproto v0.0.0-20210921215903-b0b4414ddbe0 // indirect
+	github.com/chromedp/cdproto v0.0.0-20211002082225-0242b9dca9f4 // indirect
 	github.com/chromedp/chromedp v0.7.4
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.7.4

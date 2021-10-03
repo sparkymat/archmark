@@ -3,6 +3,8 @@ github.com/caarlos0/env/v6 v6.7.1/go.mod h1:FE0jGiAnQqtv2TenJ4KTa8+/T2Ss8kdS5s1V
 github.com/chromedp/cdproto v0.0.0-20210713064928-7d28b402946a/go.mod h1:At5TxYYdxkbQL0TSefRjhLE3Q0lgvqKKMSFUglJ7i1U=
 github.com/chromedp/cdproto v0.0.0-20210921215903-b0b4414ddbe0 h1:vrVr4waSUQaerQiDqL2S9tzZ6V7SdRyXUGn+S7dORJc=
 github.com/chromedp/cdproto v0.0.0-20210921215903-b0b4414ddbe0/go.mod h1:At5TxYYdxkbQL0TSefRjhLE3Q0lgvqKKMSFUglJ7i1U=
+github.com/chromedp/cdproto v0.0.0-20211002082225-0242b9dca9f4 h1:5s+L1cvXzolXsfAChfBr6KmD86rJR5BTeJnz36vQCmo=
+github.com/chromedp/cdproto v0.0.0-20211002082225-0242b9dca9f4/go.mod h1:At5TxYYdxkbQL0TSefRjhLE3Q0lgvqKKMSFUglJ7i1U=
 github.com/chromedp/chromedp v0.7.4 h1:U+0d3WbB/Oj4mDuBOI0P7S3PJEued5UZIl5AJ3QulwU=
 github.com/chromedp/chromedp v0.7.4/go.mod h1:dBj+SXuQHznp6ZPwZeDDEBZKwclUwDLbZ0hjMialMYs=
 github.com/chromedp/sysutil v1.0.0 h1:+ZxhTpfpZlmchB58ih/LBHX52ky7w2VhQVKQMucy3Ic=

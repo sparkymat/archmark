@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/chromedp/cdproto/cdp"
+	"github.com/chromedp/cdproto/input"
+	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -25,7 +28,7 @@ func retrieve(cfg config.API, url string) string {
 	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel()
 
-	ctx, cancel := context.WithTimeout(allocCtx, time.Second*5)
+	ctx, cancel := context.WithTimeout(allocCtx, time.Second*30)
 
 	ctx, cancel = chromedp.NewContext(ctx, chromedp.WithLogf(log.Printf))
 	defer cancel()
@@ -38,6 +41,18 @@ func retrieve(cfg config.API, url string) string {
 		chromedp.SendKeys("#id_password", cfg.ArchiveBoxPassword(), chromedp.ByQuery),
 		chromedp.Submit("#id_username", chromedp.ByQuery),
 		chromedp.WaitVisible("#recent-actions-module", chromedp.ByQuery),
+		chromedp.Navigate(fmt.Sprintf("%s/add/", cfg.ArchiveBoxPath())),
+		chromedp.WaitVisible("#id_url", chromedp.ByQuery),
+		chromedp.SendKeys("#id_url", url, chromedp.ByQuery),
+		chromedp.Click("#id_depth_0", chromedp.ByQuery),
+		chromedp.QueryAfter("#id_archive_methods > option[value=\"title\"]", func(ctx context.Context, id runtime.ExecutionContextID, nodes ...*cdp.Node) error {
+			return chromedp.MouseClickNode(nodes[0], chromedp.ButtonModifiers(input.ModifierCtrl)).Do(ctx)
+		}, chromedp.ByQuery),
+		chromedp.QueryAfter("#id_archive_methods > option[value=\"singlefile\"]", func(ctx context.Context, id runtime.ExecutionContextID, nodes ...*cdp.Node) error {
+			return chromedp.MouseClickNode(nodes[0], chromedp.ButtonModifiers(input.ModifierCtrl)).Do(ctx)
+		}, chromedp.ByQuery),
+		chromedp.Click("#submit", chromedp.ByQuery),
+		chromedp.WaitVisible("pre#stdout", chromedp.ByQuery),
 		chromedp.FullScreenshot(&buf, 90),
 	); err != nil {
 		if err := ioutil.WriteFile("fullScreenshot.png", buf, 0644); err != nil {
