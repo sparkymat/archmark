@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/chromedp/cdproto v0.0.0-20210921215903-b0b4414ddbe0 // indirect
-	github.com/chromedp/chromedp v0.7.4 // indirect
+	github.com/chromedp/chromedp v0.7.4
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -25,6 +25,6 @@ require (
 )
 
 require (
-	github.com/caarlos0/env/v6 v6.7.1 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
+	github.com/caarlos0/env/v6 v6.7.1
+	github.com/joho/godotenv v1.4.0
 )
