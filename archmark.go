@@ -28,6 +28,6 @@ func main() {
 	)
 
 	r := gin.Default()
-	router.Setup(r, cfg)
+	router.Setup(r, cfg, db)
 	r.Run(":8080")
 }
