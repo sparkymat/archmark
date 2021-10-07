@@ -1,6 +1,9 @@
 package config
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/caarlos0/env/v6"
 )
 
@@ -8,6 +11,7 @@ type API interface {
 	ArchiveBoxPath() string
 	ArchiveBoxUsername() string
 	ArchiveBoxPassword() string
+	DBConnectionString() string
 }
 
 func New() API {
@@ -37,8 +41,38 @@ func (s *service) ArchiveBoxPassword() string {
 	return s.envConfig.ArchiveBoxPassword
 }
 
+func (s *service) DBConnectionString() string {
+	connFragments := []string{
+		fmt.Sprintf("host=%s", s.envConfig.DBHostname),
+		fmt.Sprintf("port=%d", s.envConfig.DBPort),
+		fmt.Sprintf("dbname=%s", s.envConfig.DBDatabase),
+	}
+
+	if s.envConfig.DBSSLMode {
+		connFragments = append(connFragments, "sslmode=require")
+	} else {
+		connFragments = append(connFragments, "sslmode=disable")
+	}
+
+	if s.envConfig.DBUsername != "" {
+		connFragments = append(connFragments, fmt.Sprintf("user=%s", s.envConfig.DBUsername))
+	}
+
+	if s.envConfig.DBPassword != "" {
+		connFragments = append(connFragments, fmt.Sprintf("password=%s", s.envConfig.DBPassword))
+	}
+
+	return strings.Join(connFragments, " ")
+}
+
 type envConfig struct {
 	ArchiveBoxPath     string `env:"ARCHIVE_BOX_PATH,required"`
 	ArchiveBoxUsername string `env:"ARCHIVE_BOX_USERNAME,required"`
 	ArchiveBoxPassword string `env:"ARCHIVE_BOX_PASSWORD,required"`
+	DBHostname         string `env:"DB_HOSTNAME,required"`
+	DBPort             int64  `env:"DB_PORT,required"`
+	DBUsername         string `env:"DB_USERNAME"`
+	DBPassword         string `env:"DB_PASSWORD"`
+	DBDatabase         string `env:"DB_DATABASE,required"`
+	DBSSLMode          bool   `env:"DB_SSL_MODE"`
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -19,8 +18,8 @@ type User struct {
 	CreatedAt         time.Time      `gorm:"default:current_timestamp"`
 	UpdatedAt         time.Time      `gorm:"default:current_timestamp"`
 	DeletedAt         gorm.DeletedAt `gorm:"index"`
-	Username          string         `gorm:"index"`
-	EncryptedPassword string
+	Username          string         `gorm:"not null;index"`
+	EncryptedPassword string         `gorm:"not null"`
 }
 
 func main() {
@@ -31,8 +30,7 @@ func main() {
 
 	cfg := config.New()
 
-	connectionString := fmt.Sprintf("host=localhost dbname=archmark port=5432 sslmode=disable")
-	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(cfg.DBConnectionString()), &gorm.Config{})
 
 	db.AutoMigrate(&User{})
 
