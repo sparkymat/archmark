@@ -22,12 +22,26 @@ func main() {
 
 	db, err := gorm.Open(postgres.Open(cfg.DBConnectionString()), &gorm.Config{})
 
+	if err != nil {
+		panic(err)
+	}
+
 	db.AutoMigrate(
 		&model.User{},
 		&model.Bookmark{},
+		&model.Configuration{},
 	)
 
+	var siteConfig model.Configuration
+	result := db.First(&siteConfig)
+	if result.RowsAffected == 0 {
+		result = db.Create(&siteConfig)
+		if result.Error != nil {
+			panic(result.Error)
+		}
+	}
+
 	r := gin.Default()
-	router.Setup(r, cfg, db)
+	router.Setup(r, cfg, db, siteConfig)
 	r.Run(":8080")
 }
