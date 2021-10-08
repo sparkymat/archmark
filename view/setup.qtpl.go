@@ -65,15 +65,15 @@ func StreamSetup(qw422016 *qt422016.Writer, siteName string, errors []string) {
 //line view/setup.qtpl:18
 	qw422016.E().S(siteName)
 //line view/setup.qtpl:18
-	qw422016.N().S(`" autofocus>
+	qw422016.N().S(`" autofocus autocomplete="hidden">
           </div>
           <div class="my-1 flex flex-col">
             <label for="admin_password" class="text-base font-bold">Admin password</label>
-            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password">
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password" autocomplete="hidden">
           </div>
           <div class="my-1 flex flex-col">
             <label for="admin_password_confirmation" class="text-base font-bold">Confirm admin password</label>
-            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation">
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation" autocomplete="hidden">
           </div>
           <input type="submit" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
         </div>
