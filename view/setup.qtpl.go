@@ -18,7 +18,7 @@ var (
 )
 
 //line view/setup.qtpl:1
-func StreamSetup(qw422016 *qt422016.Writer, siteName string) {
+func StreamSetup(qw422016 *qt422016.Writer, siteName string, errors []string) {
 //line view/setup.qtpl:1
 	qw422016.N().S(`
   <div class="container mx-auto flex flex-col items-stretch p-2">
@@ -27,56 +27,85 @@ func StreamSetup(qw422016 *qt422016.Writer, siteName string) {
 	qw422016.E().S(siteName)
 //line view/setup.qtpl:3
 	qw422016.N().S(`</h1>
-    <h3 class="text-2xl text-center my-2">Setup</h3>
-    <p>Set up your new instance of archmark!</p>
-    <form>
-      <div class="flex flex-col mt-4">
-        <div class="my-2 flex flex-col flex-grow">
-          <label for="site_name" class="text-base">Site name</label>
-          <input type="text" class="text-lg border rounded p-1 my-2" id="site_name" name="site_name" value="`)
-//line view/setup.qtpl:10
+    <div class="border rounded-sm p-2 lg:p-4 w-full lg:w-1/3 mx-auto bg-gray-100">
+      <h3 class="text-2xl text-center my-1">Setup</h3>
+      <p>Configure your new instance of archmark!</p>
+      <form>
+        <div class="flex flex-col mt-2">
+          `)
+//line view/setup.qtpl:9
+	if len(errors) > 0 {
+//line view/setup.qtpl:9
+		qw422016.N().S(`
+            <ul class="border p-2 rounded-sm border-red-400 border-dashed">
+              `)
+//line view/setup.qtpl:11
+		for _, err := range errors {
+//line view/setup.qtpl:11
+			qw422016.N().S(`
+                <li class="font-base text-red-400">`)
+//line view/setup.qtpl:12
+			qw422016.E().S(err)
+//line view/setup.qtpl:12
+			qw422016.N().S(`</li>
+              `)
+//line view/setup.qtpl:13
+		}
+//line view/setup.qtpl:13
+		qw422016.N().S(`
+            </ul>
+          `)
+//line view/setup.qtpl:15
+	}
+//line view/setup.qtpl:15
+	qw422016.N().S(`
+          <div class="my-1 flex flex-col flex-grow">
+            <label for="site_name" class="text-base font-bold">Site name</label>
+            <input type="text" class="text-lg border rounded p-1 my-2" id="site_name" name="site_name" value="`)
+//line view/setup.qtpl:18
 	qw422016.E().S(siteName)
-//line view/setup.qtpl:10
+//line view/setup.qtpl:18
 	qw422016.N().S(`" autofocus>
+          </div>
+          <div class="my-1 flex flex-col">
+            <label for="admin_password" class="text-base font-bold">Admin password</label>
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password">
+          </div>
+          <div class="my-1 flex flex-col">
+            <label for="admin_password_confirmation" class="text-base font-bold">Confirm admin password</label>
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation">
+          </div>
+          <input type="submit" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
         </div>
-        <div class="my-2 flex flex-col">
-          <label for="admin_password" class="text-base">Admin password</label>
-          <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password">
-        </div>
-        <div class="my-2 flex flex-col">
-          <label for="admin_password_confirmation" class="text-base">Confirm admin password</label>
-          <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation">
-        </div>
-        <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 `)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
 }
 
-//line view/setup.qtpl:24
-func WriteSetup(qq422016 qtio422016.Writer, siteName string) {
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
+func WriteSetup(qq422016 qtio422016.Writer, siteName string, errors []string) {
+//line view/setup.qtpl:33
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/setup.qtpl:24
-	StreamSetup(qw422016, siteName)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
+	StreamSetup(qw422016, siteName, errors)
+//line view/setup.qtpl:33
 	qt422016.ReleaseWriter(qw422016)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
 }
 
-//line view/setup.qtpl:24
-func Setup(siteName string) string {
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
+func Setup(siteName string, errors []string) string {
+//line view/setup.qtpl:33
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/setup.qtpl:24
-	WriteSetup(qb422016, siteName)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
+	WriteSetup(qb422016, siteName, errors)
+//line view/setup.qtpl:33
 	qs422016 := string(qb422016.B)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
 	return qs422016
-//line view/setup.qtpl:24
+//line view/setup.qtpl:33
 }

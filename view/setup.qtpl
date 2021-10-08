@@ -1,24 +1,33 @@
-{% func Setup(siteName string) %}
+{% func Setup(siteName string, errors []string) %}
   <div class="container mx-auto flex flex-col items-stretch p-2">
     <h1 class="text-xl text-center my-2">{%s siteName %}</h1>
-    <h3 class="text-2xl text-center my-2">Setup</h3>
-    <p>Set up your new instance of archmark!</p>
-    <form>
-      <div class="flex flex-col mt-4">
-        <div class="my-2 flex flex-col flex-grow">
-          <label for="site_name" class="text-base">Site name</label>
-          <input type="text" class="text-lg border rounded p-1 my-2" id="site_name" name="site_name" value="{%s siteName %}" autofocus>
+    <div class="border rounded-sm p-2 lg:p-4 w-full lg:w-1/3 mx-auto bg-gray-100">
+      <h3 class="text-2xl text-center my-1">Setup</h3>
+      <p>Configure your new instance of archmark!</p>
+      <form>
+        <div class="flex flex-col mt-2">
+          {% if len(errors) > 0 %}
+            <ul class="border p-2 rounded-sm border-red-400 border-dashed">
+              {% for _, err := range errors %}
+                <li class="font-base text-red-400">{%s err %}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <div class="my-1 flex flex-col flex-grow">
+            <label for="site_name" class="text-base font-bold">Site name</label>
+            <input type="text" class="text-lg border rounded p-1 my-2" id="site_name" name="site_name" value="{%s siteName %}" autofocus>
+          </div>
+          <div class="my-1 flex flex-col">
+            <label for="admin_password" class="text-base font-bold">Admin password</label>
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password">
+          </div>
+          <div class="my-1 flex flex-col">
+            <label for="admin_password_confirmation" class="text-base font-bold">Confirm admin password</label>
+            <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation">
+          </div>
+          <input type="submit" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
         </div>
-        <div class="my-2 flex flex-col">
-          <label for="admin_password" class="text-base">Admin password</label>
-          <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password" name="admin_password">
-        </div>
-        <div class="my-2 flex flex-col">
-          <label for="admin_password_confirmation" class="text-base">Confirm admin password</label>
-          <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation">
-        </div>
-        <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 {% endfunc %}

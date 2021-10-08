@@ -17,7 +17,7 @@ func Setup(c *gin.Context) {
 	}
 	siteConfig := siteConfigVal.(model.Configuration)
 
-	pageHTML := view.Setup(siteConfig.SiteName)
+	pageHTML := view.Setup(siteConfig.SiteName, []string{"error1", "error2"})
 	html := view.Layout(siteConfig.SiteName, pageHTML)
 	c.Header("Content-Type", "text/html")
 	c.String(http.StatusOK, html)
