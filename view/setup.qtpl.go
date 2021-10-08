@@ -30,7 +30,7 @@ func StreamSetup(qw422016 *qt422016.Writer, siteName string, errors []string) {
     <div class="border rounded-sm p-2 lg:p-4 w-full lg:w-1/3 mx-auto bg-gray-100">
       <h3 class="text-2xl text-center my-1">Setup</h3>
       <p>Configure your new instance of archmark!</p>
-      <form>
+      <form action="/setup" method="post">
         <div class="flex flex-col mt-2">
           `)
 //line view/setup.qtpl:9

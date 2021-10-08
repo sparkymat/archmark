@@ -17,6 +17,7 @@ func Setup(r *gin.Engine, cfg config.API, db *gorm.DB, siteConfig model.Configur
 
 	app.GET("/", handler.Home)
 	app.GET("/setup", handler.Setup)
+	app.POST("/setup", handler.DoSetup)
 	app.POST("/add", handler.Create)
 
 	r.Static("/css", "public/css")
