@@ -10,10 +10,15 @@ import (
 )
 
 func Setup(r *gin.Engine, cfg config.API, db *gorm.DB, siteConfig model.Configuration) {
-	r.Use(middleware.ConfigInjector(cfg, db, siteConfig))
-	r.Use(middleware.SetupRedirect(cfg, db))
+	app := r.Group("")
 
-	r.GET("/", handler.Home)
-	r.GET("/setup", handler.Setup)
-	r.POST("/add", handler.Create)
+	app.Use(middleware.ConfigInjector(cfg, db, siteConfig))
+	app.Use(middleware.SetupRedirect(cfg, db))
+
+	app.GET("/", handler.Home)
+	app.GET("/setup", handler.Setup)
+	app.POST("/add", handler.Create)
+
+	r.Static("/css", "public/css")
+	r.Static("/javascript", "public/javascript")
 }

@@ -46,6 +46,8 @@ require (
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/quicktemplate v1.7.0 // indirect
 	gorm.io/driver/postgres v1.1.2 // indirect
 	gorm.io/gorm v1.21.15 // indirect
 )
