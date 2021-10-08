@@ -3,13 +3,13 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sparkymat/archmark/config"
+	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/internal/handler"
 	"github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/model"
-	"gorm.io/gorm"
 )
 
-func Setup(r *gin.Engine, cfg config.API, db *gorm.DB, siteConfig model.Configuration) {
+func Setup(r *gin.Engine, cfg config.API, db database.API, siteConfig model.Configuration) {
 	app := r.Group("")
 
 	app.Use(middleware.ConfigInjector(cfg, db, siteConfig))
