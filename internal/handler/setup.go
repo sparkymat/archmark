@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/model"
 	"github.com/sparkymat/archmark/view"
@@ -15,10 +16,6 @@ var (
 	ErrPasswordTooShort   = errors.New("admin password must be at least 8 characters")
 	ErrPasswordsDontMatch = errors.New("admin passwords don't match")
 )
-
-func Setup(c *gin.Context) {
-	renderSetupPage(c, []string{})
-}
 
 type setupInput struct {
 	SiteName                  string `form:"site_name"`
@@ -39,6 +36,10 @@ func (i *setupInput) Validate() []error {
 	return errors
 }
 
+func ShowSetup(c *gin.Context) {
+	renderSetupPage(c, []string{})
+}
+
 func DoSetup(c *gin.Context) {
 	var input setupInput
 	c.Bind(&input)
@@ -50,6 +51,19 @@ func DoSetup(c *gin.Context) {
 			errorStrings = append(errorStrings, err.Error())
 		}
 		renderSetupPage(c, errorStrings)
+		return
+	}
+
+	dbVal, valFound := c.Get(middleware.DBKey)
+	if !valFound {
+		c.String(http.StatusInternalServerError, "db connection not found")
+		return
+	}
+	db := dbVal.(database.API)
+
+	_, err := db.CreateAdminUser(input.AdminPassword)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "admin creation failed")
 		return
 	}
 

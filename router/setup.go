@@ -16,7 +16,7 @@ func Setup(r *gin.Engine, cfg config.API, db database.API, siteConfig model.Conf
 	app.Use(middleware.SetupRedirect(cfg, db))
 
 	app.GET("/", handler.Home)
-	app.GET("/setup", handler.Setup)
+	app.GET("/setup", handler.ShowSetup)
 	app.POST("/setup", handler.DoSetup)
 	app.POST("/add", handler.Create)
 
