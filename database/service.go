@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/sparkymat/archmark/model"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,8 @@ var (
 	ErrNotFound = errors.New("not found")
 )
 
+const BcryptDefaultCost = 10
+
 type Config struct {
 	ConnectionString string
 }
@@ -19,6 +22,7 @@ type Config struct {
 type API interface {
 	LoadSiteConfiguration() (*model.Configuration, error)
 	LoadAdminUser() (*model.User, error)
+	CreateAdminUser(password string) (*model.User, error)
 }
 
 func New(cfg Config) API {
@@ -69,4 +73,22 @@ func (s *service) LoadAdminUser() (*model.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (s *service) CreateAdminUser(password string) (*model.User, error) {
+	encryptedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(password), BcryptDefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	admin := model.User{
+		Username:          "admin",
+		EncryptedPassword: string(encryptedPasswordBytes),
+	}
+
+	result := s.conn.Create(&admin)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &admin, nil
 }
