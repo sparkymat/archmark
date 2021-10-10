@@ -27,7 +27,7 @@ func StreamSetup(qw422016 *qt422016.Writer, siteName string, errors []string) {
 	qw422016.E().S(siteName)
 //line view/setup.qtpl:3
 	qw422016.N().S(`</h1>
-    <div class="border rounded-sm p-2 lg:p-4 w-full lg:w-1/3 mx-auto bg-gray-100">
+    <div class="border rounded-sm mt-4 p-2 lg:p-4 w-full lg:w-1/3 mx-auto bg-gray-100">
       <h3 class="text-2xl text-center my-1">Setup</h3>
       <p>Configure your new instance of archmark!</p>
       <form action="/setup" method="post">
@@ -75,7 +75,7 @@ func StreamSetup(qw422016 *qt422016.Writer, siteName string, errors []string) {
             <label for="admin_password_confirmation" class="text-base font-bold">Confirm admin password</label>
             <input type="password" class="text-lg border rounded p-1 my-2" id="admin_password_confirmation" name="admin_password_confirmation" autocomplete="hidden">
           </div>
-          <input type="submit" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-sm" value="Initialise">
+          <input type="submit" class="bg-green-600 hover:bg-green-800 text-white font-bold mt-2 py-2 px-4 rounded-sm" value="Initialise">
         </div>
       </form>
     </div>

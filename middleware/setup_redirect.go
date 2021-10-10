@@ -21,6 +21,12 @@ func SetupRedirect(cfg config.API, db database.API) gin.HandlerFunc {
 			return
 		}
 
+		_, err = db.LoadSiteConfiguration()
+		if err != nil {
+			c.Redirect(http.StatusSeeOther, "/setup")
+			return
+		}
+
 		c.Next()
 	}
 }

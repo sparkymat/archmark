@@ -23,6 +23,7 @@ type API interface {
 	LoadSiteConfiguration() (*model.Configuration, error)
 	LoadAdminUser() (*model.User, error)
 	CreateAdminUser(password string) (*model.User, error)
+	FindUser(username string) (*model.User, error)
 }
 
 func New(cfg Config) API {
@@ -60,19 +61,7 @@ func (s *service) LoadSiteConfiguration() (*model.Configuration, error) {
 }
 
 func (s *service) LoadAdminUser() (*model.User, error) {
-	var user model.User
-
-	result := s.conn.Where("username = 'admin'").First(&user)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	if result.RowsAffected == 0 { // no results
-		return nil, ErrNotFound
-	}
-
-	return &user, nil
+	return s.FindUser("admin")
 }
 
 func (s *service) CreateAdminUser(password string) (*model.User, error) {
@@ -91,4 +80,20 @@ func (s *service) CreateAdminUser(password string) (*model.User, error) {
 	}
 
 	return &admin, nil
+}
+
+func (s *service) FindUser(username string) (*model.User, error) {
+	var user model.User
+
+	result := s.conn.Where("username = ?", username).First(&user)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 { // no results
+		return nil, ErrNotFound
+	}
+
+	return &user, nil
 }
