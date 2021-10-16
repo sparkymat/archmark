@@ -1,12 +1,13 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 )
 
-func Home(c *gin.Context) {
-	c.String(http.StatusOK, "%d", time.Now().Unix())
+func Home(c echo.Context) error {
+	return c.String(http.StatusOK, fmt.Sprintf("%d", time.Now().Unix()))
 }

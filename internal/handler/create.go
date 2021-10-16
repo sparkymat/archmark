@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/archivebox"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/middleware"
@@ -13,13 +13,12 @@ type CreateInput struct {
 	Url string `json:"url" binding:"required"`
 }
 
-func Create(c *gin.Context) {
-	cfgVal, configFound := c.Get(middleware.ConfigKey)
-	if !configFound {
-		c.JSON(http.StatusInternalServerError, gin.H{
+func Create(c echo.Context) error {
+	cfgVal := c.Get(middleware.ConfigKey)
+	if cfgVal == nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": "not configured",
 		})
-		return
 	}
 
 	cfg := cfgVal.(config.API)
@@ -33,22 +32,20 @@ func Create(c *gin.Context) {
 	var input CreateInput
 
 	if c.Bind(&input) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		return c.JSON(http.StatusBadRequest, map[string]string{
 			"message": "invalid input",
 		})
-		return
 	}
 
 	title, url, err := archiveBoxAPI.ArchiveLink(input.Url)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"title": title,
-			"url":   url,
-		})
 	}
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"title": title,
+		"url":   url,
+	})
 }

@@ -5,8 +5,8 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/router"
@@ -22,12 +22,8 @@ func main() {
 	db := database.New(database.Config{
 		ConnectionString: cfg.DBConnectionString(),
 	})
-	siteConfig, err := db.LoadSiteConfiguration()
-	if err != nil || siteConfig == nil {
-		panic(err)
-	}
 
-	r := gin.Default()
-	router.Setup(r, cfg, db, *siteConfig)
-	r.Run(":8080")
+	r := echo.New()
+	router.Setup(r, cfg, db)
+	r.Start(":8080")
 }

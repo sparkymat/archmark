@@ -12,7 +12,7 @@ type API interface {
 	ArchiveBoxUsername() string
 	ArchiveBoxPassword() string
 	DBConnectionString() string
-	JWTSecret() string
+	AdminPassword() string
 }
 
 func New() API {
@@ -42,8 +42,8 @@ func (s *service) ArchiveBoxPassword() string {
 	return s.envConfig.ArchiveBoxPassword
 }
 
-func (s *service) JWTSecret() string {
-	return s.envConfig.JWTSecret
+func (s *service) AdminPassword() string {
+	return s.envConfig.AdminPassword
 }
 
 func (s *service) DBConnectionString() string {
@@ -80,5 +80,5 @@ type envConfig struct {
 	DBPassword         string `env:"DB_PASSWORD"`
 	DBDatabase         string `env:"DB_DATABASE,required"`
 	DBSSLMode          bool   `env:"DB_SSL_MODE"`
-	JWTSecret          string `env:"JWT_SECRET,required"`
+	AdminPassword      string `env:"ADMIN_PASSWORD,required"`
 }
