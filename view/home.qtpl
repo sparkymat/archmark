@@ -1,0 +1,14 @@
+{% import "github.com/sparkymat/archmark/presenter" %}
+
+{% func Home(bookmarks []presenter.Bookmark) %}
+  <div>
+    <input type="text">
+    <ul>
+      {% for _, bookmark := range bookmarks %}
+        <li>
+          <a href="{%s bookmark.Url %}">{%s bookmark.Title %}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endfunc %}

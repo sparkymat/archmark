@@ -19,6 +19,7 @@ type Config struct {
 }
 
 type API interface {
+	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
 }
 
 func New(cfg Config) API {
@@ -39,4 +40,13 @@ func New(cfg Config) API {
 
 type service struct {
 	conn *gorm.DB
+}
+
+func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
+	var bookmarks []model.Bookmark
+	offset := int((page - 1) * pageSize)
+	if err := s.conn.Where("title LIKE ?", query).Order("created_at desc").Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err != nil {
+		return nil, err.Error
+	}
+	return bookmarks, nil
 }

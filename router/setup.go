@@ -12,16 +12,14 @@ import (
 )
 
 func Setup(e *echo.Echo, cfg config.API, db database.API) {
-	app := e.Group("")
-
-	app.Use(mw.ConfigInjector(cfg, db))
-
-	app.POST("/add", handler.Create)
-
 	e.Static("/css", "public/css")
 	e.Static("/javascript", "public/javascript")
 
-	authApp := e.Group("")
+	app := e.Group("")
+	app.Use(mw.ConfigInjector(cfg, db))
+	app.POST("/add", handler.Create)
+
+	authApp := app.Group("")
 	authApp.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		// Be careful to use constant time comparison to prevent timing attacks
 		if subtle.ConstantTimeCompare([]byte(username), []byte("admin")) == 1 &&
@@ -31,6 +29,5 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 
 		return false, nil
 	}))
-
 	authApp.GET("/", handler.Home)
 }
