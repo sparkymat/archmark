@@ -9,6 +9,13 @@
       <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
     <body>
+      <nav class="bg-gray-800">
+        <div class="flex flex-row align-center">
+          <span class="text-white self-center px-4">archmark!</span>
+          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">Bookmarks</a>
+          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">Add new</a>
+        </div>
+      </nav>
       {%s= content %}
     </body>
   </html>

@@ -15,7 +15,7 @@ import (
 )
 
 type BookmarksCreateInput struct {
-	Url string `json:"url" binding:"required"`
+	Url string `json:"url" form:"url" binding:"required"`
 }
 
 func BookmarksCreate(c echo.Context) error {
@@ -64,8 +64,5 @@ func BookmarksCreate(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{
-		"title": page.Title,
-		"url":   fmt.Sprintf("/b/%s", bookmark.FileName),
-	})
+	return c.Redirect(http.StatusSeeOther, "/")
 }

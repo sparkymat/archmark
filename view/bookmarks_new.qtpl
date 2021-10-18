@@ -1,0 +1,10 @@
+{% func BookmarksNew() %}
+  <div class="container mx-auto">
+    <form action="/bookmarks" method="POST">
+      <div class="flex flex-row mt-4">
+        <input type="text" name="url" class="text-2xl flex-grow p-2 border" placeholder="Paste URL here..." autofocus>
+        <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white px-8">
+      </div>
+    </form>
+  </div>
+{% endfunc %}
