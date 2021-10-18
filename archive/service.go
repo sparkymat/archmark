@@ -8,6 +8,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 var (
@@ -63,8 +66,21 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	if err != nil {
 		return nil, err
 	}
+	body := string(bodyBytes)
 
 	// Parse for title
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
 
-	return "", string(out), nil
+	title := doc.Find("title").Text()
+
+	page := &ArchivedPage{
+		Title:       title,
+		HTMLContent: body,
+		FilePath:    filePath,
+	}
+
+	return page, nil
 }
