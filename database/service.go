@@ -23,6 +23,7 @@ type Config struct {
 
 type API interface {
 	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
+	CreateBookmark(bookmark *model.Bookmark) error
 }
 
 func New(cfg Config) API {
@@ -60,4 +61,9 @@ func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]m
 		return nil, err.Error
 	}
 	return bookmarks, nil
+}
+
+func (s *service) CreateBookmark(bookmark *model.Bookmark) error {
+	result := s.conn.Create(bookmark)
+	return result.Error
 }

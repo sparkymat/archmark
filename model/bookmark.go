@@ -15,4 +15,5 @@ type Bookmark struct {
 	Title     string         `gorm:"not null"`
 	Status    string         `gorm:"not null"`
 	Content   string
+	FileName  string
 }

@@ -2,6 +2,9 @@ package router
 
 import (
 	"crypto/subtle"
+	"fmt"
+	"os"
+	"text/tabwriter"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -14,12 +17,12 @@ import (
 func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	e.Static("/css", "public/css")
 	e.Static("/javascript", "public/javascript")
+	e.Static("/b", cfg.DownloadPath())
 
 	app := e.Group("")
 	app.Use(middleware.Logger())
 	app.Use(middleware.Recover())
 	app.Use(mw.ConfigInjector(cfg, db))
-	app.POST("/add", handler.Create)
 
 	authApp := app.Group("")
 	authApp.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
@@ -32,4 +35,28 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 		return false, nil
 	}))
 	authApp.GET("/", handler.Home)
+	authApp.POST("/bookmarks", handler.BookmarksCreate)
+
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
+	methodWhitelist := map[string]interface{}{
+		"DELETE": struct{}{},
+		"GET":    struct{}{},
+		"PATCH":  struct{}{},
+		"POST":   struct{}{},
+		"PUT":    struct{}{},
+	}
+
+	fmt.Println("")
+	fmt.Println("  Registered routes  ")
+	fmt.Println("  =================  ")
+	fmt.Println("")
+
+	for _, r := range e.Routes() {
+		if _, whitelisted := methodWhitelist[r.Method]; whitelisted {
+			if r.Path != "" && r.Path != "/*" {
+				fmt.Fprintf(w, "%s\t%s\t\t%s\n", r.Method, r.Path, r.Name)
+			}
+		}
+	}
+	w.Flush()
 }

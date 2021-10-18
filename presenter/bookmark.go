@@ -1,15 +1,21 @@
 package presenter
 
-import "github.com/sparkymat/archmark/model"
+import (
+	"fmt"
+
+	"github.com/sparkymat/archmark/model"
+)
 
 type Bookmark struct {
-	Url   string
-	Title string
+	Url         string
+	OriginalUrl string
+	Title       string
 }
 
 func PresentBookmark(bookmark model.Bookmark) Bookmark {
 	return Bookmark{
-		Url:   bookmark.Url,
-		Title: bookmark.Title,
+		Url:         fmt.Sprintf("/b/%s", bookmark.FileName),
+		OriginalUrl: bookmark.Url,
+		Title:       bookmark.Title,
 	}
 }

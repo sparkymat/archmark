@@ -11,6 +11,7 @@ type API interface {
 	DBConnectionString() string
 	AdminPassword() string
 	MonolithPath() string
+	DownloadPath() string
 }
 
 func New() API {
@@ -60,6 +61,10 @@ func (s *service) MonolithPath() string {
 	return s.envConfig.MonolithPath
 }
 
+func (s *service) DownloadPath() string {
+	return s.envConfig.DownloadPath
+}
+
 type envConfig struct {
 	DBHostname    string `env:"DB_HOSTNAME,required"`
 	DBPort        int64  `env:"DB_PORT,required"`
@@ -69,4 +74,5 @@ type envConfig struct {
 	DBSSLMode     bool   `env:"DB_SSL_MODE"`
 	AdminPassword string `env:"ADMIN_PASSWORD,required"`
 	MonolithPath  string `env:"MONOLITH_PATH,required"`
+	DownloadPath  string `env:"DOWNLOAD_PATH,required"`
 }
