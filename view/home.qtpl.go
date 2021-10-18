@@ -24,58 +24,60 @@ var (
 func StreamHome(qw422016 *qt422016.Writer, bookmarks []presenter.Bookmark) {
 //line view/home.qtpl:3
 	qw422016.N().S(`
-  <div>
-    <input type="text">
-    <ul>
-      `)
-//line view/home.qtpl:7
+  <div class="container mx-auto">
+    <div class="flex flex-col mt-4">
+      <input type="text" class="text-2xl mt-2 p-2 border rounded" placeholder="Search bookmarks..." autofocus>
+      <ul>
+        `)
+//line view/home.qtpl:8
 	for _, bookmark := range bookmarks {
-//line view/home.qtpl:7
+//line view/home.qtpl:8
 		qw422016.N().S(`
-        <li>
-          <a href="`)
-//line view/home.qtpl:9
+          <li class="py-4">
+            <a class="text-2xl" href="`)
+//line view/home.qtpl:10
 		qw422016.E().S(bookmark.Url)
-//line view/home.qtpl:9
-		qw422016.N().S(`">`)
-//line view/home.qtpl:9
+//line view/home.qtpl:10
+		qw422016.N().S(`" target="_blank">`)
+//line view/home.qtpl:10
 		qw422016.E().S(bookmark.Title)
-//line view/home.qtpl:9
+//line view/home.qtpl:10
 		qw422016.N().S(`</a>
-        </li>
-      `)
-//line view/home.qtpl:11
+          </li>
+        `)
+//line view/home.qtpl:12
 	}
-//line view/home.qtpl:11
+//line view/home.qtpl:12
 	qw422016.N().S(`
-    </ul>
+      </ul>
+    </div>
   </div>
 `)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 }
 
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 func WriteHome(qq422016 qtio422016.Writer, bookmarks []presenter.Bookmark) {
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	StreamHome(qw422016, bookmarks)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	qt422016.ReleaseWriter(qw422016)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 }
 
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 func Home(bookmarks []presenter.Bookmark) string {
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	WriteHome(qb422016, bookmarks)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	qs422016 := string(qb422016.B)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 	return qs422016
-//line view/home.qtpl:14
+//line view/home.qtpl:16
 }

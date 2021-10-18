@@ -8,11 +8,9 @@ import (
 )
 
 type API interface {
-	ArchiveBoxPath() string
-	ArchiveBoxUsername() string
-	ArchiveBoxPassword() string
 	DBConnectionString() string
 	AdminPassword() string
+	MonolithPath() string
 }
 
 func New() API {
@@ -28,18 +26,6 @@ func New() API {
 
 type service struct {
 	envConfig envConfig
-}
-
-func (s *service) ArchiveBoxPath() string {
-	return s.envConfig.ArchiveBoxPath
-}
-
-func (s *service) ArchiveBoxUsername() string {
-	return s.envConfig.ArchiveBoxUsername
-}
-
-func (s *service) ArchiveBoxPassword() string {
-	return s.envConfig.ArchiveBoxPassword
 }
 
 func (s *service) AdminPassword() string {
@@ -70,15 +56,17 @@ func (s *service) DBConnectionString() string {
 	return strings.Join(connFragments, " ")
 }
 
+func (s *service) MonolithPath() string {
+	return s.envConfig.MonolithPath
+}
+
 type envConfig struct {
-	ArchiveBoxPath     string `env:"ARCHIVE_BOX_PATH,required"`
-	ArchiveBoxUsername string `env:"ARCHIVE_BOX_USERNAME,required"`
-	ArchiveBoxPassword string `env:"ARCHIVE_BOX_PASSWORD,required"`
-	DBHostname         string `env:"DB_HOSTNAME,required"`
-	DBPort             int64  `env:"DB_PORT,required"`
-	DBUsername         string `env:"DB_USERNAME"`
-	DBPassword         string `env:"DB_PASSWORD"`
-	DBDatabase         string `env:"DB_DATABASE,required"`
-	DBSSLMode          bool   `env:"DB_SSL_MODE"`
-	AdminPassword      string `env:"ADMIN_PASSWORD,required"`
+	DBHostname    string `env:"DB_HOSTNAME,required"`
+	DBPort        int64  `env:"DB_PORT,required"`
+	DBUsername    string `env:"DB_USERNAME"`
+	DBPassword    string `env:"DB_PASSWORD"`
+	DBDatabase    string `env:"DB_DATABASE,required"`
+	DBSSLMode     bool   `env:"DB_SSL_MODE"`
+	AdminPassword string `env:"ADMIN_PASSWORD,required"`
+	MonolithPath  string `env:"MONOLITH_PATH,required"`
 }

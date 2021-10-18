@@ -4,8 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/sparkymat/archmark/archivebox"
-	"github.com/sparkymat/archmark/config"
+	"github.com/sparkymat/archmark/archive"
 	"github.com/sparkymat/archmark/middleware"
 )
 
@@ -21,14 +20,6 @@ func Create(c echo.Context) error {
 		})
 	}
 
-	cfg := cfgVal.(config.API)
-
-	archiveBoxAPI := archivebox.New(archivebox.Config{
-		Path:     cfg.ArchiveBoxPath(),
-		Username: cfg.ArchiveBoxUsername(),
-		Password: cfg.ArchiveBoxPassword(),
-	})
-
 	var input CreateInput
 
 	if c.Bind(&input) != nil {
@@ -37,7 +28,8 @@ func Create(c echo.Context) error {
 		})
 	}
 
-	title, url, err := archiveBoxAPI.ArchiveLink(input.Url)
+	archiveAPI := archive.New()
+	title, url, err := archiveAPI.Fetch(input.Url)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),

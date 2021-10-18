@@ -1,14 +1,16 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 
 {% func Home(bookmarks []presenter.Bookmark) %}
-  <div>
-    <input type="text">
-    <ul>
-      {% for _, bookmark := range bookmarks %}
-        <li>
-          <a href="{%s bookmark.Url %}">{%s bookmark.Title %}</a>
-        </li>
-      {% endfor %}
-    </ul>
+  <div class="container mx-auto">
+    <div class="flex flex-col mt-4">
+      <input type="text" class="text-2xl mt-2 p-2 border rounded" placeholder="Search bookmarks..." autofocus>
+      <ul>
+        {% for _, bookmark := range bookmarks %}
+          <li class="py-4">
+            <a class="text-2xl" href="{%s bookmark.Url %}" target="_blank">{%s bookmark.Title %}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 {% endfunc %}

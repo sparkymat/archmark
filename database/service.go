@@ -2,10 +2,13 @@ package database
 
 import (
 	"errors"
+	"log"
+	"os"
 
 	"github.com/sparkymat/archmark/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -23,7 +26,15 @@ type API interface {
 }
 
 func New(cfg Config) API {
-	conn, err := gorm.Open(postgres.Open(cfg.ConnectionString), &gorm.Config{})
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			Colorful: true,
+		},
+	)
+	conn, err := gorm.Open(postgres.Open(cfg.ConnectionString), &gorm.Config{
+		Logger: newLogger,
+	})
 
 	if err != nil {
 		panic(err)
@@ -45,7 +56,7 @@ type service struct {
 func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
 	var bookmarks []model.Bookmark
 	offset := int((page - 1) * pageSize)
-	if err := s.conn.Where("title LIKE ?", query).Order("created_at desc").Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err != nil {
+	if err := s.conn.Order("created_at desc").Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err.Error != nil {
 		return nil, err.Error
 	}
 	return bookmarks, nil

@@ -16,6 +16,8 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	e.Static("/javascript", "public/javascript")
 
 	app := e.Group("")
+	app.Use(middleware.Logger())
+	app.Use(middleware.Recover())
 	app.Use(mw.ConfigInjector(cfg, db))
 	app.POST("/add", handler.Create)
 
