@@ -76,9 +76,15 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 
 	title := doc.Find("title").Text()
 
+	// Try and extract body text
+	doc.Find("script").Each(func(i int, el *goquery.Selection) {
+		el.Remove()
+	})
+	bodyText := doc.Text()
+
 	page := &ArchivedPage{
 		Title:       title,
-		HTMLContent: body,
+		HTMLContent: bodyText,
 		FilePath:    filePath,
 	}
 
