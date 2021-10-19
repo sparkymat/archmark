@@ -41,7 +41,7 @@ func Home(c echo.Context) error {
 		presentedBookmarks = append(presentedBookmarks, presenter.PresentBookmark(bookmark))
 	}
 
-	pageHTML := view.Home(presentedBookmarks)
+	pageHTML := view.Home(input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }

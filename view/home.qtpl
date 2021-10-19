@@ -1,9 +1,17 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func Home(bookmarks []presenter.Bookmark) %}
+{% func Home(showSearchHeader bool, searchQuery string, bookmarks []presenter.Bookmark) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
-      <input type="text" class="text-2xl mt-2 p-2 border rounded" placeholder="Search bookmarks..." autofocus>
+      <form action="/" method="GET" class="flex flex-row">
+        <input type="text" name="q" class="flex-grow text-2xl mt-2 p-2 border rounded" placeholder="Type query and hit Enter to search" autofocus>
+      </form>
+      {% if showSearchHeader %}
+        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between">
+          <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
+          <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-2">Clear</a>
+        </div>
+      {% endif %}
       <ul>
         {% for _, bookmark := range bookmarks %}
           <li class="py-4">
