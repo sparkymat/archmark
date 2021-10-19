@@ -2,9 +2,10 @@
   <div class="container mx-auto">
     <form action="/bookmarks" method="POST">
       <div class="flex flex-row mt-4">
-        <input type="text" name="url" class="text-2xl flex-grow p-2 border" placeholder="Paste URL here..." autofocus>
-        <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white px-8">
+        <input type="text" name="url" class="text-xl flex-grow p-2 border outline-white" placeholder="Paste URL here..." autofocus>
+        <input type="submit" value="Add" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4">
       </div>
     </form>
+    <p class="text-l p-4 mt-4 border-2 border-gray-400 text-gray-400 border-dashed italic">Please note that it might take a while for the archive to be generated. In the meantime, you can use the 'original' link.</p>
   </div>
 {% endfunc %}
