@@ -9,6 +9,6 @@ import (
 
 func BookmarksNew(c echo.Context) error {
 	pageHTML := view.BookmarksNew()
-	htmlString := view.Layout("archmark", pageHTML)
+	htmlString := view.Layout("archmark | add", pageHTML)
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }
