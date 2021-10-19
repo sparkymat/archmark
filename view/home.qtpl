@@ -7,7 +7,7 @@
         <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="Type query and hit Enter to search" autofocus>
       </form>
       {% if showSearchHeader %}
-        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between">
+        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
           <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
         </div>

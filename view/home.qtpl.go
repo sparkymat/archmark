@@ -34,7 +34,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
 	if showSearchHeader {
 //line view/home.qtpl:9
 		qw422016.N().S(`
-        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between">
+        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '`)
 //line view/home.qtpl:11
 		qw422016.E().S(searchQuery)
