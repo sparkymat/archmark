@@ -39,6 +39,9 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	authApp.GET("/", handler.Home)
 	authApp.GET("/add", handler.BookmarksNew)
 	authApp.POST("/bookmarks", handler.BookmarksCreate)
+	authApp.GET("/tokens", handler.ApiTokensIndex)
+	authApp.POST("/tokens/:id/destroy", handler.ApiTokensDestroy)
+	authApp.POST("/tokens", handler.ApiTokensCreate)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{

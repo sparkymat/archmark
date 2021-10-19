@@ -1,0 +1,23 @@
+{% import "github.com/sparkymat/archmark/presenter" %}
+
+{% func ApiTokensIndex(tokens []presenter.ApiToken) %}
+  <div class="container mx-auto">
+    <div class="flex flex-col mt-4">
+      <div class="flex flex-row justify-end">
+        <form action="/tokens" method="POST">
+          <input type="submit" value="Create new token" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-4 py-2">
+        </form>
+      </div>
+      <ul>
+        {% for _, token := range tokens %}
+          <li class="md:mx-0 mx-4 p-4 mt-4 border-2 border-dashed flex flex-row justify-between items-center rounded">
+            <span class="text-md italic break-all">{%s token.Token %}</span>
+            <form action="/tokens/{%s token.ID %}/destroy" method="POST">
+              <input type="submit" value="Delete" class="text-l text-white bg-red-700 hover:bg-red-900 rounded shadow-md px-4 py-2">
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endfunc %}

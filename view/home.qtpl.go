@@ -40,7 +40,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
 		qw422016.E().S(searchQuery)
 //line view/home.qtpl:11
 		qw422016.N().S(`'</span>
-          <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-2">Clear</a>
+          <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
         </div>
       `)
 //line view/home.qtpl:14

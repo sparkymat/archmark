@@ -24,6 +24,9 @@ type Config struct {
 type API interface {
 	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
 	CreateBookmark(bookmark *model.Bookmark) error
+	ListApiTokens() ([]model.ApiToken, error)
+	DeleteApiToken(id uint) error
+	CreateApiToken(token string) (*model.ApiToken, error)
 }
 
 func New(cfg Config) API {
@@ -67,8 +70,8 @@ func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]m
 		stmnt = stmnt.Order("created_at desc")
 	}
 
-	if err := stmnt.Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err.Error != nil {
-		return nil, err.Error
+	if result := stmnt.Offset(offset).Limit(int(pageSize)).Find(&bookmarks); result.Error != nil {
+		return nil, result.Error
 	}
 	return bookmarks, nil
 }
@@ -76,4 +79,30 @@ func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]m
 func (s *service) CreateBookmark(bookmark *model.Bookmark) error {
 	result := s.conn.Create(bookmark)
 	return result.Error
+}
+
+func (s *service) ListApiTokens() ([]model.ApiToken, error) {
+	var apiTokens []model.ApiToken
+
+	if result := s.conn.Find(&apiTokens); result.Error != nil {
+		return nil, result.Error
+	}
+	return apiTokens, nil
+}
+
+func (s *service) DeleteApiToken(id uint) error {
+	err := s.conn.Delete(&model.ApiToken{}, id)
+	return err.Error
+}
+
+func (s *service) CreateApiToken(token string) (*model.ApiToken, error) {
+	apiToken := &model.ApiToken{
+		Token: token,
+	}
+
+	if result := s.conn.Create(&apiToken); result.Error != nil {
+		return nil, result.Error
+	}
+
+	return apiToken, nil
 }
