@@ -43,6 +43,7 @@ func New(cfg Config) API {
 
 	conn.AutoMigrate(
 		&model.Bookmark{},
+		&model.ApiToken{},
 	)
 
 	return &service{
