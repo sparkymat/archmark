@@ -13,7 +13,8 @@ import (
 const pageSize = 20
 
 type HomeInput struct {
-	Page uint32 `query:"p"`
+	Query string `query:"q"`
+	Page  uint32 `query:"p"`
 }
 
 func Home(c echo.Context) error {
@@ -30,7 +31,7 @@ func Home(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
 	db := dbVal.(database.API)
-	bookmarks, err := db.LoadBookmarks("", input.Page, pageSize)
+	bookmarks, err := db.LoadBookmarks(input.Query, input.Page, pageSize)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

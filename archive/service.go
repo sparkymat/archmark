@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -50,10 +51,7 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	}
 
 	// Download page using monolith
-	err := exec.Command(s.config.MonolithPath, "-esM", url, "-o", filePath).Run()
-	if err != nil {
-		return nil, err
-	}
+	go downloadPageWithMonolith(s.config.MonolithPath, url, filePath)
 
 	// Fetch page
 	resp, err := http.Get(url)
@@ -89,4 +87,11 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	}
 
 	return page, nil
+}
+
+func downloadPageWithMonolith(monolithPath, url, filePath string) {
+	err := exec.Command(monolithPath, "-esM", url, "-o", filePath).Run()
+	if err != nil {
+		log.Printf("monolith download failed with: %v", err)
+	}
 }

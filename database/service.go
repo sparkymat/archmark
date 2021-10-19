@@ -57,7 +57,16 @@ type service struct {
 func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
 	var bookmarks []model.Bookmark
 	offset := int((page - 1) * pageSize)
-	if err := s.conn.Order("created_at desc").Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err.Error != nil {
+
+	stmnt := s.conn
+
+	if query != "" {
+		stmnt = stmnt.Where("to_tsvector(content) @@ to_tsquery(?)", query)
+	} else {
+		stmnt = stmnt.Order("created_at desc")
+	}
+
+	if err := stmnt.Offset(offset).Limit(int(pageSize)).Find(&bookmarks); err.Error != nil {
 		return nil, err.Error
 	}
 	return bookmarks, nil
