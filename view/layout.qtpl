@@ -14,6 +14,7 @@
           <span class="text-white self-center px-4">archmark!</span>
           <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">Bookmarks</a>
           <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">Add new</a>
+          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">API Tokens</a>
         </div>
       </nav>
       {%s= content %}

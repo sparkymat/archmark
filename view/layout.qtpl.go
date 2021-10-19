@@ -40,41 +40,42 @@ func StreamLayout(qw422016 *qt422016.Writer, title string, content string) {
           <span class="text-white self-center px-4">archmark!</span>
           <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">Bookmarks</a>
           <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">Add new</a>
+          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">API Tokens</a>
         </div>
       </nav>
       `)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qw422016.N().S(content)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qw422016.N().S(`
     </body>
   </html>
 `)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 }
 
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 func WriteLayout(qq422016 qtio422016.Writer, title string, content string) {
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	StreamLayout(qw422016, title, content)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	qt422016.ReleaseWriter(qw422016)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 }
 
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 func Layout(title string, content string) string {
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	WriteLayout(qb422016, title, content)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	qs422016 := string(qb422016.B)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 	return qs422016
-//line view/layout.qtpl:22
+//line view/layout.qtpl:23
 }
