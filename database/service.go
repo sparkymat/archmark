@@ -23,6 +23,7 @@ type Config struct {
 
 type API interface {
 	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
+	FindBookmark(id uint) (*model.Bookmark, error)
 	CreateBookmark(bookmark *model.Bookmark) error
 	ListApiTokens() ([]model.ApiToken, error)
 	DeleteApiToken(id uint) error
@@ -74,6 +75,15 @@ func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]m
 		return nil, result.Error
 	}
 	return bookmarks, nil
+}
+
+func (s *service) FindBookmark(id uint) (*model.Bookmark, error) {
+	bookmark := &model.Bookmark{}
+	result := s.conn.Find(bookmark, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return bookmark, nil
 }
 
 func (s *service) CreateBookmark(bookmark *model.Bookmark) error {
