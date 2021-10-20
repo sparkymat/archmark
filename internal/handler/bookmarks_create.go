@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	faktory "github.com/contribsys/faktory/client"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/archive"
@@ -38,7 +39,6 @@ func BookmarksCreate(c echo.Context) error {
 	}
 
 	archiveAPI := archive.New(archive.Config{
-		MonolithPath:   cfg.MonolithPath(),
 		DownloadFolder: cfg.DownloadPath(),
 	})
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
@@ -64,5 +64,21 @@ func BookmarksCreate(c echo.Context) error {
 		})
 	}
 
+	err = queueDownloadJob(bookmark.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+
 	return c.Redirect(http.StatusSeeOther, "/")
+}
+
+func queueDownloadJob(bookmarkID uint) error {
+	client, err := faktory.Open()
+	if err != nil {
+		return err
+	}
+	job := faktory.NewJob("SaveWebPage", fmt.Sprintf("%d", bookmarkID))
+	return client.Push(job)
 }

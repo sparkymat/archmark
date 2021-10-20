@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"log"
+	"os/exec"
+	"path/filepath"
 	"strconv"
 
 	worker "github.com/contribsys/faktory_worker_go"
-	"github.com/sparkymat/archmark/archive"
+	"github.com/joho/godotenv"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 )
@@ -40,20 +42,34 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		}
 
 		if bookmark.Status != "pending" {
-			log.Printf("No penidng bookmark for job %s\n", help.Jid())
+			log.Printf("No pending bookmark for job %s\n", help.Jid())
 			return nil
 		}
 
-		archiveAPI := archive.New(archive.Config{
-			MonolithPath:   cfg.MonolithPath(),
-			DownloadFolder: cfg.DownloadPath(),
-		})
+		filePath := filepath.Join(cfg.DownloadPath(), bookmark.FileName)
+		err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.Url, filePath)
+		if err != nil {
+			log.Printf("Download failed for job %s\n", help.Jid())
+			return nil
+		}
 
+		err = db.MarkBookmarkCompleted(bookmark.ID)
+		if err != nil {
+			log.Printf("Failed to mark bookmark as complete for job %s\n", help.Jid())
+			return err
+		}
+
+		log.Printf("Completed job %s\n", help.Jid())
 		return nil
 	}
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Print("Error loading .env file. Expecting ENV to be set")
+	}
+
 	cfg := config.New()
 	db := database.New(database.Config{
 		ConnectionString: cfg.DBConnectionString(),
@@ -64,4 +80,13 @@ func main() {
 	mgr.Concurrency = 5
 	mgr.ProcessStrictPriorityQueues("critical", "default")
 	mgr.Run()
+}
+
+func downloadPageWithMonolith(jobID string, monolithPath, url, filePath string) error {
+	err := exec.Command(monolithPath, "-esM", url, "-o", filePath).Run()
+	if err != nil {
+		log.Printf("monolith download for job %s failed with: %v", jobID, err)
+	}
+
+	return err
 }

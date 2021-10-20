@@ -4,10 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -19,7 +17,6 @@ var (
 )
 
 type Config struct {
-	MonolithPath   string
 	DownloadFolder string
 }
 
@@ -49,9 +46,6 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {
 		return nil, ErrUnableToCreateFile
 	}
-
-	// Download page using monolith
-	go downloadPageWithMonolith(s.config.MonolithPath, url, filePath)
 
 	// Fetch page
 	resp, err := http.Get(url)
@@ -87,11 +81,4 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	}
 
 	return page, nil
-}
-
-func downloadPageWithMonolith(monolithPath, url, filePath string) {
-	err := exec.Command(monolithPath, "-esM", url, "-o", filePath).Run()
-	if err != nil {
-		log.Printf("monolith download failed with: %v", err)
-	}
 }

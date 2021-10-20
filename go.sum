@@ -14,6 +14,8 @@ github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
 github.com/contribsys/faktory v1.4.2-1 h1:mlem9k+2ewSimN69hOW6WG4Zu0qZXwOyh3XAQgUUt3U=
 github.com/contribsys/faktory v1.4.2-1/go.mod h1:brvKSde5nm23lY889T04EgHA+mYyfoNyYe8s/CloRPU=
+github.com/contribsys/faktory v1.5.5 h1:UgXL9O6iNZYJGF3FOb3Nfu+zhffh1Gpff+yZSTPTMkI=
+github.com/contribsys/faktory v1.5.5/go.mod h1:i0je6v+dcCoAVdPZZaW8nQIHTj3az4ZOwBXegJK39aA=
 github.com/contribsys/faktory_worker_go v1.5.0 h1:92mcSrwY8OzJsLFa/znh+d0pwQOuSOVNUgC/ikP/s7U=
 github.com/contribsys/faktory_worker_go v1.5.0/go.mod h1:TEavZ99r7MLYQAQTQji95CDXxPSP5mZ4YUnpbnTSqG4=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=

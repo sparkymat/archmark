@@ -22,7 +22,7 @@ require (
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect
-	github.com/contribsys/faktory v1.4.2-1 // indirect
+	github.com/contribsys/faktory v1.5.5 // indirect
 	github.com/contribsys/faktory_worker_go v1.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect

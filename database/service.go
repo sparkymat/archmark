@@ -28,6 +28,7 @@ type API interface {
 	ListApiTokens() ([]model.ApiToken, error)
 	DeleteApiToken(id uint) error
 	CreateApiToken(token string) (*model.ApiToken, error)
+	MarkBookmarkCompleted(id uint) error
 }
 
 func New(cfg Config) API {
@@ -115,4 +116,9 @@ func (s *service) CreateApiToken(token string) (*model.ApiToken, error) {
 	}
 
 	return apiToken, nil
+}
+
+func (s *service) MarkBookmarkCompleted(id uint) error {
+	result := s.conn.Model(&model.Bookmark{}).Where("id = ?", id).Update("status", "completed")
+	return result.Error
 }
