@@ -15,11 +15,11 @@
       <ul>
         {% for _, bookmark := range bookmarks %}
           <li class="py-4">
-            <a class="text-xl font-light" href="{%s bookmark.Url %}" target="_blank">{%s bookmark.Title %}</a>
+            <a class="text-xl font-light" href="{%s bookmark.URL %}" target="_blank">{%s bookmark.Title %}</a>
             <div class="">
               <span class="text-sm text-gray-400">Added {%s bookmark.TimeSince %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalUrl %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
             </div>
           </li>
         {% endfor %}

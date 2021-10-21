@@ -8,16 +8,16 @@ import (
 )
 
 type Bookmark struct {
-	Url         string
-	OriginalUrl string
+	URL         string
+	OriginalURL string
 	Title       string
 	TimeSince   string
 }
 
 func PresentBookmark(bookmark model.Bookmark) Bookmark {
 	return Bookmark{
-		Url:         fmt.Sprintf("/b/%s", bookmark.FileName),
-		OriginalUrl: bookmark.Url,
+		URL:         fmt.Sprintf("/b/%s", bookmark.FileName),
+		OriginalURL: bookmark.URL,
 		Title:       bookmark.Title,
 		TimeSince:   timeago.English.Format(bookmark.CreatedAt),
 	}

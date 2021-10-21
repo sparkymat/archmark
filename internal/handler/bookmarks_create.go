@@ -23,6 +23,7 @@ func BookmarksCreate(c echo.Context) error {
 	cfgVal := c.Get(middleware.ConfigKey)
 	dbVal := c.Get(middleware.DBKey)
 	if cfgVal == nil || dbVal == nil {
+		//nolint:wrapcheck
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": "not configured",
 		})
@@ -33,6 +34,7 @@ func BookmarksCreate(c echo.Context) error {
 	var input BookmarksCreateInput
 
 	if c.Bind(&input) != nil {
+		//nolint:wrapcheck
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"message": "invalid input",
 		})
@@ -44,13 +46,14 @@ func BookmarksCreate(c echo.Context) error {
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
 	page, err := archiveAPI.Save(input.Url, fileHash)
 	if err != nil {
+		//nolint:wrapcheck
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
 
 	bookmark := model.Bookmark{
-		Url:      input.Url,
+		URL:      input.Url,
 		Title:    page.Title,
 		Status:   "pending",
 		Content:  page.HTMLContent,
@@ -59,6 +62,7 @@ func BookmarksCreate(c echo.Context) error {
 
 	err = db.CreateBookmark(&bookmark)
 	if err != nil {
+		//nolint:wrapcheck
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
@@ -66,18 +70,20 @@ func BookmarksCreate(c echo.Context) error {
 
 	err = queueDownloadJob(bookmark.ID)
 	if err != nil {
+		//nolint:wrapcheck
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
 
+	//nolint:wrapcheck
 	return c.Redirect(http.StatusSeeOther, "/")
 }
 
 func queueDownloadJob(bookmarkID uint) error {
 	client, err := faktory.Open()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to connect to faktory. err: %w", err)
 	}
 	job := faktory.NewJob("SaveWebPage", fmt.Sprintf("%d", bookmarkID))
 	return client.Push(job)

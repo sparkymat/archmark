@@ -26,5 +26,6 @@ func ApiTokensDestroy(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
+	//nolint:wrapcheck
 	return c.Redirect(http.StatusSeeOther, "/tokens")
 }

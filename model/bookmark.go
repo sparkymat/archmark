@@ -11,7 +11,7 @@ type Bookmark struct {
 	CreatedAt time.Time      `gorm:"default:current_timestamp"`
 	UpdatedAt time.Time      `gorm:"default:current_timestamp"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Url       string         `gorm:"not null"`
+	URL       string         `gorm:"not null"`
 	Title     string         `gorm:"not null"`
 	Status    string         `gorm:"not null"`
 	Content   string

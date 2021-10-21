@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os/exec"
 	"path/filepath"
@@ -12,6 +13,9 @@ import (
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 )
+
+const Base10 = 10
+const SixtyFourBits = 64
 
 func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args ...interface{}) error {
 	return func(ctx context.Context, args ...interface{}) error {
@@ -29,9 +33,10 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 			return nil
 		}
 
-		bookmarkID, err := strconv.ParseUint(bookmarkIDString, 10, 64)
+		bookmarkID, err := strconv.ParseUint(bookmarkIDString, Base10, SixtyFourBits)
 		if err != nil {
 			log.Printf("Non-ID param found for job %s\n", help.Jid())
+			//nolint:nilerr
 			return nil
 		}
 
@@ -47,9 +52,10 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		}
 
 		filePath := filepath.Join(cfg.DownloadPath(), bookmark.FileName)
-		err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.Url, filePath)
+		err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.URL, filePath)
 		if err != nil {
 			log.Printf("Download failed for job %s\n", help.Jid())
+			//nolint:nilerr
 			return nil
 		}
 
@@ -65,8 +71,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Print("Error loading .env file. Expecting ENV to be set")
 	}
 
@@ -88,5 +93,5 @@ func downloadPageWithMonolith(jobID string, monolithPath, url, filePath string) 
 		log.Printf("monolith download for job %s failed with: %v", jobID, err)
 	}
 
-	return err
+	return fmt.Errorf("download failed. err: %w", err)
 }

@@ -56,7 +56,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
           <li class="py-4">
             <a class="text-xl font-light" href="`)
 //line view/home.qtpl:18
-		qw422016.E().S(bookmark.Url)
+		qw422016.E().S(bookmark.URL)
 //line view/home.qtpl:18
 		qw422016.N().S(`" target="_blank">`)
 //line view/home.qtpl:18
@@ -72,7 +72,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
               <span>•</span>
               <a href="`)
 //line view/home.qtpl:22
-		qw422016.E().S(bookmark.OriginalUrl)
+		qw422016.E().S(bookmark.OriginalURL)
 //line view/home.qtpl:22
 		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
             </div>
