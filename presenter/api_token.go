@@ -6,18 +6,20 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-type ApiToken struct {
+type APIToken struct {
 	ID    string
 	Token string
 }
 
-func PresentApiTokens(tokens []model.ApiToken) []ApiToken {
-	presentedTokens := []ApiToken{}
+func PresentAPITokens(tokens []model.APIToken) []APIToken {
+	presentedTokens := []APIToken{}
+
 	for _, token := range tokens {
-		presentedTokens = append(presentedTokens, ApiToken{
+		presentedTokens = append(presentedTokens, APIToken{
 			ID:    fmt.Sprintf("%d", token.ID),
 			Token: token.Token,
 		})
 	}
+
 	return presentedTokens
 }

@@ -11,15 +11,17 @@ import (
 )
 
 func TestFetch(t *testing.T) {
+	t.Parallel()
+
 	archiveConfig := archive.Config{
 		DownloadFolder: "/tmp",
 	}
 	s := archive.New(archiveConfig)
-
 	htmlBody := "<html><head><title>THE TITLE</title></head><body>THIS IS THE BODY</body></html>"
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, htmlBody)
 	}))
+
 	defer ts.Close()
 
 	page, err := s.Save(ts.URL, "foobar")

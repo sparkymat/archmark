@@ -50,20 +50,21 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	// Fetch page
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to retrieve web page. err: %w", err)
 	}
 	defer resp.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read response body. err: %w", err)
 	}
+
 	body := string(bodyBytes)
 
 	// Parse for title
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(body))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to load goquery doc. err: %w", err)
 	}
 
 	title := doc.Find("title").Text()
@@ -72,8 +73,8 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 	doc.Find("script").Each(func(i int, el *goquery.Selection) {
 		el.Remove()
 	})
-	bodyText := doc.Text()
 
+	bodyText := doc.Text()
 	page := &ArchivedPage{
 		Title:       title,
 		HTMLContent: bodyText,

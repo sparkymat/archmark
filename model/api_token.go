@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ApiToken struct {
+type APIToken struct {
 	ID        uint           `gorm:"primaryKey"`
 	CreatedAt time.Time      `gorm:"default:current_timestamp"`
 	UpdatedAt time.Time      `gorm:"default:current_timestamp"`

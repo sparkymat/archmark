@@ -18,6 +18,7 @@ func ConfigInjector(cfg config.API, db database.API) func(echo.HandlerFunc) echo
 		return func(c echo.Context) error {
 			c.Set(ConfigKey, cfg)
 			c.Set(DBKey, db)
+
 			return next(c)
 		}
 	}

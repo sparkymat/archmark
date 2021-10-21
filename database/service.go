@@ -25,9 +25,9 @@ type API interface {
 	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
 	FindBookmark(id uint) (*model.Bookmark, error)
 	CreateBookmark(bookmark *model.Bookmark) error
-	ListApiTokens() ([]model.ApiToken, error)
-	DeleteApiToken(id uint) error
-	CreateApiToken(token string) (*model.ApiToken, error)
+	ListAPITokens() ([]model.APIToken, error)
+	DeleteAPIToken(id uint) error
+	CreateAPIToken(token string) (*model.APIToken, error)
 	MarkBookmarkCompleted(id uint) error
 }
 
@@ -48,7 +48,7 @@ func New(cfg Config) API {
 
 	err = conn.AutoMigrate(
 		&model.Bookmark{},
-		&model.ApiToken{},
+		&model.APIToken{},
 	)
 	if err != nil {
 		panic(err)
@@ -65,8 +65,8 @@ type service struct {
 
 func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
 	var bookmarks []model.Bookmark
-	offset := int((page - 1) * pageSize)
 
+	offset := int((page - 1) * pageSize)
 	stmnt := s.conn
 
 	if query != "" {
@@ -78,39 +78,44 @@ func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]m
 	if result := stmnt.Offset(offset).Limit(int(pageSize)).Find(&bookmarks); result.Error != nil {
 		return nil, result.Error
 	}
+
 	return bookmarks, nil
 }
 
 func (s *service) FindBookmark(id uint) (*model.Bookmark, error) {
 	bookmark := &model.Bookmark{}
-	result := s.conn.Find(bookmark, id)
-	if result.Error != nil {
+
+	if result := s.conn.Find(bookmark, id); result.Error != nil {
 		return nil, result.Error
 	}
+
 	return bookmark, nil
 }
 
 func (s *service) CreateBookmark(bookmark *model.Bookmark) error {
 	result := s.conn.Create(bookmark)
+
 	return result.Error
 }
 
-func (s *service) ListApiTokens() ([]model.ApiToken, error) {
-	var apiTokens []model.ApiToken
+func (s *service) ListAPITokens() ([]model.APIToken, error) {
+	var apiTokens []model.APIToken
 
 	if result := s.conn.Find(&apiTokens); result.Error != nil {
 		return nil, result.Error
 	}
+
 	return apiTokens, nil
 }
 
-func (s *service) DeleteApiToken(id uint) error {
-	err := s.conn.Delete(&model.ApiToken{}, id)
+func (s *service) DeleteAPIToken(id uint) error {
+	err := s.conn.Delete(&model.APIToken{}, id)
+
 	return err.Error
 }
 
-func (s *service) CreateApiToken(token string) (*model.ApiToken, error) {
-	apiToken := &model.ApiToken{
+func (s *service) CreateAPIToken(token string) (*model.APIToken, error) {
+	apiToken := &model.APIToken{
 		Token: token,
 	}
 
@@ -123,5 +128,6 @@ func (s *service) CreateApiToken(token string) (*model.ApiToken, error) {
 
 func (s *service) MarkBookmarkCompleted(id uint) error {
 	result := s.conn.Model(&model.Bookmark{}).Where("id = ?", id).Update("status", "completed")
+
 	return result.Error
 }

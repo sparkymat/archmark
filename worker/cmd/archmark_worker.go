@@ -24,18 +24,21 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 
 		if len(args) == 0 {
 			log.Printf("No params found for job %s\n", help.Jid())
+
 			return nil
 		}
 
 		bookmarkIDString, isString := args[0].(string)
 		if !isString {
 			log.Printf("Non-string param passed for job %s\n", help.Jid())
+
 			return nil
 		}
 
 		bookmarkID, err := strconv.ParseUint(bookmarkIDString, Base10, SixtyFourBits)
 		if err != nil {
 			log.Printf("Non-ID param found for job %s\n", help.Jid())
+
 			//nolint:nilerr
 			return nil
 		}
@@ -43,18 +46,21 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		bookmark, err := db.FindBookmark(uint(bookmarkID))
 		if err != nil {
 			log.Printf("Unable to load bookmark for job %s\n", help.Jid())
-			return err
+
+			return fmt.Errorf("failed to find bookmark. err: %w", err)
 		}
 
 		if bookmark.Status != "pending" {
 			log.Printf("No pending bookmark for job %s\n", help.Jid())
+
 			return nil
 		}
 
 		filePath := filepath.Join(cfg.DownloadPath(), bookmark.FileName)
-		err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.URL, filePath)
-		if err != nil {
+
+		if err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.URL, filePath); err != nil {
 			log.Printf("Download failed for job %s\n", help.Jid())
+
 			//nolint:nilerr
 			return nil
 		}
@@ -62,10 +68,12 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		err = db.MarkBookmarkCompleted(bookmark.ID)
 		if err != nil {
 			log.Printf("Failed to mark bookmark as complete for job %s\n", help.Jid())
-			return err
+
+			return fmt.Errorf("failed to mark bookmark as completed. err: %w", err)
 		}
 
 		log.Printf("Completed job %s\n", help.Jid())
+
 		return nil
 	}
 }

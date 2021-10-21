@@ -24,7 +24,7 @@ func ApiTokensIndex(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	presentedTokens := presenter.PresentApiTokens(tokens)
+	presentedTokens := presenter.PresentAPITokens(tokens)
 	pageHTML := view.ApiTokensIndex(presentedTokens)
 	htmlString := view.Layout("archmark | tokens", pageHTML)
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
