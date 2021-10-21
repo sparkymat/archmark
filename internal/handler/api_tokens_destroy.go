@@ -11,18 +11,23 @@ import (
 
 func ApiTokensDestroy(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
+
 	if dbVal == nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
+
 	db := dbVal.(database.API)
 
 	tokenIDString := c.Param("id")
 	tokenID, err := strconv.ParseUint(tokenIDString, 10, 32)
 	if err != nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
 	if err = db.DeleteApiToken(uint(tokenID)); err != nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 

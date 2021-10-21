@@ -20,19 +20,24 @@ type HomeInput struct {
 func Home(c echo.Context) error {
 	input := &HomeInput{}
 	if err := c.Bind(input); err != nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
+
 	if input.Page == 0 {
 		input.Page = 1
 	}
 
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
 	db := dbVal.(database.API)
+
 	bookmarks, err := db.LoadBookmarks(input.Query, input.Page, pageSize)
 	if err != nil {
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
@@ -43,5 +48,7 @@ func Home(c echo.Context) error {
 
 	pageHTML := view.Home(input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
+
+	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }
