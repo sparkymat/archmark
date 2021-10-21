@@ -20,6 +20,26 @@ services:
     links:
       - faktory
       - db
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile_worker
+    volumes:
+      - archmarkdownloads:/data
+    environment:
+      DB_DATABASE: archmark
+      DB_HOSTNAME: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: foobar
+      DB_PORT: 5432
+      DB_SSL_MODE: "false"
+      ADMIN_PASSWORD: foobar
+      MONOLITH_PATH: /bin/monolith
+      DOWNLOAD_PATH: /data
+      FAKTORY_URL: "tcp://faktory:7419"
+    links:
+      - faktory
+      - db
   db:
     image: postgres:14.0-alpine
     environment:
