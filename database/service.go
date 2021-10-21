@@ -46,10 +46,13 @@ func New(cfg Config) API {
 		panic(err)
 	}
 
-	conn.AutoMigrate(
+	err = conn.AutoMigrate(
 		&model.Bookmark{},
 		&model.ApiToken{},
 	)
+	if err != nil {
+		panic(err)
+	}
 
 	return &service{
 		conn: conn,

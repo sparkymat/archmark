@@ -25,5 +25,8 @@ func main() {
 
 	r := echo.New()
 	router.Setup(r, cfg, db)
-	r.Start(":8080")
+	err = r.Start(":8080")
+	if err != nil {
+		panic(err)
+	}
 }
