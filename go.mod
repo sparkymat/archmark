@@ -10,23 +10,24 @@ require (
 )
 
 require (
+	github.com/PuerkitoBio/goquery v1.7.1
 	github.com/caarlos0/env/v6 v6.7.1
+	github.com/contribsys/faktory v1.5.5
+	github.com/contribsys/faktory_worker_go v1.5.0
+	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/stretchr/testify v1.7.0
 	github.com/valyala/quicktemplate v1.7.0
+	github.com/xeonx/timeago v1.0.0-rc4
 	gorm.io/driver/postgres v1.1.2
 	gorm.io/gorm v1.21.15
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect
-	github.com/contribsys/faktory v1.5.5 // indirect
-	github.com/contribsys/faktory_worker_go v1.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.10.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -44,7 +45,6 @@ require (
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
-	github.com/xeonx/timeago v1.0.0-rc4 // indirect
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
