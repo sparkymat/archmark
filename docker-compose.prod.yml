@@ -1,0 +1,63 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    image: sparkymat/archmark:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - archmarkdownloads:/data
+    environment:
+      DB_DATABASE: archmark
+      DB_HOSTNAME: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: foobar
+      DB_PORT: 5432
+      DB_SSL_MODE: "false"
+      ADMIN_PASSWORD: foobar
+      MONOLITH_PATH: /bin/monolith
+      DOWNLOAD_PATH: /data
+      FAKTORY_URL: "tcp://faktory:7419"
+    links:
+      - faktory
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+  worker:
+    image: sparkymat/archmark-worker:latest
+    volumes:
+      - archmarkdownloads:/data
+    environment:
+      DB_DATABASE: archmark
+      DB_HOSTNAME: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: foobar
+      DB_PORT: 5432
+      DB_SSL_MODE: "false"
+      ADMIN_PASSWORD: foobar
+      MONOLITH_PATH: /bin/monolith
+      DOWNLOAD_PATH: /data
+      FAKTORY_URL: "tcp://faktory:7419"
+    links:
+      - faktory
+      - db
+      - web
+  db:
+    image: postgres:14.0-alpine
+    environment:
+      POSTGRES_PASSWORD: foobar
+      POSTGRES_DB: archmark
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  faktory:
+    image: contribsys/faktory
+    ports:
+      - "7420:7420"
+    volumes:
+      - faktorydata:/var/lib/faktory
+volumes:
+  archmarkdownloads: {}
+  faktorydata: {}
