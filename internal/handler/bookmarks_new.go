@@ -10,5 +10,7 @@ import (
 func BookmarksNew(c echo.Context) error {
 	pageHTML := view.BookmarksNew()
 	htmlString := view.Layout("archmark | add", pageHTML)
+
+	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }

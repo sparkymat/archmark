@@ -10,15 +10,20 @@ import (
 	"github.com/sparkymat/archmark/view"
 )
 
-func ApiTokensIndex(c echo.Context) error {
+func APITokensIndex(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
-	db := dbVal.(database.API)
 
-	tokens, err := db.ListApiTokens()
+	db, ok := dbVal.(database.API)
+	if !ok {
+		//nolint:wrapcheck
+		return c.String(http.StatusInternalServerError, "db conn not found")
+	}
+
+	tokens, err := db.ListAPITokens()
 	if err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
@@ -27,5 +32,7 @@ func ApiTokensIndex(c echo.Context) error {
 	presentedTokens := presenter.PresentAPITokens(tokens)
 	pageHTML := view.ApiTokensIndex(presentedTokens)
 	htmlString := view.Layout("archmark | tokens", pageHTML)
+
+	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }

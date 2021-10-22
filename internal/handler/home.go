@@ -33,7 +33,12 @@ func Home(c echo.Context) error {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
-	db := dbVal.(database.API)
+
+	db, ok := dbVal.(database.API)
+	if !ok {
+		//nolint:wrapcheck
+		return c.String(http.StatusInternalServerError, "db conn not found")
+	}
 
 	bookmarks, err := db.LoadBookmarks(input.Query, input.Page, pageSize)
 	if err != nil {

@@ -11,21 +11,28 @@ import (
 	"github.com/sparkymat/archmark/middleware"
 )
 
-func ApiTokensCreate(c echo.Context) error {
+const tokenLength = 32
+
+func APITokensCreate(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
-	db := dbVal.(database.API)
 
-	token, err := randomHex(32)
+	db, ok := dbVal.(database.API)
+	if !ok {
+		//nolint:wrapcheck
+		return c.String(http.StatusInternalServerError, "db conn not found")
+	}
+
+	token, err := randomHex(tokenLength)
 	if err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	if _, err = db.CreateApiToken(token); err != nil {
+	if _, err = db.CreateAPIToken(token); err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -39,5 +46,6 @@ func randomHex(n int) (string, error) {
 	if _, err := rand.Read(bytes); err != nil {
 		return "", fmt.Errorf("failed to read random data. err: %w", err)
 	}
+
 	return hex.EncodeToString(bytes), nil
 }

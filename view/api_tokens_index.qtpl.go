@@ -21,7 +21,7 @@ var (
 )
 
 //line view/api_tokens_index.qtpl:3
-func StreamApiTokensIndex(qw422016 *qt422016.Writer, tokens []presenter.ApiToken) {
+func StreamApiTokensIndex(qw422016 *qt422016.Writer, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:3
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -64,7 +64,7 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, tokens []presenter.ApiToken
 }
 
 //line view/api_tokens_index.qtpl:23
-func WriteApiTokensIndex(qq422016 qtio422016.Writer, tokens []presenter.ApiToken) {
+func WriteApiTokensIndex(qq422016 qtio422016.Writer, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:23
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/api_tokens_index.qtpl:23
@@ -75,7 +75,7 @@ func WriteApiTokensIndex(qq422016 qtio422016.Writer, tokens []presenter.ApiToken
 }
 
 //line view/api_tokens_index.qtpl:23
-func ApiTokensIndex(tokens []presenter.ApiToken) string {
+func ApiTokensIndex(tokens []presenter.APIToken) string {
 //line view/api_tokens_index.qtpl:23
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/api_tokens_index.qtpl:23

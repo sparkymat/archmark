@@ -13,3 +13,7 @@ type APIToken struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	Token     string         `gorm:"not null;index"`
 }
+
+func (APIToken) TableName() string {
+	return "api_tokens"
+}

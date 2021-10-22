@@ -1,6 +1,7 @@
 package archive
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,9 +13,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var (
-	ErrUnableToCreateFile = errors.New("unable to create file")
-)
+var ErrUnableToCreateFile = errors.New("unable to create file")
 
 type Config struct {
 	DownloadFolder string
@@ -27,7 +26,7 @@ type ArchivedPage struct {
 }
 
 type API interface {
-	Save(url string, filename string) (*ArchivedPage, error)
+	Save(ctx context.Context, url string, filename string) (*ArchivedPage, error)
 }
 
 func New(cfg Config) API {
@@ -40,18 +39,23 @@ type service struct {
 	config Config
 }
 
-func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
+func (s *service) Save(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
 	// Check if file already exists
 	filePath := filepath.Join(s.config.DownloadFolder, fmt.Sprintf("%s.html", fileName))
 	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {
 		return nil, ErrUnableToCreateFile
 	}
 
-	// Fetch page
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve web page. err: %w", err)
+		return nil, fmt.Errorf("failed to create http request. err: %w", err)
 	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch url. err: %w", err)
+	}
+
 	defer resp.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
@@ -61,7 +65,6 @@ func (s *service) Save(url string, fileName string) (*ArchivedPage, error) {
 
 	body := string(bodyBytes)
 
-	// Parse for title
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load goquery doc. err: %w", err)

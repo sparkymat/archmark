@@ -40,9 +40,9 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	authApp.GET("/", handler.Home)
 	authApp.GET("/add", handler.BookmarksNew)
 	authApp.POST("/bookmarks", handler.BookmarksCreate)
-	authApp.GET("/tokens", handler.ApiTokensIndex)
-	authApp.POST("/tokens/:id/destroy", handler.ApiTokensDestroy)
-	authApp.POST("/tokens", handler.ApiTokensCreate)
+	authApp.GET("/tokens", handler.APITokensIndex)
+	authApp.POST("/tokens/:id/destroy", handler.APITokensDestroy)
+	authApp.POST("/tokens", handler.APITokensCreate)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{
@@ -53,10 +53,7 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 		"PUT":    struct{}{},
 	}
 
-	fmt.Println("")
-	fmt.Println("  Registered routes  ")
-	fmt.Println("  =================  ")
-	fmt.Println("")
+	fmt.Fprintf(os.Stdout, "\n  Registered routes  \n  =================  \n\n")
 
 	for _, r := range e.Routes() {
 		if _, whitelisted := methodWhitelist[r.Method]; whitelisted {

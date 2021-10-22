@@ -1,6 +1,7 @@
 package archive_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -24,7 +25,7 @@ func TestFetch(t *testing.T) {
 
 	defer ts.Close()
 
-	page, err := s.Save(ts.URL, "foobar")
+	page, err := s.Save(context.Background(), ts.URL, "foobar")
 
 	assert.NoError(t, err)
 	assert.NotNil(t, page)

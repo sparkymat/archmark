@@ -1,6 +1,6 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func ApiTokensIndex(tokens []presenter.ApiToken) %}
+{% func ApiTokensIndex(tokens []presenter.APIToken) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <div class="flex flex-row justify-end">

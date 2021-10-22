@@ -11,9 +11,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var (
-	ErrNotFound = errors.New("not found")
-)
+var ErrNotFound = errors.New("not found")
 
 const BcryptDefaultCost = 10
 
@@ -38,10 +36,10 @@ func New(cfg Config) API {
 			Colorful: true,
 		},
 	)
+
 	conn, err := gorm.Open(postgres.Open(cfg.ConnectionString), &gorm.Config{
 		Logger: newLogger,
 	})
-
 	if err != nil {
 		panic(err)
 	}

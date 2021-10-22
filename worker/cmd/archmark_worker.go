@@ -14,8 +14,10 @@ import (
 	"github.com/sparkymat/archmark/database"
 )
 
-const Base10 = 10
-const SixtyFourBits = 64
+const (
+	base10        = 10
+	sixtyFourBits = 64
+)
 
 func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args ...interface{}) error {
 	return func(ctx context.Context, args ...interface{}) error {
@@ -35,7 +37,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 			return nil
 		}
 
-		bookmarkID, err := strconv.ParseUint(bookmarkIDString, Base10, SixtyFourBits)
+		bookmarkID, err := strconv.ParseUint(bookmarkIDString, base10, sixtyFourBits)
 		if err != nil {
 			log.Printf("Non-ID param found for job %s\n", help.Jid())
 
