@@ -39,7 +39,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 
 		bookmarkID, err := strconv.ParseUint(bookmarkIDString, base10, sixtyFourBits)
 		if err != nil {
-			log.Printf("Non-ID param found for job %s\n", help.Jid())
+			log.Printf("Non-ID param found for job %s with err: %v\n", help.Jid(), err)
 
 			//nolint:nilerr
 			return nil
@@ -61,7 +61,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		filePath := filepath.Join(cfg.DownloadPath(), bookmark.FileName)
 
 		if err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.URL, filePath); err != nil {
-			log.Printf("Download failed for job %s\n", help.Jid())
+			log.Printf("Download failed for job %s with err: %v\n", help.Jid(), err)
 
 			//nolint:nilerr
 			return nil
@@ -103,5 +103,9 @@ func downloadPageWithMonolith(jobID string, monolithPath, url, filePath string) 
 		log.Printf("monolith download for job %s failed with: %v", jobID, err)
 	}
 
-	return fmt.Errorf("download failed. err: %w", err)
+	if err != nil {
+		return fmt.Errorf("download failed. err: %w", err)
+	}
+
+	return nil
 }

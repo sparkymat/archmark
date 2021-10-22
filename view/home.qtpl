@@ -15,7 +15,11 @@
       <ul>
         {% for _, bookmark := range bookmarks %}
           <li class="py-4">
-            <a class="text-xl font-light" href="{%s bookmark.URL %}" target="_blank">{%s bookmark.Title %}</a>
+            {% if bookmark.IsActive %}
+              <a class="text-xl" href="{%s bookmark.URL %}" target="_blank">{%s bookmark.Title %}</a>
+            {% else %}
+              <a class="text-xl font-light" href="#" target="_blank">[pending] {%s bookmark.Title %}</a>
+            {% endif %}
             <div class="">
               <span class="text-sm text-gray-400">Added {%s bookmark.TimeSince %}</span>
               <span>•</span>
