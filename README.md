@@ -1,4 +1,4 @@
-# ArchMark
+# ArchMark [![.github/workflows/ci.yml](https://github.com/sparkymat/archmark/actions/workflows/ci.yml/badge.svg)](https://github.com/sparkymat/archmark/actions/workflows/ci.yml)
 
 ArchMark is a bookmark manager that archives the bookmarked page using [Monolith](https://github.com/Y2Z/monolith). It consists of the main web proccess as well as a worker that downloads the web page for archival.
 
@@ -21,6 +21,26 @@ Alternatively, you can build and run from the code with:
 2. `cd archmark`
 3. `docker-compose build`
 4. `docker-compose up`
+
+P.S: Don't forget to edit the `docker-compose.yml` file, and update the value of `ADMIN_PASSWORD` to something more secure.
+
+N.B: Everything in the download folder (configured using `DOWNLOAD_FOLDER`) will be served under `/b/` sub-path. 
+
+## Configuration
+
+Both the app and the worker are configured using environment variables.
+
+| Variable         | Description                                                    |
+| ---------------- | -------------------------------------------------------------- |
+| `DB_HOSTNAME`    | Hostname of the machine where PostgreSQL is running            |
+| `DB_PORT`        | Port on which PostgreSQL is running                            |
+| `DB_USERNAME`    | PostgreSQL user                                                |
+| `DB_PASSWORD`    | PostgreSQL password                                            |
+| `DB_DATABASE`    | PostgreSQL database name                                       |
+| `DB_SSL_MODE`    | `true` if the connection to PostgreSQL should be done over SSL |
+| `ADMIN_PASSWORD` | Password for the `admin` user                                  |
+| `MONOLITH_PATH`  | Full path to the Monolith binary                               |
+| `DOWNLOAD_PATH`  | Full path to the folder where archived pages are to be stored  |
 
 ## Screenshots
 
