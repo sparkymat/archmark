@@ -23,6 +23,10 @@ func main() {
 		ConnectionString: cfg.DBConnectionString(),
 	})
 
+	if err = db.AutoMigrate(); err != nil {
+		panic(err)
+	}
+
 	r := echo.New()
 	router.Setup(r, cfg, db)
 

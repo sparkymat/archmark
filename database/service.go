@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -20,6 +21,7 @@ type Config struct {
 }
 
 type API interface {
+	AutoMigrate() error
 	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
 	FindBookmark(id uint) (*model.Bookmark, error)
 	CreateBookmark(bookmark *model.Bookmark) error
@@ -40,14 +42,6 @@ func New(cfg Config) API {
 	conn, err := gorm.Open(postgres.Open(cfg.ConnectionString), &gorm.Config{
 		Logger: newLogger,
 	})
-	if err != nil {
-		panic(err)
-	}
-
-	err = conn.AutoMigrate(
-		&model.Bookmark{},
-		&model.APIToken{},
-	)
 	if err != nil {
 		panic(err)
 	}
@@ -128,4 +122,16 @@ func (s *service) MarkBookmarkCompleted(id uint) error {
 	result := s.conn.Model(&model.Bookmark{}).Where("id = ?", id).Update("status", "completed")
 
 	return result.Error
+}
+
+func (s *service) AutoMigrate() error {
+	err := s.conn.AutoMigrate(
+		&model.Bookmark{},
+		&model.APIToken{},
+	)
+	if err != nil {
+		return fmt.Errorf("failed to migrate. err: %w", err)
+	}
+
+	return nil
 }
