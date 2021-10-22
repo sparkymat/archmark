@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - archmarkdownloads:/data
+      - ./data/archive:/data
     environment:
       DB_DATABASE: archmark
       DB_HOSTNAME: db
@@ -26,7 +26,7 @@ services:
   worker:
     image: sparkymat/archmark-worker:latest
     volumes:
-      - archmarkdownloads:/data
+      - ./data/archive:/data
     environment:
       DB_DATABASE: archmark
       DB_HOSTNAME: db
@@ -47,6 +47,8 @@ services:
     environment:
       POSTGRES_PASSWORD: foobar
       POSTGRES_DB: archmark
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -57,7 +59,4 @@ services:
     ports:
       - "7420:7420"
     volumes:
-      - faktorydata:/var/lib/faktory
-volumes:
-  archmarkdownloads: {}
-  faktorydata: {}
+      - ./data/faktory:/var/lib/faktory

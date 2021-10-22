@@ -46,6 +46,8 @@ services:
       - web
   db:
     image: postgres:14.0-alpine
+    volumes:
+      - archmarkdb:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: foobar
       POSTGRES_DB: archmark
@@ -59,7 +61,8 @@ services:
     ports:
       - "7420:7420"
     volumes:
-      - faktorydata:/var/lib/faktory
+      - archmarkfaktory:/var/lib/faktory
 volumes:
+  archmarkdb: {}
   archmarkdownloads: {}
-  faktorydata: {}
+  archmarkfaktory: {}
