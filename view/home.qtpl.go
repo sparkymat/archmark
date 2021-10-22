@@ -73,7 +73,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
 		} else {
 //line view/home.qtpl:20
 			qw422016.N().S(`
-              <a class="text-xl font-light" href="#" target="_blank">[pending] `)
+              <a class="text-xl font-light" href="#">[pending] `)
 //line view/home.qtpl:21
 			qw422016.E().S(bookmark.Title)
 //line view/home.qtpl:21

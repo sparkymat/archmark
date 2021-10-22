@@ -20,6 +20,9 @@ services:
     links:
       - faktory
       - db
+    depends_on:
+      db:
+        condition: service_healthy
   worker:
     build:
       context: .
@@ -40,11 +43,17 @@ services:
     links:
       - faktory
       - db
+      - web
   db:
     image: postgres:14.0-alpine
     environment:
       POSTGRES_PASSWORD: foobar
       POSTGRES_DB: archmark
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   faktory:
     image: contribsys/faktory
     ports:
