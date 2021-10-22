@@ -41,7 +41,6 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		if err != nil {
 			log.Printf("Non-ID param found for job %s with err: %v\n", help.Jid(), err)
 
-			//nolint:nilerr
 			return nil
 		}
 
@@ -63,7 +62,6 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 		if err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.URL, filePath); err != nil {
 			log.Printf("Download failed for job %s with err: %v\n", help.Jid(), err)
 
-			//nolint:nilerr
 			return nil
 		}
 
