@@ -3,13 +3,10 @@ package database
 import (
 	"errors"
 	"fmt"
-	"log"
-	"os"
 
+	_ "github.com/jackc/pgx/v4"
+	"github.com/jmoiron/sqlx"
 	"github.com/sparkymat/archmark/model"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var ErrNotFound = errors.New("not found")
@@ -32,27 +29,23 @@ type API interface {
 }
 
 func New(cfg Config) API {
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags),
-		logger.Config{
-			Colorful: true,
-		},
-	)
+	dbConn, err := sqlx.Connect("postgres", cfg.ConnectionString)
+	if err != nil {
+		panic(err)
+	}
 
-	conn, err := gorm.Open(postgres.Open(cfg.ConnectionString), &gorm.Config{
-		Logger: newLogger,
-	})
+	err = dbConn.Ping()
 	if err != nil {
 		panic(err)
 	}
 
 	return &service{
-		conn: conn,
+		conn: dbConn,
 	}
 }
 
 type service struct {
-	conn *gorm.DB
+	conn *sqlx.DB
 }
 
 func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
