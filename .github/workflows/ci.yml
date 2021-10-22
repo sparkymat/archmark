@@ -25,9 +25,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
+      - name: Build and push web app
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: sparkymat/archmark:latest
+      - name: Build and push worker
+        id: docker_build_worker
+        uses: docker/build-push-action@v2
+        with:
+          file: Dockerfile_worker
+          push: true
+          tags: sparkymat/archmark-worker:latest
