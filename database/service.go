@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -22,13 +23,13 @@ type Config struct {
 
 type API interface {
 	AutoMigrate() error
-	ListBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
-	FindBookmark(id uint) (*model.Bookmark, error)
-	CreateBookmark(bookmark *model.Bookmark) error
-	ListAPITokens() ([]model.APIToken, error)
-	DeleteAPIToken(id uint) error
-	CreateAPIToken(token string) (*model.APIToken, error)
-	MarkBookmarkCompleted(id uint) error
+	ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error)
+	FindBookmark(ctx context.Context, id uint64) (*model.Bookmark, error)
+	CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error
+	ListAPITokens(ctx context.Context) ([]model.APIToken, error)
+	DeleteAPIToken(ctx context.Context, id uint64) error
+	CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error)
+	MarkBookmarkCompleted(ctx context.Context, id uint64) error
 }
 
 func New(cfg Config) API {
@@ -67,7 +68,7 @@ func (s *service) AutoMigrate() error {
 	}
 
 	err = m.Up()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		return fmt.Errorf("failed to apply migrations. err: %w", err)
 	}
 

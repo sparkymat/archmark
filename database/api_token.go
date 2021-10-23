@@ -1,8 +1,12 @@
 package database
 
-import "github.com/sparkymat/archmark/model"
+import (
+	"context"
 
-func (s *service) ListAPITokens() ([]model.APIToken, error) {
+	"github.com/sparkymat/archmark/model"
+)
+
+func (s *service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
 	panic("unimplemented")
 	/*
 		var apiTokens []model.APIToken
@@ -15,7 +19,7 @@ func (s *service) ListAPITokens() ([]model.APIToken, error) {
 	*/
 }
 
-func (s *service) DeleteAPIToken(id uint) error {
+func (s *service) DeleteAPIToken(ctx context.Context, id uint64) error {
 	panic("unimplemented")
 	/*
 		err := s.conn.Delete(&model.APIToken{}, id)
@@ -24,7 +28,7 @@ func (s *service) DeleteAPIToken(id uint) error {
 	*/
 }
 
-func (s *service) CreateAPIToken(token string) (*model.APIToken, error) {
+func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
 	panic("unimplemented")
 	/*
 		apiToken := &model.APIToken{

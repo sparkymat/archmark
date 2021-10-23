@@ -35,7 +35,7 @@ func APITokensDestroy(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	if err = db.DeleteAPIToken(uint(tokenID)); err != nil {
+	if err = db.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

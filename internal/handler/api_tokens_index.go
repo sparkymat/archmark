@@ -23,7 +23,7 @@ func APITokensIndex(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
 
-	tokens, err := db.ListAPITokens()
+	tokens, err := db.ListAPITokens(c.Request().Context())
 	if err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())

@@ -7,7 +7,7 @@ import (
 )
 
 type APIToken struct {
-	ID        uint           `gorm:"primaryKey"`
+	ID        uint64         `gorm:"primaryKey"`
 	CreatedAt time.Time      `gorm:"default:current_timestamp"`
 	UpdatedAt time.Time      `gorm:"default:current_timestamp"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
