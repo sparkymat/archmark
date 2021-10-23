@@ -74,40 +74,14 @@ func (s *service) FindBookmark(ctx context.Context, id uint64) (*model.Bookmark,
 
 	log.Printf("SQL: %s\n", querySQL)
 
-	var bookmarks model.Bookmark
+	var bookmark model.Bookmark
 
-	rows, err := s.conn.QueryxContext(ctx, querySQL, args...)
+	err = s.conn.QueryRowxContext(ctx, querySQL, args...).StructScan(&bookmark)
 	if err != nil {
 		return nil, fmt.Errorf("failed to run query. err: %w", err)
 	}
 
-	for rows.Next() {
-		var bookmark model.Bookmark
-
-		var deletedAt sql.NullTime
-		err := rows.StructScan(&bookmark)
-		if err != nil {
-			return nil, fmt.Errorf("failed to scan row. err: %w", err)
-		}
-
-		if deletedAt.Valid {
-			bookmark.DeletedAt = &deletedAt.Time
-		}
-
-		bookmarks = append(bookmarks, bookmark)
-	}
-
-	return bookmarks, nil
-	panic("unimplemented")
-	/*
-		bookmark := &model.Bookmark{}
-
-		if result := s.conn.Find(bookmark, id); result.Error != nil {
-			return nil, result.Error
-		}
-
-		return bookmark, nil
-	*/
+	return &bookmark, nil
 }
 
 func (s *service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error {
