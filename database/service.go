@@ -7,6 +7,8 @@ import (
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
+
+	// Importing file driver for migrations.
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v4"
 	"github.com/jmoiron/sqlx"
@@ -68,7 +70,7 @@ func (s *service) AutoMigrate() error {
 	}
 
 	err = m.Up()
-	if err != nil && err != migrate.ErrNoChange {
+	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return fmt.Errorf("failed to apply migrations. err: %w", err)
 	}
 

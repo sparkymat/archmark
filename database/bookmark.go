@@ -10,6 +10,7 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
+//nolint:lll
 func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
@@ -23,7 +24,7 @@ func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, 
 		stmnt = stmnt.OrderBy("created_at desc")
 	}
 
-	offset := uint64((page - 1) * pageSize)
+	offset := (page - 1) * pageSize
 	stmnt = stmnt.Offset(offset).Limit(pageSize)
 
 	querySQL, args, err := stmnt.ToSql()
@@ -39,11 +40,13 @@ func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, 
 	if err != nil {
 		return nil, fmt.Errorf("failed to run query. err: %w", err)
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var bookmark model.Bookmark
 
 		var deletedAt sql.NullTime
+
 		err := rows.StructScan(&bookmark)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan row. err: %w", err)
@@ -101,6 +104,7 @@ func (s *service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) 
 	log.Printf("SQL: %s\n", querySQL)
 
 	var id uint64
+
 	err = s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&id)
 	if err != nil {
 		return fmt.Errorf("failed to run query. err: %w", err)

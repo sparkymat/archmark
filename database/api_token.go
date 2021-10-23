@@ -32,10 +32,13 @@ func (s *service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
 		return nil, fmt.Errorf("failed to run query. err: %w", err)
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		var token model.APIToken
 
 		var deletedAt sql.NullTime
+
 		err := rows.StructScan(&token)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan row. err: %w", err)
@@ -90,6 +93,7 @@ func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIT
 	log.Printf("SQL: %s\n", querySQL)
 
 	var id uint64
+
 	err = s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to run query. err: %w", err)
