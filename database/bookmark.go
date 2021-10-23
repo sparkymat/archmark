@@ -85,19 +85,51 @@ func (s *service) FindBookmark(ctx context.Context, id uint64) (*model.Bookmark,
 }
 
 func (s *service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error {
-	panic("unimplemented")
-	/*
-		result := s.conn.Create(bookmark)
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-		return result.Error
-	*/
+	stmnt := psql.
+		Insert("bookmarks").
+		Columns("url, title, status, content, file_name").
+		Values(bookmark.URL, bookmark.Title, bookmark.Status, bookmark.Content, bookmark.FileName).
+		Suffix("RETURNING \"id\"")
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var id uint64
+	err = s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&id)
+	if err != nil {
+		return fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	bookmark.ID = id
+
+	return nil
 }
 
 func (s *service) MarkBookmarkCompleted(ctx context.Context, id uint64) error {
-	panic("unimplemented")
-	/*
-		result := s.conn.Model(&model.Bookmark{}).Where("id = ?", id).Update("status", "completed")
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-		return result.Error
-	*/
+	stmnt := psql.
+		Update("bookmarks").
+		Set("status", "completed").
+		Where(sq.Eq{"id": id})
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	_, err = s.conn.ExecContext(ctx, querySQL, args...)
+	if err != nil {
+		return fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return nil
 }

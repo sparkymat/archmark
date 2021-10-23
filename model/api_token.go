@@ -7,11 +7,11 @@ import (
 )
 
 type APIToken struct {
-	ID        uint64         `gorm:"primaryKey"`
-	CreatedAt time.Time      `gorm:"default:current_timestamp"`
-	UpdatedAt time.Time      `gorm:"default:current_timestamp"`
-	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Token     string         `gorm:"not null;index"`
+	ID        uint64         `db:"id"`
+	CreatedAt time.Time      `db:"created_at"`
+	UpdatedAt time.Time      `db:"updated_at"`
+	DeletedAt gorm.DeletedAt `db:"deleted_at"`
+	Token     string         `db:"token"`
 }
 
 func (APIToken) TableName() string {
