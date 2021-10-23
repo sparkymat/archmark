@@ -4,14 +4,27 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/database"
-	"github.com/sparkymat/archmark/middleware"
+	mw "github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/presenter"
 	"github.com/sparkymat/archmark/view"
 )
 
 func APITokensIndex(c echo.Context) error {
-	dbVal := c.Get(middleware.DBKey)
+	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
+	if csrfTokenVal == nil {
+		//nolint:wrapcheck
+		return c.String(http.StatusInternalServerError, "csrf token not found")
+	}
+
+	csrfToken, ok := csrfTokenVal.(string)
+	if !ok {
+		//nolint:wrapcheck
+		return c.String(http.StatusInternalServerError, "csrf token not found")
+	}
+
+	dbVal := c.Get(mw.DBKey)
 	if dbVal == nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, "db conn not found")
@@ -30,7 +43,7 @@ func APITokensIndex(c echo.Context) error {
 	}
 
 	presentedTokens := presenter.PresentAPITokens(tokens)
-	pageHTML := view.ApiTokensIndex(presentedTokens)
+	pageHTML := view.ApiTokensIndex(csrfToken, presentedTokens)
 	htmlString := view.Layout("archmark | tokens", pageHTML)
 
 	//nolint:wrapcheck

@@ -1,6 +1,7 @@
-{% func BookmarksNew() %}
+{% func BookmarksNew(csrfToken string) %}
   <div class="container mx-auto">
     <form action="/bookmarks" method="POST">
+      <input type="hidden" name="csrf" value="{%s csrfToken %}">
       <div class="flex flex-row mt-4">
         <input type="text" name="url" class="text-xl flex-grow p-2 border outline-white" placeholder="Paste URL here..." autofocus>
         <input type="submit" value="Add" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4">

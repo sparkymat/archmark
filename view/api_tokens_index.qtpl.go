@@ -21,70 +21,80 @@ var (
 )
 
 //line view/api_tokens_index.qtpl:3
-func StreamApiTokensIndex(qw422016 *qt422016.Writer, tokens []presenter.APIToken) {
+func StreamApiTokensIndex(qw422016 *qt422016.Writer, csrfToken string, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:3
 	qw422016.N().S(`
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <div class="flex flex-row justify-end">
         <form action="/tokens" method="POST">
+          <input type="hidden" name="csrf" value="`)
+//line view/api_tokens_index.qtpl:8
+	qw422016.E().S(csrfToken)
+//line view/api_tokens_index.qtpl:8
+	qw422016.N().S(`">
           <input type="submit" value="Create new token" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-4 py-2">
         </form>
       </div>
       <ul>
         `)
-//line view/api_tokens_index.qtpl:12
+//line view/api_tokens_index.qtpl:13
 	for _, token := range tokens {
-//line view/api_tokens_index.qtpl:12
+//line view/api_tokens_index.qtpl:13
 		qw422016.N().S(`
           <li class="md:mx-0 mx-4 p-4 mt-4 border-2 border-dashed flex flex-row justify-between items-center rounded">
             <span class="text-md italic break-all">`)
-//line view/api_tokens_index.qtpl:14
+//line view/api_tokens_index.qtpl:15
 		qw422016.E().S(token.Token)
-//line view/api_tokens_index.qtpl:14
+//line view/api_tokens_index.qtpl:15
 		qw422016.N().S(`</span>
             <form action="/tokens/`)
-//line view/api_tokens_index.qtpl:15
+//line view/api_tokens_index.qtpl:16
 		qw422016.E().S(token.ID)
-//line view/api_tokens_index.qtpl:15
+//line view/api_tokens_index.qtpl:16
 		qw422016.N().S(`/destroy" method="POST">
+              <input type="hidden" name="csrf" value="`)
+//line view/api_tokens_index.qtpl:17
+		qw422016.E().S(csrfToken)
+//line view/api_tokens_index.qtpl:17
+		qw422016.N().S(`">
               <input type="submit" value="Delete" class="text-l text-white bg-red-700 hover:bg-red-900 rounded shadow-md px-4 py-2">
             </form>
           </li>
         `)
-//line view/api_tokens_index.qtpl:19
+//line view/api_tokens_index.qtpl:21
 	}
-//line view/api_tokens_index.qtpl:19
+//line view/api_tokens_index.qtpl:21
 	qw422016.N().S(`
       </ul>
     </div>
   </div>
 `)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
 }
 
-//line view/api_tokens_index.qtpl:23
-func WriteApiTokensIndex(qq422016 qtio422016.Writer, tokens []presenter.APIToken) {
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
+func WriteApiTokensIndex(qq422016 qtio422016.Writer, csrfToken string, tokens []presenter.APIToken) {
+//line view/api_tokens_index.qtpl:25
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/api_tokens_index.qtpl:23
-	StreamApiTokensIndex(qw422016, tokens)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
+	StreamApiTokensIndex(qw422016, csrfToken, tokens)
+//line view/api_tokens_index.qtpl:25
 	qt422016.ReleaseWriter(qw422016)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
 }
 
-//line view/api_tokens_index.qtpl:23
-func ApiTokensIndex(tokens []presenter.APIToken) string {
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
+func ApiTokensIndex(csrfToken string, tokens []presenter.APIToken) string {
+//line view/api_tokens_index.qtpl:25
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/api_tokens_index.qtpl:23
-	WriteApiTokensIndex(qb422016, tokens)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
+	WriteApiTokensIndex(qb422016, csrfToken, tokens)
+//line view/api_tokens_index.qtpl:25
 	qs422016 := string(qb422016.B)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
 	return qs422016
-//line view/api_tokens_index.qtpl:23
+//line view/api_tokens_index.qtpl:25
 }

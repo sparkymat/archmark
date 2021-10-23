@@ -24,8 +24,14 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
+	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup: "form:csrf",
+	}))
 	app.Use(middleware.Recover())
 	app.Use(mw.ConfigInjector(cfg, db))
+	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	authApp := app.Group("")
 	authApp.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
