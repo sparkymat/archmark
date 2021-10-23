@@ -58,7 +58,7 @@ func (s *service) AutoMigrate() error {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file:///migrations",
+		"file://./migrations",
 		"postgres",
 		driver,
 	)
