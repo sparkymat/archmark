@@ -44,7 +44,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 			return nil
 		}
 
-		bookmark, err := db.FindBookmark(uint(bookmarkID))
+		bookmark, err := db.FindBookmark(ctx, bookmarkID)
 		if err != nil {
 			log.Printf("Unable to load bookmark for job %s\n", help.Jid())
 
@@ -65,7 +65,7 @@ func saveWebPage(cfg config.API, db database.API) func(ctx context.Context, args
 			return nil
 		}
 
-		err = db.MarkBookmarkCompleted(bookmark.ID)
+		err = db.MarkBookmarkCompleted(ctx, bookmark.ID)
 		if err != nil {
 			log.Printf("Failed to mark bookmark as complete for job %s\n", help.Jid())
 
