@@ -26,6 +26,14 @@ P.S: Don't forget to edit the `docker-compose.yml` file, and update the value of
 
 N.B: Everything in the download folder (configured using `DOWNLOAD_FOLDER`) will be served under `/b/` sub-path. 
 
+## API
+
+The app exposes an API which can be used to add bookmarks. The API requests are authenticated using API tokens that the user can manage from the API Tokens tab. 
+
+After creating a user token, you can use it as follows (using curl as an example):
+
+> ```curl -XPOST -H "Content-Type: application/json" -H "Authorization: Bearer <token-here>" -d '{"url": "url-to-add-here"}'  "http://localhost:8080/api/add"```
+
 ## Configuration
 
 Both the app and the worker are configured using environment variables.
