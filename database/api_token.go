@@ -104,3 +104,28 @@ func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIT
 		Token: token,
 	}, nil
 }
+
+func (s *service) LookupAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	stmnt := psql.
+		Select("*").
+		From("api_tokens").
+		Where("token = ?", token)
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var apiToken model.APIToken
+
+	err = s.conn.QueryRowxContext(ctx, querySQL, args...).StructScan(&apiToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return &apiToken, nil
+}
