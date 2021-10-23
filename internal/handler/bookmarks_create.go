@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -20,60 +21,69 @@ type BookmarksCreateInput struct {
 	URL string `json:"url" form:"url" binding:"required"`
 }
 
+func APIBookmarksCreate(c echo.Context) error {
+	err := bookmarksCreate(c)
+	if err != nil {
+		//nolint:wrapcheck
+		return c.JSON(http.StatusOK, map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	//nolint:wrapcheck
+	return c.JSON(http.StatusOK, map[string]string{
+		"id": "",
+	})
+}
+
 func BookmarksCreate(c echo.Context) error {
-	cfgVal := c.Get(middleware.ConfigKey)
-	dbVal := c.Get(middleware.DBKey)
-
-	if cfgVal == nil || dbVal == nil {
-		//nolint:wrapcheck
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "not configured",
-		})
-	}
-
-	cfg, ok := cfgVal.(config.API)
-	if !ok {
-		//nolint:wrapcheck
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "config not found",
-		})
-	}
-
-	db, ok := dbVal.(database.API)
-	if !ok {
-		//nolint:wrapcheck
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "db not found",
-		})
-	}
-
-	var input BookmarksCreateInput
-
-	if c.Bind(&input) != nil {
-		//nolint:wrapcheck
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": "invalid input",
-		})
-	}
-
-	bookmark, err := createBookmark(c.Request().Context(), db, cfg, input.URL)
+	err := bookmarksCreate(c)
 	if err != nil {
 		//nolint:wrapcheck
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": err.Error(),
-		})
-	}
-
-	err = queueDownloadJob(bookmark.ID)
-	if err != nil {
-		//nolint:wrapcheck
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": err.Error(),
+		return c.JSON(http.StatusOK, map[string]string{
+			"error": err.Error(),
 		})
 	}
 
 	//nolint:wrapcheck
 	return c.Redirect(http.StatusSeeOther, "/")
+}
+
+func bookmarksCreate(c echo.Context) error {
+	cfgVal := c.Get(middleware.ConfigKey)
+	dbVal := c.Get(middleware.DBKey)
+
+	if cfgVal == nil || dbVal == nil {
+		return errors.New("not configured")
+	}
+
+	cfg, ok := cfgVal.(config.API)
+	if !ok {
+		return errors.New("not configured")
+	}
+
+	db, ok := dbVal.(database.API)
+	if !ok {
+		return errors.New("not configured")
+	}
+
+	var input BookmarksCreateInput
+
+	if err := c.Bind(&input); err != nil {
+		return err
+	}
+
+	bookmark, err := createBookmark(c.Request().Context(), db, cfg, input.URL)
+	if err != nil {
+		return err
+	}
+
+	err = queueDownloadJob(bookmark.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func createBookmark(ctx context.Context, db database.API, cfg config.API, url string) (*model.Bookmark, error) {

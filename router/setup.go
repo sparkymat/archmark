@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"crypto/subtle"
 	"fmt"
 	"os"
@@ -24,11 +25,11 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
+	app.Use(middleware.Recover())
+	app.Use(mw.ConfigInjector(cfg, db))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
 	}))
-	app.Use(middleware.Recover())
-	app.Use(mw.ConfigInjector(cfg, db))
 	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
@@ -49,6 +50,22 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	authApp.GET("/tokens", handler.APITokensIndex)
 	authApp.POST("/tokens/:id/destroy", handler.APITokensDestroy)
 	authApp.POST("/tokens", handler.APITokensCreate)
+
+	apiApp := e.Group("/api")
+	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}\n",
+	}))
+	apiApp.Use(middleware.Recover())
+	apiApp.Use(mw.ConfigInjector(cfg, db))
+	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
+		_, err := db.LookupAPIToken(context.Background(), token)
+		if err != nil {
+			return false, fmt.Errorf("db lookup failed. err: %w", err)
+		}
+
+		return true, nil
+	}))
+	apiApp.POST("/add", handler.APIBookmarksCreate)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{
