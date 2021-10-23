@@ -2,43 +2,101 @@ package database
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
+	"log"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/sparkymat/archmark/model"
 )
 
 func (s *service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
-	panic("unimplemented")
-	/*
-		var apiTokens []model.APIToken
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-		if result := s.conn.Find(&apiTokens); result.Error != nil {
-			return nil, result.Error
+	stmnt := psql.
+		Select("*").
+		From("api_tokens").
+		OrderBy("created_at desc")
+
+	querySQL, _, err := stmnt.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var tokens []model.APIToken
+
+	rows, err := s.conn.QueryxContext(ctx, querySQL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	for rows.Next() {
+		var token model.APIToken
+
+		var deletedAt sql.NullTime
+		err := rows.StructScan(&token)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan row. err: %w", err)
 		}
 
-		return apiTokens, nil
-	*/
+		if deletedAt.Valid {
+			token.DeletedAt = &deletedAt.Time
+		}
+
+		tokens = append(tokens, token)
+	}
+
+	return tokens, nil
 }
 
 func (s *service) DeleteAPIToken(ctx context.Context, id uint64) error {
-	panic("unimplemented")
-	/*
-		err := s.conn.Delete(&model.APIToken{}, id)
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-		return err.Error
-	*/
+	stmnt := psql.
+		Delete("api_tokens").
+		Where(sq.Eq{"id": id})
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	_, err = s.conn.ExecContext(ctx, querySQL, args...)
+	if err != nil {
+		return fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return nil
 }
 
 func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
-	panic("unimplemented")
-	/*
-		apiToken := &model.APIToken{
-			Token: token,
-		}
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-		if result := s.conn.Create(&apiToken); result.Error != nil {
-			return nil, result.Error
-		}
+	stmnt := psql.
+		Insert("api_tokens").
+		Columns("token").
+		Values(token).
+		Suffix("RETURNING \"id\"")
 
-		return apiToken, nil
-	*/
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var id uint64
+	err = s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return &model.APIToken{
+		ID:    id,
+		Token: token,
+	}, nil
 }
