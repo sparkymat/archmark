@@ -20,6 +20,32 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	e.Static("/javascript", "public/javascript")
 	e.Static("/b", cfg.DownloadPath())
 
+	registerWebRoutes(e, cfg, db)
+	registerAPIRoutes(e, cfg, db)
+
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
+	methodWhitelist := map[string]interface{}{
+		"DELETE": struct{}{},
+		"GET":    struct{}{},
+		"PATCH":  struct{}{},
+		"POST":   struct{}{},
+		"PUT":    struct{}{},
+	}
+
+	fmt.Fprintf(os.Stdout, "\n  Registered routes  \n  =================  \n\n")
+
+	for _, r := range e.Routes() {
+		if _, whitelisted := methodWhitelist[r.Method]; whitelisted {
+			if r.Path != "" && r.Path != "/*" {
+				fmt.Fprintf(w, "%s\t%s\t\t%s\n", r.Method, r.Path, r.Name)
+			}
+		}
+	}
+
+	w.Flush()
+}
+
+func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -50,7 +76,9 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	authApp.GET("/tokens", handler.APITokensIndex)
 	authApp.POST("/tokens/:id/destroy", handler.APITokensDestroy)
 	authApp.POST("/tokens", handler.APITokensCreate)
+}
 
+func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
@@ -66,25 +94,4 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 		return true, nil
 	}))
 	apiApp.POST("/add", handler.APIBookmarksCreate)
-
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
-	methodWhitelist := map[string]interface{}{
-		"DELETE": struct{}{},
-		"GET":    struct{}{},
-		"PATCH":  struct{}{},
-		"POST":   struct{}{},
-		"PUT":    struct{}{},
-	}
-
-	fmt.Fprintf(os.Stdout, "\n  Registered routes  \n  =================  \n\n")
-
-	for _, r := range e.Routes() {
-		if _, whitelisted := methodWhitelist[r.Method]; whitelisted {
-			if r.Path != "" && r.Path != "/*" {
-				fmt.Fprintf(w, "%s\t%s\t\t%s\n", r.Method, r.Path, r.Name)
-			}
-		}
-	}
-
-	w.Flush()
 }

@@ -17,13 +17,14 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
+var ErrConfigNotFound = errors.New("config not found")
+
 type BookmarksCreateInput struct {
 	URL string `json:"url" form:"url" binding:"required"`
 }
 
 func APIBookmarksCreate(c echo.Context) error {
-	err := bookmarksCreate(c)
-	if err != nil {
+	if err := bookmarksCreate(c); err != nil {
 		//nolint:wrapcheck
 		return c.JSON(http.StatusOK, map[string]string{
 			"error": err.Error(),
@@ -37,8 +38,7 @@ func APIBookmarksCreate(c echo.Context) error {
 }
 
 func BookmarksCreate(c echo.Context) error {
-	err := bookmarksCreate(c)
-	if err != nil {
+	if err := bookmarksCreate(c); err != nil {
 		//nolint:wrapcheck
 		return c.JSON(http.StatusOK, map[string]string{
 			"error": err.Error(),
@@ -54,22 +54,23 @@ func bookmarksCreate(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
 
 	if cfgVal == nil || dbVal == nil {
-		return errors.New("not configured")
+		return ErrConfigNotFound
 	}
 
 	cfg, ok := cfgVal.(config.API)
 	if !ok {
-		return errors.New("not configured")
+		return ErrConfigNotFound
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
-		return errors.New("not configured")
+		return ErrConfigNotFound
 	}
 
 	var input BookmarksCreateInput
 
 	if err := c.Bind(&input); err != nil {
+		//nolint:wrapcheck
 		return err
 	}
 
