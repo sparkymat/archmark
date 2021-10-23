@@ -40,7 +40,7 @@ func Home(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "db conn not found")
 	}
 
-	bookmarks, err := db.LoadBookmarks(input.Query, input.Page, pageSize)
+	bookmarks, err := db.ListBookmarks(input.Query, input.Page, pageSize)
 	if err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())

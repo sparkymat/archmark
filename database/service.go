@@ -22,7 +22,7 @@ type Config struct {
 
 type API interface {
 	AutoMigrate() error
-	LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
+	ListBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error)
 	FindBookmark(id uint) (*model.Bookmark, error)
 	CreateBookmark(bookmark *model.Bookmark) error
 	ListAPITokens() ([]model.APIToken, error)

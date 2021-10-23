@@ -2,7 +2,7 @@ package database
 
 import "github.com/sparkymat/archmark/model"
 
-func (s *service) LoadBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
+func (s *service) ListBookmarks(query string, page uint32, pageSize uint32) ([]model.Bookmark, error) {
 	panic("unimplemented")
 	/*
 		var bookmarks []model.Bookmark
