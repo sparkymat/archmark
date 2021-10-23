@@ -2,18 +2,16 @@ package model
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Bookmark struct {
-	ID        uint           `gorm:"primaryKey"`
-	CreatedAt time.Time      `gorm:"default:current_timestamp"`
-	UpdatedAt time.Time      `gorm:"default:current_timestamp"`
-	DeletedAt gorm.DeletedAt `gorm:"index"`
-	URL       string         `gorm:"not null"`
-	Title     string         `gorm:"not null"`
-	Status    string         `gorm:"not null"`
-	Content   string
-	FileName  string
+	ID        uint64     `db:"id"`
+	CreatedAt time.Time  `db:"created_at"`
+	UpdatedAt time.Time  `db:"updated_at"`
+	DeletedAt *time.Time `db:"deleted_at"`
+	URL       string     `db:"url"`
+	Title     string     `db:"title"`
+	Status    string     `db:"status"`
+	Content   string     `db:"content"`
+	FileName  string     `db:"file_name"`
 }

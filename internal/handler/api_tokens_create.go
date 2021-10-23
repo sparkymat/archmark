@@ -32,7 +32,7 @@ func APITokensCreate(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	if _, err = db.CreateAPIToken(token); err != nil {
+	if _, err = db.CreateAPIToken(c.Request().Context(), token); err != nil {
 		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

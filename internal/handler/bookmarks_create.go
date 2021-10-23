@@ -95,7 +95,7 @@ func createBookmark(ctx context.Context, db database.API, cfg config.API, url st
 		FileName: fmt.Sprintf("%s.html", fileHash),
 	}
 
-	err = db.CreateBookmark(&bookmark)
+	err = db.CreateBookmark(ctx, &bookmark)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create bookmark in db. err: %w", err)
 	}
@@ -103,7 +103,7 @@ func createBookmark(ctx context.Context, db database.API, cfg config.API, url st
 	return &bookmark, nil
 }
 
-func queueDownloadJob(bookmarkID uint) error {
+func queueDownloadJob(bookmarkID uint64) error {
 	client, err := faktory.Open()
 	if err != nil {
 		return fmt.Errorf("failed to connect to faktory. err: %w", err)
