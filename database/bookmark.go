@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/sparkymat/archmark/model"
@@ -19,7 +20,9 @@ func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, 
 		From("bookmarks")
 
 	if query != "" {
-		stmnt = stmnt.Where("to_tsvector(content) @@ to_tsquery(?)", query)
+		queryWords := strings.Split(query, " ")
+		querySearchTerm := strings.Join(queryWords, "|")
+		stmnt = stmnt.Where("weighted_tsv @@ to_tsquery(?)", querySearchTerm)
 	} else {
 		stmnt = stmnt.OrderBy("created_at desc")
 	}
