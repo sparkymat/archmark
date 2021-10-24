@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -20,8 +21,9 @@ type HomeInput struct {
 func Home(c echo.Context) error {
 	input := &HomeInput{}
 	if err := c.Bind(input); err != nil {
+		log.Printf("error: %v", err)
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, err.Error())
+		return ShowError(c)
 	}
 
 	if input.Page == 0 {
@@ -30,20 +32,23 @@ func Home(c echo.Context) error {
 
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
+		log.Print("error: db conn not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "db conn not found")
+		return ShowError(c)
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
+		log.Print("error: db conn not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "db conn not found")
+		return ShowError(c)
 	}
 
 	bookmarks, err := db.ListBookmarks(c.Request().Context(), input.Query, input.Page, pageSize)
 	if err != nil {
+		log.Printf("error: %v", err)
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, err.Error())
+		return ShowError(r)
 	}
 
 	presentedBookmarks := []presenter.Bookmark{}

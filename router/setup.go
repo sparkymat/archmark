@@ -46,6 +46,8 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 }
 
 func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {
+	e.GET("/error", handler.ShowError)
+
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{

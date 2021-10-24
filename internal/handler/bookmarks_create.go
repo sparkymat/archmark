@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -40,9 +41,8 @@ func APIBookmarksCreate(c echo.Context) error {
 func BookmarksCreate(c echo.Context) error {
 	if err := bookmarksCreate(c); err != nil {
 		//nolint:wrapcheck
-		return c.JSON(http.StatusOK, map[string]string{
-			"error": err.Error(),
-		})
+		log.Printf("error: %v", err)
+		return showError(c, "Unable to add bookmark. Please try again later.")
 	}
 
 	//nolint:wrapcheck

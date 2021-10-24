@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,32 +15,37 @@ import (
 func APITokensIndex(c echo.Context) error {
 	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
 	if csrfTokenVal == nil {
+		log.Print("error: csrf token not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "csrf token not found")
+		return ShowError(c)
 	}
 
 	csrfToken, ok := csrfTokenVal.(string)
 	if !ok {
+		log.Print("error: csrf token not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "csrf token not found")
+		return ShowError(c)
 	}
 
 	dbVal := c.Get(mw.DBKey)
 	if dbVal == nil {
+		log.Print("error: db conn not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "db conn not found")
+		return ShowError(c)
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
+		log.Print("error: db conn not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "db conn not found")
+		return ShowError(c)
 	}
 
 	tokens, err := db.ListAPITokens(c.Request().Context())
 	if err != nil {
+		log.Printf("error: %v", err)
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, err.Error())
+		return ShowError(c)
 	}
 
 	presentedTokens := presenter.PresentAPITokens(tokens)

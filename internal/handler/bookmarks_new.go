@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,14 +12,16 @@ import (
 func BookmarksNew(c echo.Context) error {
 	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
 	if csrfTokenVal == nil {
+		log.Print("error: csrf token not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "csrf token not found")
+		return ShowError(c)
 	}
 
 	csrfToken, ok := csrfTokenVal.(string)
 	if !ok {
+		log.Print("error: csrf token not found")
 		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, "csrf token not found")
+		return ShowError(c)
 	}
 
 	pageHTML := view.BookmarksNew(csrfToken)
