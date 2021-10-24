@@ -18,27 +18,27 @@ func APITokensCreate(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
 		log.Print("error: db conn not found")
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
 		log.Print("error: db conn not found")
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 
 	token, err := randomHex(tokenLength)
 	if err != nil {
 		log.Printf("error: %v", err.Error())
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 
 	if _, err = db.CreateAPIToken(c.Request().Context(), token); err != nil {
 		log.Printf("error: %v", err.Error())
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -19,15 +18,15 @@ const (
 func APITokensDestroy(c echo.Context) error {
 	dbVal := c.Get(middleware.DBKey)
 	if dbVal == nil {
-		fmt.Print("error: db conn not found")
-		//nolint:wrapcheck
+		log.Print("error: db conn not found")
+
 		return ShowError(c)
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
-		fmt.Print("error: db conn not found")
-		//nolint:wrapcheck
+		log.Print("error: db conn not found")
+
 		return ShowError(c)
 	}
 
@@ -36,13 +35,13 @@ func APITokensDestroy(c echo.Context) error {
 	tokenID, err := strconv.ParseUint(tokenIDString, base10, sixtyFourBits)
 	if err != nil {
 		log.Printf("error: %v", err)
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 
 	if err = db.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
 		log.Printf("error: %v", err)
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 

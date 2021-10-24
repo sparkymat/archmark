@@ -13,14 +13,14 @@ func BookmarksNew(c echo.Context) error {
 	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
 	if csrfTokenVal == nil {
 		log.Print("error: csrf token not found")
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 
 	csrfToken, ok := csrfTokenVal.(string)
 	if !ok {
 		log.Print("error: csrf token not found")
-		//nolint:wrapcheck
+
 		return ShowError(c)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	faktory "github.com/contribsys/faktory/client"
@@ -40,8 +41,8 @@ func APIBookmarksCreate(c echo.Context) error {
 
 func BookmarksCreate(c echo.Context) error {
 	if err := bookmarksCreate(c); err != nil {
-		//nolint:wrapcheck
 		log.Printf("error: %v", err)
+
 		return showError(c, "Unable to add bookmark. Please try again later.")
 	}
 
@@ -87,19 +88,23 @@ func bookmarksCreate(c echo.Context) error {
 	return nil
 }
 
-func createBookmark(ctx context.Context, db database.API, cfg config.API, url string) (*model.Bookmark, error) {
+func createBookmark(ctx context.Context, db database.API, cfg config.API, urlString string) (*model.Bookmark, error) {
+	if _, err := url.ParseRequestURI(urlString); err != nil {
+		return nil, fmt.Errorf("invalid url. err: %w", err)
+	}
+
 	archiveAPI := archive.New(archive.Config{
 		DownloadFolder: cfg.DownloadPath(),
 	})
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
 
-	page, err := archiveAPI.Save(ctx, url, fileHash)
+	page, err := archiveAPI.Save(ctx, urlString, fileHash)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch page details. err: %w", err)
 	}
 
 	bookmark := model.Bookmark{
-		URL:      url,
+		URL:      urlString,
 		Title:    page.Title,
 		Status:   "pending",
 		Content:  page.HTMLContent,
