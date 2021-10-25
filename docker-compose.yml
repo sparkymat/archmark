@@ -14,7 +14,6 @@ services:
       DB_PORT: 5432
       DB_SSL_MODE: "false"
       ADMIN_PASSWORD: foobar
-      MONOLITH_PATH: /bin/monolith
       DOWNLOAD_PATH: /data
       FAKTORY_URL: "tcp://faktory:7419"
     links:
@@ -37,7 +36,6 @@ services:
       DB_PORT: 5432
       DB_SSL_MODE: "false"
       ADMIN_PASSWORD: foobar
-      MONOLITH_PATH: /bin/monolith
       DOWNLOAD_PATH: /data
       FAKTORY_URL: "tcp://faktory:7419"
     links:
