@@ -11,7 +11,7 @@ import (
 	"github.com/sparkymat/archmark/view"
 )
 
-const pageSize = 4
+const pageSize = 20
 
 type HomeInput struct {
 	Query string `query:"q"`
