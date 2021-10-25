@@ -24,7 +24,7 @@ var (
 )
 
 //line view/home.qtpl:4
-func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func StreamHome(qw422016 *qt422016.Writer, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:4
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -113,7 +113,7 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
 //line view/home.qtpl:33
 		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">open original link</a>
               <span>•</span>
-              <a href="javascript:showDeleteModal(`)
+              <a href="javascript:showBookmarkDeleteModal(`)
 //line view/home.qtpl:35
 		qw422016.N().DUL(bookmark.ID)
 //line view/home.qtpl:35
@@ -145,32 +145,54 @@ func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery st
 	qw422016.N().S(`
     </div>
   </div>
+  <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
+   	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+      <div class="">
+        <div class="text-center p-2 flex-auto justify-center">
+          <h3 class="text-lg font-bold py-4 ">Bookmark delete</h3>
+          <p class="text-md text-gray-400 px-4">Are you sure you want to delete this bookmark?</p>
+        </div>
+        <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
+          <input type="hidden" name="csrf" value="`)
+//line view/home.qtpl:56
+	qw422016.E().S(csrfToken)
+//line view/home.qtpl:56
+	qw422016.N().S(`">
+          <div class="p-3 mt-2 flex flex-row justify-end">
+            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">Cancel</a>
+            <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 `)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
 }
 
-//line view/home.qtpl:47
-func WriteHome(qq422016 qtio422016.Writer, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
-//line view/home.qtpl:47
+//line view/home.qtpl:65
+func WriteHome(qq422016 qtio422016.Writer, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+//line view/home.qtpl:65
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/home.qtpl:47
-	StreamHome(qw422016, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
+	StreamHome(qw422016, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+//line view/home.qtpl:65
 	qt422016.ReleaseWriter(qw422016)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
 }
 
-//line view/home.qtpl:47
-func Home(showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
-//line view/home.qtpl:47
+//line view/home.qtpl:65
+func Home(csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
+//line view/home.qtpl:65
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/home.qtpl:47
-	WriteHome(qb422016, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
+	WriteHome(qb422016, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+//line view/home.qtpl:65
 	qs422016 := string(qb422016.B)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/home.qtpl:47
+//line view/home.qtpl:65
 	return qs422016
-//line view/home.qtpl:47
+//line view/home.qtpl:65
 }
