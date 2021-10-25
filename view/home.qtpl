@@ -28,9 +28,11 @@
               </a>
             {% endif %}
             <div class="">
-              <span class="text-sm text-gray-400">Added {%s bookmark.TimeSince %}</span>
+              <span class="text-sm text-gray-400 mr-2">added {%s bookmark.TimeSince %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">open original link</a>
+              <span>•</span>
+              <a href="javascript:showDeleteModal({%dul bookmark.ID %})" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">delete</a>
             </div>
           </li>
         {% endfor %}

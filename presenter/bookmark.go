@@ -17,6 +17,7 @@ type BookmarksList struct {
 
 type Bookmark struct {
 	Index       uint64
+	ID          uint64
 	URL         string
 	OriginalURL string
 	IsActive    bool
@@ -52,6 +53,7 @@ func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPa
 func PresentBookmark(bookmark model.Bookmark, index uint64) Bookmark {
 	return Bookmark{
 		Index:       index,
+		ID:          bookmark.ID,
 		URL:         fmt.Sprintf("/b/%s", bookmark.FileName),
 		OriginalURL: bookmark.URL,
 		IsActive:    bookmark.Status == "completed",
