@@ -33,6 +33,7 @@ func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPa
 	if currentQuery != "" {
 		queryFragments = append(queryFragments, fmt.Sprintf("q=%s", currentQuery))
 	}
+
 	if hasMore {
 		queryFragments = append(queryFragments, fmt.Sprintf("p=%d", currentPage+1))
 	}
