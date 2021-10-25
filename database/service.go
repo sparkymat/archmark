@@ -32,6 +32,7 @@ type API interface {
 	FindBookmark(ctx context.Context, id uint64) (*model.Bookmark, error)
 	CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error
 	MarkBookmarkCompleted(ctx context.Context, id uint64) error
+	DeleteBookmark(ctx context.Context, id uint64) error
 
 	// API Tokens
 	ListAPITokens(ctx context.Context) ([]model.APIToken, error)
