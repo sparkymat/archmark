@@ -11,7 +11,7 @@ import (
 	"github.com/sparkymat/archmark/view"
 )
 
-const pageSize = 20
+const pageSize = 4
 
 type HomeInput struct {
 	Query string `query:"q"`
@@ -51,11 +51,18 @@ func Home(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	presentedBookmarks := []presenter.Bookmark{}
-	for _, bookmark := range bookmarks {
-		presentedBookmarks = append(presentedBookmarks, presenter.PresentBookmark(bookmark))
+	bookmarksCount, err := db.CountBookmarks(c.Request().Context(), input.Query)
+	if err != nil {
+		log.Printf("error: %v", err)
+
+		return ShowError(c)
 	}
 
+	currentCount := pageSize * input.Page
+
+	hasMore := bookmarksCount > currentCount
+
+	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, hasMore)
 	pageHTML := view.Home(input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
 

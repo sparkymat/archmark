@@ -1,6 +1,6 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func Home(showSearchHeader bool, searchQuery string, bookmarks []presenter.Bookmark) %}
+{% func Home(showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <form action="/" method="GET" class="flex flex-row">
@@ -13,7 +13,7 @@
         </div>
       {% endif %}
       <ul>
-        {% for _, bookmark := range bookmarks %}
+        {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
               <a class="text-xl" href="{%s bookmark.URL %}" target="_blank">{%s bookmark.Title %}</a>
@@ -28,6 +28,11 @@
           </li>
         {% endfor %}
       </ul>
+      {% if bookmarksList.ShowNextLink %}
+        <div class="flex flex-row p-2 mx-auto">
+          <a href="{%s bookmarksList.NextPageLink %}" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endfunc %}
