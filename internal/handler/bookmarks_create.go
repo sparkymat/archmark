@@ -15,7 +15,6 @@ import (
 	"github.com/sparkymat/archmark/archive"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
-	"github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/model"
 )
 
@@ -52,20 +51,10 @@ func BookmarksCreate(c echo.Context) error {
 }
 
 func bookmarksCreate(c echo.Context) (*model.Bookmark, error) {
-	cfgVal := c.Get(middleware.ConfigKey)
-	dbVal := c.Get(middleware.DBKey)
+	cfg := getConfig(c)
+	db := getDB(c)
 
-	if cfgVal == nil || dbVal == nil {
-		return nil, ErrConfigNotFound
-	}
-
-	cfg, ok := cfgVal.(config.API)
-	if !ok {
-		return nil, ErrConfigNotFound
-	}
-
-	db, ok := dbVal.(database.API)
-	if !ok {
+	if cfg == nil || db == nil {
 		return nil, ErrConfigNotFound
 	}
 

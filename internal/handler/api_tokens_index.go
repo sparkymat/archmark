@@ -5,37 +5,20 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/sparkymat/archmark/database"
-	mw "github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/presenter"
 	"github.com/sparkymat/archmark/view"
 )
 
 func APITokensIndex(c echo.Context) error {
-	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
-	if csrfTokenVal == nil {
+	csrfToken := getCSRFToken(c)
+	if csrfToken == "" {
 		log.Print("error: csrf token not found")
 
 		return ShowError(c)
 	}
 
-	csrfToken, ok := csrfTokenVal.(string)
-	if !ok {
-		log.Print("error: csrf token not found")
-
-		return ShowError(c)
-	}
-
-	dbVal := c.Get(mw.DBKey)
-	if dbVal == nil {
-		log.Print("error: db conn not found")
-
-		return ShowError(c)
-	}
-
-	db, ok := dbVal.(database.API)
-	if !ok {
+	db := getDB(c)
+	if db == nil {
 		log.Print("error: db conn not found")
 
 		return ShowError(c)

@@ -5,20 +5,12 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/view"
 )
 
 func BookmarksNew(c echo.Context) error {
-	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
-	if csrfTokenVal == nil {
-		log.Print("error: csrf token not found")
-
-		return ShowError(c)
-	}
-
-	csrfToken, ok := csrfTokenVal.(string)
-	if !ok {
+	csrfToken := getCSRFToken(c)
+	if csrfToken == "" {
 		log.Print("error: csrf token not found")
 
 		return ShowError(c)

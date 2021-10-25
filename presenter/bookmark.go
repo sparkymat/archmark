@@ -25,6 +25,7 @@ type Bookmark struct {
 	TimeSince   string
 }
 
+//nolint:lll
 func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPage uint64, pageSize uint64, hasMore bool) BookmarksList {
 	presentedBookmarks := []Bookmark{}
 	startCount := (currentPage-1)*pageSize + 1

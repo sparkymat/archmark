@@ -5,9 +5,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/sparkymat/archmark/database"
-	mw "github.com/sparkymat/archmark/middleware"
 	"github.com/sparkymat/archmark/presenter"
 	"github.com/sparkymat/archmark/view"
 )
@@ -20,15 +17,8 @@ type HomeInput struct {
 }
 
 func Home(c echo.Context) error {
-	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)
-	if csrfTokenVal == nil {
-		log.Print("error: csrf token not found")
-
-		return ShowError(c)
-	}
-
-	csrfToken, ok := csrfTokenVal.(string)
-	if !ok {
+	csrfToken := getCSRFToken(c)
+	if csrfToken == "" {
 		log.Print("error: csrf token not found")
 
 		return ShowError(c)
@@ -45,15 +35,8 @@ func Home(c echo.Context) error {
 		input.Page = 1
 	}
 
-	dbVal := c.Get(mw.DBKey)
-	if dbVal == nil {
-		log.Print("error: db conn not found")
-
-		return ShowError(c)
-	}
-
-	db, ok := dbVal.(database.API)
-	if !ok {
+	db := getDB(c)
+	if db == nil {
 		log.Print("error: db conn not found")
 
 		return ShowError(c)
