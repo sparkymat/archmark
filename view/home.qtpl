@@ -1,7 +1,7 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 {% import "fmt" %}
 
-{% func Home(showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
@@ -11,6 +11,11 @@
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
           <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+        </div>
+      {% endif %}
+      {% if len(bookmarksList.Bookmarks) == 0 %}
+        <div class="flex flex-col items-center mt-16">
+          <p class="border border-dashed border-gray-400 py-4 px-8 text-xl text-gray-600">No bookmarks found</p>
         </div>
       {% endif %}
       <ul class="my-2">
@@ -28,9 +33,11 @@
               </a>
             {% endif %}
             <div class="">
-              <span class="text-sm text-gray-400">Added {%s bookmark.TimeSince %}</span>
+              <span class="text-sm text-gray-400 mr-2">added {%s bookmark.TimeSince %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">open original link</a>
+              <span>•</span>
+              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">delete</a>
             </div>
           </li>
         {% endfor %}
@@ -40,6 +47,24 @@
           <a href="{%s bookmarksList.NextPageLink %}" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
         </div>
       {% endif %}
+    </div>
+  </div>
+  <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
+   	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+      <div class="">
+        <div class="text-center p-2 flex-auto justify-center">
+          <h3 class="text-lg font-bold py-4 ">Bookmark delete</h3>
+          <p class="text-md text-gray-400 px-4">Are you sure you want to delete this bookmark?</p>
+        </div>
+        <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
+          <input type="hidden" name="csrf" value="{%s csrfToken %}">
+          <div class="p-3 mt-2 flex flex-row justify-end">
+            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">Cancel</a>
+            <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 {% endfunc %}

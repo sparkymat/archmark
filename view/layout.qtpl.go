@@ -48,34 +48,35 @@ func StreamLayout(qw422016 *qt422016.Writer, title string, content string) {
 	qw422016.N().S(content)
 //line view/layout.qtpl:20
 	qw422016.N().S(`
+      <script src="/javascript/index.js"></script>
     </body>
   </html>
 `)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 }
 
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 func WriteLayout(qq422016 qtio422016.Writer, title string, content string) {
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	StreamLayout(qw422016, title, content)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	qt422016.ReleaseWriter(qw422016)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 }
 
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 func Layout(title string, content string) string {
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	WriteLayout(qb422016, title, content)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	qs422016 := string(qb422016.B)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 	return qs422016
-//line view/layout.qtpl:23
+//line view/layout.qtpl:24
 }

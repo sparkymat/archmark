@@ -169,3 +169,25 @@ func (s *service) CountBookmarks(ctx context.Context, query string) (uint64, err
 
 	return bookmarksCount, nil
 }
+
+func (s *service) DeleteBookmark(ctx context.Context, id uint64) error {
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	stmnt := psql.
+		Delete("bookmarks").
+		Where(sq.Eq{"id": id})
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	_, err = s.conn.ExecContext(ctx, querySQL, args...)
+	if err != nil {
+		return fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return nil
+}

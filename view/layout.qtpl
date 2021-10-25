@@ -18,6 +18,7 @@
         </div>
       </nav>
       {%s= content %}
+      <script src="/javascript/index.js"></script>
     </body>
   </html>
 {% endfunc %}

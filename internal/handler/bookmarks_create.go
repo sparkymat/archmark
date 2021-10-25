@@ -26,7 +26,8 @@ type BookmarksCreateInput struct {
 }
 
 func APIBookmarksCreate(c echo.Context) error {
-	if err := bookmarksCreate(c); err != nil {
+	bookmark, err := bookmarksCreate(c)
+	if err != nil {
 		//nolint:wrapcheck
 		return c.JSON(http.StatusOK, map[string]string{
 			"error": err.Error(),
@@ -34,13 +35,13 @@ func APIBookmarksCreate(c echo.Context) error {
 	}
 
 	//nolint:wrapcheck
-	return c.JSON(http.StatusOK, map[string]string{
-		"id": "",
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"id": bookmark.ID,
 	})
 }
 
 func BookmarksCreate(c echo.Context) error {
-	if err := bookmarksCreate(c); err != nil {
+	if _, err := bookmarksCreate(c); err != nil {
 		log.Printf("error: %v", err)
 
 		return showError(c, "Unable to add bookmark. Please try again later.")
@@ -50,42 +51,42 @@ func BookmarksCreate(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/")
 }
 
-func bookmarksCreate(c echo.Context) error {
+func bookmarksCreate(c echo.Context) (*model.Bookmark, error) {
 	cfgVal := c.Get(middleware.ConfigKey)
 	dbVal := c.Get(middleware.DBKey)
 
 	if cfgVal == nil || dbVal == nil {
-		return ErrConfigNotFound
+		return nil, ErrConfigNotFound
 	}
 
 	cfg, ok := cfgVal.(config.API)
 	if !ok {
-		return ErrConfigNotFound
+		return nil, ErrConfigNotFound
 	}
 
 	db, ok := dbVal.(database.API)
 	if !ok {
-		return ErrConfigNotFound
+		return nil, ErrConfigNotFound
 	}
 
 	var input BookmarksCreateInput
 
 	if err := c.Bind(&input); err != nil {
 		//nolint:wrapcheck
-		return err
+		return nil, err
 	}
 
 	bookmark, err := createBookmark(c.Request().Context(), db, cfg, input.URL)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = queueDownloadJob(bookmark.ID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return bookmark, nil
 }
 
 func createBookmark(ctx context.Context, db database.API, cfg config.API, urlString string) (*model.Bookmark, error) {
