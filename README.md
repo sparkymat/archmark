@@ -52,7 +52,13 @@ Both the app and the worker are configured using environment variables.
 
 ## Screenshots
 
-![list](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/list.png)
+![newbookmark](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/newbookmark.png)
 
-![add](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/add.png)
+![pendingbookmark](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/pendingbookmark.png)
+
+![bookmarks](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/bookmarks.png)
+
+![deleteconfirm](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/deleteconfirm.png)
+
+![tokens](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/tokens.png)
 
