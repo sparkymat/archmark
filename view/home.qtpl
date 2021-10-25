@@ -17,12 +17,12 @@
         {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
-              <a class="flex flex-row items-end" href="{%s bookmark.URL %}" target="_blank">
+              <a class="flex flex-row items-center" href="{%s bookmark.URL %}" target="_blank">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">{%s bookmark.Title %}</div>
               </a>
             {% else %}
-              <a class="flex flex-row items-end font-light" href="#">
+              <a class="flex flex-row items-center font-light" href="#">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">[pending] {%s bookmark.Title %}</div>
               </a>
