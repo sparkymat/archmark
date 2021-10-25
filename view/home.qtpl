@@ -28,6 +28,11 @@
           </li>
         {% endfor %}
       </ul>
+      {% if bookmarksList.ShowNextLink %}
+        <div class="flex flex-row p-2 mx-auto">
+          <a href="{%s bookmarksList.NextPageLink %}" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endfunc %}

@@ -10,6 +10,7 @@ import (
 
 type BookmarksList struct {
 	Bookmarks    []Bookmark
+	CurrentPage  uint64
 	NextPageLink string
 	ShowNextLink bool
 }
@@ -38,7 +39,8 @@ func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPa
 
 	return BookmarksList{
 		Bookmarks:    presentedBookmarks,
-		NextPageLink: fmt.Sprintf("/?", strings.Join(queryFragments, "&")),
+		CurrentPage:  currentPage,
+		NextPageLink: fmt.Sprintf("/?%s", strings.Join(queryFragments, "&")),
 		ShowNextLink: hasMore,
 	}
 }
