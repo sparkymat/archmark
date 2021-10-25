@@ -15,7 +15,7 @@
             <span class="text-md italic break-all">{%s token.Token %}</span>
             <form action="/tokens/{%s token.ID %}/destroy" method="POST">
               <input type="hidden" name="csrf" value="{%s csrfToken %}">
-              <input type="submit" value="Delete" class="text-l text-white bg-red-700 hover:bg-red-900 rounded shadow-md px-4 py-2">
+              <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
             </form>
           </li>
         {% endfor %}

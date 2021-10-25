@@ -58,7 +58,7 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, csrfToken string, tokens []
 		qw422016.E().S(csrfToken)
 //line view/api_tokens_index.qtpl:17
 		qw422016.N().S(`">
-              <input type="submit" value="Delete" class="text-l text-white bg-red-700 hover:bg-red-900 rounded shadow-md px-4 py-2">
+              <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
             </form>
           </li>
         `)
