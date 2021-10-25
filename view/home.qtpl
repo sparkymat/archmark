@@ -1,24 +1,31 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
+{% import "fmt" %}
 
 {% func Home(showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
-    <div class="flex flex-col mt-4">
+    <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
         <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="Type query and hit Enter to search" autofocus>
       </form>
       {% if showSearchHeader %}
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
-          <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+          <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
         </div>
       {% endif %}
-      <ul>
+      <ul class="my-2">
         {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
-              <a class="text-xl" href="{%s bookmark.URL %}" target="_blank">{%s bookmark.Title %}</a>
+              <a class="flex flex-row items-end" href="{%s bookmark.URL %}" target="_blank">
+                <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
+                <div class="text-xl ml-2">{%s bookmark.Title %}</div>
+              </a>
             {% else %}
-              <a class="text-xl font-light" href="#">[pending] {%s bookmark.Title %}</a>
+              <a class="flex flex-row items-end font-light" href="#">
+                <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
+                <div class="text-xl ml-2">[pending] {%s bookmark.Title %}</div>
+              </a>
             {% endif %}
             <div class="">
               <span class="text-sm text-gray-400">Added {%s bookmark.TimeSince %}</span>
@@ -30,7 +37,7 @@
       </ul>
       {% if bookmarksList.ShowNextLink %}
         <div class="flex flex-row p-2 mx-auto">
-          <a href="{%s bookmarksList.NextPageLink %}" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
+          <a href="{%s bookmarksList.NextPageLink %}" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
         </div>
       {% endif %}
     </div>

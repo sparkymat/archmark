@@ -62,7 +62,7 @@ func Home(c echo.Context) error {
 
 	hasMore := bookmarksCount > currentCount
 
-	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, hasMore)
+	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, hasMore)
 	pageHTML := view.Home(input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
 

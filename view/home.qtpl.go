@@ -7,147 +7,164 @@ package view
 //line view/home.qtpl:1
 import "github.com/sparkymat/archmark/presenter"
 
-//line view/home.qtpl:3
+//line view/home.qtpl:2
+import "fmt"
+
+//line view/home.qtpl:4
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line view/home.qtpl:3
+//line view/home.qtpl:4
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line view/home.qtpl:3
+//line view/home.qtpl:4
 func StreamHome(qw422016 *qt422016.Writer, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
-//line view/home.qtpl:3
+//line view/home.qtpl:4
 	qw422016.N().S(`
   <div class="container mx-auto">
-    <div class="flex flex-col mt-4">
+    <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
         <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="Type query and hit Enter to search" autofocus>
       </form>
       `)
-//line view/home.qtpl:9
+//line view/home.qtpl:10
 	if showSearchHeader {
-//line view/home.qtpl:9
+//line view/home.qtpl:10
 		qw422016.N().S(`
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '`)
-//line view/home.qtpl:11
+//line view/home.qtpl:12
 		qw422016.E().S(searchQuery)
-//line view/home.qtpl:11
+//line view/home.qtpl:12
 		qw422016.N().S(`'</span>
-          <a href="/" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+          <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
         </div>
       `)
-//line view/home.qtpl:14
+//line view/home.qtpl:15
 	}
-//line view/home.qtpl:14
+//line view/home.qtpl:15
 	qw422016.N().S(`
-      <ul>
+      <ul class="my-2">
         `)
-//line view/home.qtpl:16
+//line view/home.qtpl:17
 	for _, bookmark := range bookmarksList.Bookmarks {
-//line view/home.qtpl:16
+//line view/home.qtpl:17
 		qw422016.N().S(`
           <li class="py-4">
             `)
-//line view/home.qtpl:18
+//line view/home.qtpl:19
 		if bookmark.IsActive {
-//line view/home.qtpl:18
-			qw422016.N().S(`
-              <a class="text-xl" href="`)
 //line view/home.qtpl:19
+			qw422016.N().S(`
+              <a class="flex flex-row items-end" href="`)
+//line view/home.qtpl:20
 			qw422016.E().S(bookmark.URL)
-//line view/home.qtpl:19
-			qw422016.N().S(`" target="_blank">`)
-//line view/home.qtpl:19
-			qw422016.E().S(bookmark.Title)
-//line view/home.qtpl:19
-			qw422016.N().S(`</a>
-            `)
 //line view/home.qtpl:20
+			qw422016.N().S(`" target="_blank">
+                <div class="text-md">`)
+//line view/home.qtpl:21
+			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
+//line view/home.qtpl:21
+			qw422016.N().S(`</div>
+                <div class="text-xl ml-2">`)
+//line view/home.qtpl:22
+			qw422016.E().S(bookmark.Title)
+//line view/home.qtpl:22
+			qw422016.N().S(`</div>
+              </a>
+            `)
+//line view/home.qtpl:24
 		} else {
-//line view/home.qtpl:20
+//line view/home.qtpl:24
 			qw422016.N().S(`
-              <a class="text-xl font-light" href="#">[pending] `)
-//line view/home.qtpl:21
+              <a class="flex flex-row items-end font-light" href="#">
+                <div class="text-md">`)
+//line view/home.qtpl:26
+			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
+//line view/home.qtpl:26
+			qw422016.N().S(`</div>
+                <div class="text-xl ml-2">[pending] `)
+//line view/home.qtpl:27
 			qw422016.E().S(bookmark.Title)
-//line view/home.qtpl:21
-			qw422016.N().S(`</a>
+//line view/home.qtpl:27
+			qw422016.N().S(`</div>
+              </a>
             `)
-//line view/home.qtpl:22
+//line view/home.qtpl:29
 		}
-//line view/home.qtpl:22
+//line view/home.qtpl:29
 		qw422016.N().S(`
             <div class="">
               <span class="text-sm text-gray-400">Added `)
-//line view/home.qtpl:24
+//line view/home.qtpl:31
 		qw422016.E().S(bookmark.TimeSince)
-//line view/home.qtpl:24
+//line view/home.qtpl:31
 		qw422016.N().S(`</span>
               <span>•</span>
               <a href="`)
-//line view/home.qtpl:26
+//line view/home.qtpl:33
 		qw422016.E().S(bookmark.OriginalURL)
-//line view/home.qtpl:26
+//line view/home.qtpl:33
 		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed">Open original link</a>
             </div>
           </li>
         `)
-//line view/home.qtpl:29
+//line view/home.qtpl:36
 	}
-//line view/home.qtpl:29
+//line view/home.qtpl:36
 	qw422016.N().S(`
       </ul>
       `)
-//line view/home.qtpl:31
+//line view/home.qtpl:38
 	if bookmarksList.ShowNextLink {
-//line view/home.qtpl:31
+//line view/home.qtpl:38
 		qw422016.N().S(`
         <div class="flex flex-row p-2 mx-auto">
           <a href="`)
-//line view/home.qtpl:33
+//line view/home.qtpl:40
 		qw422016.E().S(bookmarksList.NextPageLink)
-//line view/home.qtpl:33
-		qw422016.N().S(`" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
+//line view/home.qtpl:40
+		qw422016.N().S(`" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
         </div>
       `)
-//line view/home.qtpl:35
+//line view/home.qtpl:42
 	}
-//line view/home.qtpl:35
+//line view/home.qtpl:42
 	qw422016.N().S(`
     </div>
   </div>
 `)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 }
 
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 func WriteHome(qq422016 qtio422016.Writer, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	StreamHome(qw422016, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	qt422016.ReleaseWriter(qw422016)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 }
 
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 func Home(showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	WriteHome(qb422016, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	qs422016 := string(qb422016.B)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 	return qs422016
-//line view/home.qtpl:38
+//line view/home.qtpl:45
 }

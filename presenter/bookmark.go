@@ -16,6 +16,7 @@ type BookmarksList struct {
 }
 
 type Bookmark struct {
+	Index       uint64
 	URL         string
 	OriginalURL string
 	IsActive    bool
@@ -23,10 +24,12 @@ type Bookmark struct {
 	TimeSince   string
 }
 
-func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPage uint64, hasMore bool) BookmarksList {
+func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPage uint64, pageSize uint64, hasMore bool) BookmarksList {
 	presentedBookmarks := []Bookmark{}
-	for _, bookmark := range bookmarks {
-		presentedBookmarks = append(presentedBookmarks, PresentBookmark(bookmark))
+	startCount := (currentPage-1)*pageSize + 1
+
+	for i, bookmark := range bookmarks {
+		presentedBookmarks = append(presentedBookmarks, PresentBookmark(bookmark, startCount+uint64(i)))
 	}
 
 	queryFragments := []string{}
@@ -46,8 +49,9 @@ func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPa
 	}
 }
 
-func PresentBookmark(bookmark model.Bookmark) Bookmark {
+func PresentBookmark(bookmark model.Bookmark, index uint64) Bookmark {
 	return Bookmark{
+		Index:       index,
 		URL:         fmt.Sprintf("/b/%s", bookmark.FileName),
 		OriginalURL: bookmark.URL,
 		IsActive:    bookmark.Status == "completed",
