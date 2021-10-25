@@ -140,3 +140,32 @@ func (s *service) MarkBookmarkCompleted(ctx context.Context, id uint64) error {
 
 	return nil
 }
+
+func (s *service) CountBookmarks(ctx context.Context, query string) (uint64, error) {
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	stmnt := psql.
+		Select("COUNT(*)").
+		From("bookmarks")
+
+	if query != "" {
+		queryWords := strings.Split(query, " ")
+		querySearchTerm := strings.Join(queryWords, "|")
+		stmnt = stmnt.Where("weighted_tsv @@ to_tsquery(?)", querySearchTerm)
+	}
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return 0, fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var bookmarksCount uint64
+
+	if err := s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&bookmarksCount); err != nil {
+		return 0, fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	return bookmarksCount, nil
+}

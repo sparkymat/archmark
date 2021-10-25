@@ -28,6 +28,7 @@ type API interface {
 
 	// Bookmarks
 	ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error)
+	CountBookmarks(ctx context.Context, query string) (uint64, error)
 	FindBookmark(ctx context.Context, id uint64) (*model.Bookmark, error)
 	CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error
 	MarkBookmarkCompleted(ctx context.Context, id uint64) error
