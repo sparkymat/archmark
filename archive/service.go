@@ -32,6 +32,7 @@ type ArchivedPage struct {
 
 type API interface {
 	FetchDetails(ctx context.Context, url string, filename string) (*ArchivedPage, error)
+	RemoveArchiveFile(ctx context.Context, filename string) error
 }
 
 func New(cfg Config) API {
@@ -46,7 +47,7 @@ type service struct {
 
 func (s *service) FetchDetails(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
 	// Check if file already exists
-	filePath := filepath.Join(s.config.DownloadFolder, fmt.Sprintf("%s.html", fileName))
+	filePath := filepath.Join(s.config.DownloadFolder, fileName)
 	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {
 		return nil, ErrUnableToCreateFile
 	}
@@ -98,4 +99,20 @@ func (s *service) FetchDetails(ctx context.Context, url string, fileName string)
 	}
 
 	return page, nil
+}
+
+func (s *service) RemoveArchiveFile(ctx context.Context, fileName string) error {
+	filePath := filepath.Join(s.config.DownloadFolder, fileName)
+	if _, err := os.Stat(filePath); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return fmt.Errorf("failed to stat file. err: %w", err)
+	}
+
+	if err := os.Remove(filePath); err != nil {
+		return fmt.Errorf("failed to remove file. err: %w", err)
+	}
+
+	return nil
 }

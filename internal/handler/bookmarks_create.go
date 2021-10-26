@@ -87,8 +87,9 @@ func createBookmark(ctx context.Context, db database.API, cfg config.API, urlStr
 		DownloadFolder: cfg.DownloadPath(),
 	})
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
+	fileName := fmt.Sprintf("%s.html", fileHash)
 
-	page, err := archiveAPI.FetchDetails(ctx, urlString, fileHash)
+	page, err := archiveAPI.FetchDetails(ctx, urlString, fileName)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch page details. err: %w", err)
 	}
@@ -98,7 +99,7 @@ func createBookmark(ctx context.Context, db database.API, cfg config.API, urlStr
 		Title:    page.Title,
 		Status:   "pending",
 		Content:  page.HTMLContent,
-		FileName: fmt.Sprintf("%s.html", fileHash),
+		FileName: fileName,
 	}
 
 	err = db.CreateBookmark(ctx, &bookmark)
