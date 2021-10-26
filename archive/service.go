@@ -107,6 +107,7 @@ func (s *service) RemoveArchiveFile(ctx context.Context, fileName string) error 
 		if os.IsNotExist(err) {
 			return nil
 		}
+
 		return fmt.Errorf("failed to stat file. err: %w", err)
 	}
 
