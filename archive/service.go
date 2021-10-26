@@ -31,7 +31,7 @@ type ArchivedPage struct {
 }
 
 type API interface {
-	Save(ctx context.Context, url string, filename string) (*ArchivedPage, error)
+	FetchDetails(ctx context.Context, url string, filename string) (*ArchivedPage, error)
 }
 
 func New(cfg Config) API {
@@ -44,7 +44,7 @@ type service struct {
 	config Config
 }
 
-func (s *service) Save(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
+func (s *service) FetchDetails(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
 	// Check if file already exists
 	filePath := filepath.Join(s.config.DownloadFolder, fmt.Sprintf("%s.html", fileName))
 	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {

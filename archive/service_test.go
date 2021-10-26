@@ -25,7 +25,7 @@ func TestFetch(t *testing.T) {
 
 	defer ts.Close()
 
-	page, err := s.Save(context.Background(), ts.URL, "foobar")
+	page, err := s.FetchDetails(context.Background(), ts.URL, "foobar")
 
 	assert.NoError(t, err)
 	assert.NotNil(t, page)

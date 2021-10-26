@@ -88,7 +88,7 @@ func createBookmark(ctx context.Context, db database.API, cfg config.API, urlStr
 	})
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
 
-	page, err := archiveAPI.Save(ctx, urlString, fileHash)
+	page, err := archiveAPI.FetchDetails(ctx, urlString, fileHash)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch page details. err: %w", err)
 	}
