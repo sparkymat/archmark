@@ -101,7 +101,7 @@ func (s *service) FetchDetails(ctx context.Context, url string, fileName string)
 	return page, nil
 }
 
-func (s *service) RemoveArchiveFile(ctx context.Context, fileName string) error {
+func (s *service) RemoveArchiveFile(_ context.Context, fileName string) error {
 	filePath := filepath.Join(s.config.DownloadFolder, fileName)
 	if _, err := os.Stat(filePath); err != nil {
 		if os.IsNotExist(err) {

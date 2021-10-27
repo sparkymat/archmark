@@ -26,7 +26,7 @@ type Bookmark struct {
 }
 
 //nolint:lll
-func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPage uint64, pageSize uint64, hasMore bool) BookmarksList {
+func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPage uint64, pageSize uint64, totalBookmarksCount uint64) BookmarksList {
 	presentedBookmarks := []Bookmark{}
 	startCount := (currentPage-1)*pageSize + 1
 
@@ -38,6 +38,10 @@ func PresentBookmarks(bookmarks []model.Bookmark, currentQuery string, currentPa
 	if currentQuery != "" {
 		queryFragments = append(queryFragments, fmt.Sprintf("q=%s", currentQuery))
 	}
+
+	currentCount := pageSize * currentPage
+
+	hasMore := totalBookmarksCount > currentCount
 
 	if hasMore {
 		queryFragments = append(queryFragments, fmt.Sprintf("p=%d", currentPage+1))

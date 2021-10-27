@@ -25,7 +25,7 @@ type BookmarksCreateInput struct {
 }
 
 func APIBookmarksCreate(c echo.Context) error {
-	bookmark, err := bookmarksCreate(c)
+	bookmark, err := createBookmark(c)
 	if err != nil {
 		//nolint:wrapcheck
 		return c.JSON(http.StatusOK, map[string]string{
@@ -40,17 +40,17 @@ func APIBookmarksCreate(c echo.Context) error {
 }
 
 func BookmarksCreate(c echo.Context) error {
-	if _, err := bookmarksCreate(c); err != nil {
+	if _, err := createBookmark(c); err != nil {
 		log.Printf("error: %v", err)
 
-		return showError(c, "Unable to add bookmark. Please try again later.")
+		return renderError(c, "Unable to add bookmark. Please try again later.")
 	}
 
 	//nolint:wrapcheck
 	return c.Redirect(http.StatusSeeOther, "/")
 }
 
-func bookmarksCreate(c echo.Context) (*model.Bookmark, error) {
+func createBookmark(c echo.Context) (*model.Bookmark, error) {
 	cfg := getConfig(c)
 	db := getDB(c)
 
@@ -65,7 +65,7 @@ func bookmarksCreate(c echo.Context) (*model.Bookmark, error) {
 		return nil, err
 	}
 
-	bookmark, err := createBookmark(c.Request().Context(), db, cfg, input.URL)
+	bookmark, err := createBookmarkModel(c.Request().Context(), db, cfg, input.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,8 @@ func bookmarksCreate(c echo.Context) (*model.Bookmark, error) {
 	return bookmark, nil
 }
 
-func createBookmark(ctx context.Context, db database.API, cfg config.API, urlString string) (*model.Bookmark, error) {
+//nolint:lll
+func createBookmarkModel(ctx context.Context, db database.API, cfg config.API, urlString string) (*model.Bookmark, error) {
 	if _, err := url.ParseRequestURI(urlString); err != nil {
 		return nil, fmt.Errorf("invalid url. err: %w", err)
 	}

@@ -42,7 +42,7 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 		}
 	}
 
-	w.Flush()
+	_ = w.Flush()
 }
 
 func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {

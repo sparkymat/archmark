@@ -8,10 +8,10 @@ import (
 )
 
 func ShowError(c echo.Context) error {
-	return showError(c, "Internal server error. Please try again later.")
+	return renderError(c, "Internal server error. Please try again later.")
 }
 
-func showError(c echo.Context, message string) error {
+func renderError(c echo.Context, message string) error {
 	pageHTML := view.ShowError(message)
 	htmlString := view.Layout("archmark", pageHTML)
 

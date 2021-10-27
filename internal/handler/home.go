@@ -56,11 +56,7 @@ func Home(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	currentCount := pageSize * input.Page
-
-	hasMore := bookmarksCount > currentCount
-
-	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, hasMore)
+	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, bookmarksCount)
 	pageHTML := view.Home(csrfToken, input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
 
