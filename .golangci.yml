@@ -63,6 +63,6 @@ linters-settings:
       - name: unhandled-error
         arguments: ["fmt.Printf", "fmt.Fprintf", "fmt.Sprintf", "fmt.Fprintln"]
       - name: cognitive-complexity
-        arguments: [8]
+        arguments: [16]
       - name: line-length-limit
         arguments: [160]
