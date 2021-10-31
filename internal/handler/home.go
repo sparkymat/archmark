@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/localize"
 	"github.com/sparkymat/archmark/presenter"
 	"github.com/sparkymat/archmark/view"
 )
@@ -42,6 +43,13 @@ func Home(c echo.Context) error {
 		return ShowError(c)
 	}
 
+	localizer := getLocalizer(c)
+	if localizer == nil {
+		log.Print("error: localizer not found")
+
+		return ShowError(c)
+	}
+
 	bookmarks, err := db.ListBookmarks(c.Request().Context(), input.Query, input.Page, pageSize)
 	if err != nil {
 		log.Printf("error: %v", err)
@@ -57,7 +65,7 @@ func Home(c echo.Context) error {
 	}
 
 	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, bookmarksCount)
-	pageHTML := view.Home(csrfToken, input.Query != "", input.Query, presentedBookmarks)
+	pageHTML := view.Home(localizer, localize.English, csrfToken, input.Query != "", input.Query, presentedBookmarks)
 	htmlString := view.Layout("archmark", pageHTML)
 
 	//nolint:wrapcheck

@@ -12,16 +12,17 @@ import (
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/internal/handler"
+	"github.com/sparkymat/archmark/localize"
 	mw "github.com/sparkymat/archmark/middleware"
 )
 
-func Setup(e *echo.Echo, cfg config.API, db database.API) {
+func Setup(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
 	e.Static("/css", "public/css")
 	e.Static("/javascript", "public/javascript")
 	e.Static("/b", cfg.DownloadPath())
 
-	registerWebRoutes(e, cfg, db)
-	registerAPIRoutes(e, cfg, db)
+	registerWebRoutes(e, cfg, db, localizer)
+	registerAPIRoutes(e, cfg, db, localizer)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{
@@ -45,7 +46,7 @@ func Setup(e *echo.Echo, cfg config.API, db database.API) {
 	_ = w.Flush()
 }
 
-func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {
+func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
 	e.GET("/error", handler.ShowError)
 
 	app := e.Group("")
@@ -54,7 +55,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	app.Use(middleware.Recover())
-	app.Use(mw.ConfigInjector(cfg, db))
+	app.Use(mw.ConfigInjector(cfg, db, localizer))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
 	}))
@@ -81,13 +82,13 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API) {
 	authApp.POST("/tokens", handler.APITokensCreate)
 }
 
-func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API) {
+func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	apiApp.Use(middleware.Recover())
-	apiApp.Use(mw.ConfigInjector(cfg, db))
+	apiApp.Use(mw.ConfigInjector(cfg, db, localizer))
 	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := db.LookupAPIToken(context.Background(), token)
 		if err != nil {

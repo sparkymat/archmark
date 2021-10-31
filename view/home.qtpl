@@ -1,11 +1,12 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
+{% import "github.com/sparkymat/archmark/localize" %}
 {% import "fmt" %}
 
-{% func Home(csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(localizer localize.API, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
-        <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="Type query and hit Enter to search" autofocus>
+        <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="{%s localizer.Lookup(lang, localize.SearchPlaceholder) %}" autofocus>
       </form>
       {% if showSearchHeader %}
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">

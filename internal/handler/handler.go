@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
+	"github.com/sparkymat/archmark/localize"
 	mw "github.com/sparkymat/archmark/middleware"
 )
 
@@ -48,4 +49,18 @@ func getConfig(c echo.Context) config.API {
 	}
 
 	return cfg
+}
+
+func getLocalizer(c echo.Context) localize.API {
+	localizeVal := c.Get(mw.LocalizeKey)
+	if localizeVal == nil {
+		return nil
+	}
+
+	localizer, ok := localizeVal.(localize.API)
+	if !ok {
+		return nil
+	}
+
+	return localizer
 }

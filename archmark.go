@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
+	"github.com/sparkymat/archmark/localize"
 	"github.com/sparkymat/archmark/router"
 )
 
@@ -27,8 +28,10 @@ func main() {
 		panic(err)
 	}
 
+	localizer := localize.New()
+
 	r := echo.New()
-	router.Setup(r, cfg, db)
+	router.Setup(r, cfg, db, localizer)
 
 	err = r.Start(":8080")
 	if err != nil {
