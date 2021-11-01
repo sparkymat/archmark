@@ -46,7 +46,7 @@ func APITokensIndex(c echo.Context) error {
 	}
 
 	presentedTokens := presenter.PresentAPITokens(tokens)
-	pageHTML := view.ApiTokensIndex(csrfToken, presentedTokens)
+	pageHTML := view.ApiTokensIndex(localizer, cfg.DefaultLanguage(), csrfToken, presentedTokens)
 	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | tokens", pageHTML)
 
 	//nolint:wrapcheck

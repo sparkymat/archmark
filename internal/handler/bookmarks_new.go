@@ -30,7 +30,7 @@ func BookmarksNew(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	pageHTML := view.BookmarksNew(csrfToken)
+	pageHTML := view.BookmarksNew(localizer, cfg.DefaultLanguage(), csrfToken)
 	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | add", pageHTML)
 
 	//nolint:wrapcheck

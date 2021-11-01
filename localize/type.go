@@ -15,4 +15,9 @@ const (
 	Bookmarks         StringIdentifier = "Bookmarks"
 	AddNew            StringIdentifier = "AddNew"
 	APITokens         StringIdentifier = "APITokens"
+	PasteURLHere      StringIdentifier = "PasteURLHere"
+	Add               StringIdentifier = "Add"
+	AddWarning        StringIdentifier = "AddWarning"
+	CreateNewToken    StringIdentifier = "CreateNewToken"
+	Delete            StringIdentifier = "Delete"
 )

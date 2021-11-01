@@ -1,12 +1,13 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
+{% import "github.com/sparkymat/archmark/localize" %}
 
-{% func ApiTokensIndex(csrfToken string, tokens []presenter.APIToken) %}
+{% func ApiTokensIndex(localizer localize.API, lang localize.Language, csrfToken string, tokens []presenter.APIToken) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <div class="flex flex-row justify-end">
         <form action="/tokens" method="POST">
           <input type="hidden" name="csrf" value="{%s csrfToken %}">
-          <input type="submit" value="Create new token" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-4 py-2">
+          <input type="submit" value="{%s localizer.Lookup(lang, localize.CreateNewToken) %}" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-4 py-2">
         </form>
       </div>
       <ul>
@@ -15,7 +16,7 @@
             <span class="text-md italic break-all">{%s token.Token %}</span>
             <form action="/tokens/{%s token.ID %}/destroy" method="POST">
               <input type="hidden" name="csrf" value="{%s csrfToken %}">
-              <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+              <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
             </form>
           </li>
         {% endfor %}
