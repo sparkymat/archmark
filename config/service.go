@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/caarlos0/env/v6"
+	"github.com/sparkymat/archmark/localize"
 )
 
 type API interface {
@@ -12,6 +13,7 @@ type API interface {
 	AdminPassword() string
 	MonolithPath() string
 	DownloadPath() string
+	DefaultLanguage() localize.Language
 }
 
 func New() API {
@@ -65,14 +67,26 @@ func (s *service) DownloadPath() string {
 	return s.envConfig.DownloadPath
 }
 
+func (s *service) DefaultLanguage() localize.Language {
+	switch s.envConfig.DefaultLanguage {
+	case string(localize.English):
+		return localize.English
+	case string(localize.Malayalam):
+		return localize.Malayalam
+	default:
+		return localize.English
+	}
+}
+
 type envConfig struct {
-	DBHostname    string `env:"DB_HOSTNAME,required"`
-	DBPort        int64  `env:"DB_PORT,required"`
-	DBUsername    string `env:"DB_USERNAME"`
-	DBPassword    string `env:"DB_PASSWORD"`
-	DBDatabase    string `env:"DB_DATABASE,required"`
-	DBSSLMode     bool   `env:"DB_SSL_MODE"`
-	AdminPassword string `env:"ADMIN_PASSWORD,required"`
-	MonolithPath  string `env:"MONOLITH_PATH,required"`
-	DownloadPath  string `env:"DOWNLOAD_PATH,required"`
+	DBHostname      string `env:"DB_HOSTNAME,required"`
+	DBPort          int64  `env:"DB_PORT,required"`
+	DBUsername      string `env:"DB_USERNAME"`
+	DBPassword      string `env:"DB_PASSWORD"`
+	DBDatabase      string `env:"DB_DATABASE,required"`
+	DBSSLMode       bool   `env:"DB_SSL_MODE"`
+	AdminPassword   string `env:"ADMIN_PASSWORD,required"`
+	MonolithPath    string `env:"MONOLITH_PATH,required"`
+	DownloadPath    string `env:"DOWNLOAD_PATH,required"`
+	DefaultLanguage string `env:"DEFAULT_LANGUAGE"`
 }

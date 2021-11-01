@@ -7,7 +7,8 @@ type API interface {
 func New() API {
 	return &service{
 		translations: map[Language]map[StringIdentifier]string{
-			English: EnglishStrings,
+			English:   EnglishStrings,
+			Malayalam: MalayalamStrings,
 		},
 	}
 }
