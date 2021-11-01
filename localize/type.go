@@ -11,4 +11,8 @@ type StringIdentifier string
 
 const (
 	SearchPlaceholder StringIdentifier = "SearchPlaceholder"
+	NoBookmarksFound  StringIdentifier = "NoBookmarksFound"
+	Bookmarks         StringIdentifier = "Bookmarks"
+	AddNew            StringIdentifier = "AddNew"
+	APITokens         StringIdentifier = "APITokens"
 )

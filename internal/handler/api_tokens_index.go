@@ -24,6 +24,20 @@ func APITokensIndex(c echo.Context) error {
 		return ShowError(c)
 	}
 
+	localizer := getLocalizer(c)
+	if localizer == nil {
+		log.Print("error: localizer not found")
+
+		return ShowError(c)
+	}
+
+	cfg := getConfig(c)
+	if cfg == nil {
+		log.Print("error: config not found")
+
+		return ShowError(c)
+	}
+
 	tokens, err := db.ListAPITokens(c.Request().Context())
 	if err != nil {
 		log.Printf("error: %v", err)
@@ -33,7 +47,7 @@ func APITokensIndex(c echo.Context) error {
 
 	presentedTokens := presenter.PresentAPITokens(tokens)
 	pageHTML := view.ApiTokensIndex(csrfToken, presentedTokens)
-	htmlString := view.Layout("archmark | tokens", pageHTML)
+	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | tokens", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

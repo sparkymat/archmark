@@ -72,7 +72,7 @@ func Home(c echo.Context) error {
 
 	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, bookmarksCount)
 	pageHTML := view.Home(localizer, cfg.DefaultLanguage(), csrfToken, input.Query != "", input.Query, presentedBookmarks)
-	htmlString := view.Layout("archmark", pageHTML)
+	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

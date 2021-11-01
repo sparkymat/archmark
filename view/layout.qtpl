@@ -1,4 +1,6 @@
-{% func Layout(title string, content string) %}
+{% import "github.com/sparkymat/archmark/localize" %}
+
+{% func Layout(localizer localize.API, lang localize.Language, title string, content string) %}
   <!DOCTYPE html>
   <html>
     <head>
@@ -12,9 +14,9 @@
       <nav class="bg-gray-800">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
-          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">Bookmarks</a>
-          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">Add new</a>
-          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">API Tokens</a>
+          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
+          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
+          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
         </div>
       </nav>
       {%s= content %}

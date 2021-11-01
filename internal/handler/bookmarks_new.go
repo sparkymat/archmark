@@ -9,6 +9,20 @@ import (
 )
 
 func BookmarksNew(c echo.Context) error {
+	localizer := getLocalizer(c)
+	if localizer == nil {
+		log.Print("error: localizer not found")
+
+		return ShowError(c)
+	}
+
+	cfg := getConfig(c)
+	if cfg == nil {
+		log.Print("error: config not found")
+
+		return ShowError(c)
+	}
+
 	csrfToken := getCSRFToken(c)
 	if csrfToken == "" {
 		log.Print("error: csrf token not found")
@@ -17,7 +31,7 @@ func BookmarksNew(c echo.Context) error {
 	}
 
 	pageHTML := view.BookmarksNew(csrfToken)
-	htmlString := view.Layout("archmark | add", pageHTML)
+	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | add", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

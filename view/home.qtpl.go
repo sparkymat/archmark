@@ -63,7 +63,11 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 //line view/home.qtpl:17
 		qw422016.N().S(`
         <div class="flex flex-col items-center mt-16">
-          <p class="border border-dashed border-gray-400 py-4 px-8 text-xl text-gray-600">No bookmarks found</p>
+          <p class="border border-dashed border-gray-400 py-4 px-8 text-xl text-gray-600">`)
+//line view/home.qtpl:19
+		qw422016.E().S(localizer.Lookup(lang, localize.NoBookmarksFound))
+//line view/home.qtpl:19
+		qw422016.N().S(`</p>
         </div>
       `)
 //line view/home.qtpl:21
