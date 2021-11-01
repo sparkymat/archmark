@@ -1,5 +1,6 @@
 package localize
 
-var EnglishStrings = map[StringIdentifier]string{
+//nolint:gochecknoglobals
+var englishStrings = map[StringIdentifier]string{
 	SearchPlaceholder: "Type query and hit Enter to search",
 }
