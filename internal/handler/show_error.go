@@ -9,7 +9,20 @@ import (
 )
 
 func ShowError(c echo.Context) error {
-	return renderError(c, "Internal server error. Please try again later.")
+	localizer := getLocalizer(c)
+	if localizer == nil {
+		localizer = localize.New()
+	}
+
+	lang := localize.English
+	cfg := getConfig(c)
+	if cfg != nil {
+		lang = cfg.DefaultLanguage()
+	}
+
+	renderedError := localizer.Lookup(lang, localize.InternalServerError)
+
+	return renderError(c, renderedError)
 }
 
 func renderError(c echo.Context, message string) error {

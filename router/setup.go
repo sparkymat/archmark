@@ -47,8 +47,6 @@ func Setup(e *echo.Echo, cfg config.API, db database.API, localizer localize.API
 }
 
 func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
-	e.GET("/error", handler.ShowError)
-
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -62,6 +60,8 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
+
+	app.GET("/error", handler.ShowError)
 
 	authApp := app.Group("")
 	authApp.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {

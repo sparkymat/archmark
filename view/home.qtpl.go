@@ -113,7 +113,11 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
 //line view/home.qtpl:32
 			qw422016.N().S(`</div>
-                <div class="text-xl ml-2">[pending] `)
+                <div class="text-xl ml-2">[`)
+//line view/home.qtpl:33
+			qw422016.E().S(localizer.Lookup(lang, localize.Pending))
+//line view/home.qtpl:33
+			qw422016.N().S(`] `)
 //line view/home.qtpl:33
 			qw422016.E().S(bookmark.Title)
 //line view/home.qtpl:33
@@ -125,9 +129,9 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 //line view/home.qtpl:35
 		qw422016.N().S(`
             <div class="">
-              <span class="text-sm text-gray-400 mr-2">added `)
+              <span class="text-sm text-gray-400 mr-2">`)
 //line view/home.qtpl:37
-		qw422016.E().S(bookmark.TimeSince)
+		qw422016.E().S(localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp))
 //line view/home.qtpl:37
 		qw422016.N().S(`</span>
               <span>•</span>
@@ -135,13 +139,21 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 //line view/home.qtpl:39
 		qw422016.E().S(bookmark.OriginalURL)
 //line view/home.qtpl:39
-		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">open original link</a>
+		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">`)
+//line view/home.qtpl:39
+		qw422016.E().S(localizer.Lookup(lang, localize.OpenOriginalLink))
+//line view/home.qtpl:39
+		qw422016.N().S(`</a>
               <span>•</span>
               <a href="javascript:showBookmarkDeleteModal(`)
 //line view/home.qtpl:41
 		qw422016.N().DUL(bookmark.ID)
 //line view/home.qtpl:41
-		qw422016.N().S(`)" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">delete</a>
+		qw422016.N().S(`)" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">`)
+//line view/home.qtpl:41
+		qw422016.E().S(localizer.Lookup(lang, localize.Delete))
+//line view/home.qtpl:41
+		qw422016.N().S(`</a>
             </div>
           </li>
         `)
@@ -174,8 +186,16 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
     <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
       <div class="">
         <div class="text-center p-2 flex-auto justify-center">
-          <h3 class="text-lg font-bold py-4 ">Bookmark delete</h3>
-          <p class="text-md text-gray-400 px-4">Are you sure you want to delete this bookmark?</p>
+          <h3 class="text-lg font-bold py-4 ">`)
+//line view/home.qtpl:58
+	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkTitle))
+//line view/home.qtpl:58
+	qw422016.N().S(`</h3>
+          <p class="text-md text-gray-400 px-4">`)
+//line view/home.qtpl:59
+	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkWarning))
+//line view/home.qtpl:59
+	qw422016.N().S(`</p>
         </div>
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="`)
@@ -184,8 +204,16 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 //line view/home.qtpl:62
 	qw422016.N().S(`">
           <div class="p-3 mt-2 flex flex-row justify-end">
-            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">Cancel</a>
-            <input type="submit" value="Delete" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">`)
+//line view/home.qtpl:64
+	qw422016.E().S(localizer.Lookup(lang, localize.Cancel))
+//line view/home.qtpl:64
+	qw422016.N().S(`</a>
+            <input type="submit" value="`)
+//line view/home.qtpl:65
+	qw422016.E().S(localizer.Lookup(lang, localize.Delete))
+//line view/home.qtpl:65
+	qw422016.N().S(`" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
           </div>
         </form>
       </div>

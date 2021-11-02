@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/sparkymat/archmark/model"
-	"github.com/xeonx/timeago"
 )
 
 type BookmarksList struct {
@@ -22,7 +21,7 @@ type Bookmark struct {
 	OriginalURL string
 	IsActive    bool
 	Title       string
-	TimeSince   string
+	TimeStamp   string
 }
 
 //nolint:lll
@@ -63,6 +62,6 @@ func PresentBookmark(bookmark model.Bookmark, index uint64) Bookmark {
 		OriginalURL: bookmark.URL,
 		IsActive:    bookmark.Status == "completed",
 		Title:       bookmark.Title,
-		TimeSince:   timeago.English.Format(bookmark.CreatedAt),
+		TimeStamp:   bookmark.CreatedAt.Format("02 Jan 2006 3:04PM"),
 	}
 }
