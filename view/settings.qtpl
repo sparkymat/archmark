@@ -1,0 +1,4 @@
+{% import "github.com/sparkymat/archmark/localize" %}
+
+{% func Settings(localizer localize.API, lang localize.Language, csrfToken string) %}
+{% endfunc %}

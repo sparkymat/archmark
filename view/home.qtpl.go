@@ -5,15 +5,13 @@
 package view
 
 //line view/home.qtpl:1
-import (
-	"github.com/sparkymat/archmark/presenter"
+import "github.com/sparkymat/archmark/presenter"
 
 //line view/home.qtpl:2
-	"github.com/sparkymat/archmark/localize"
+import "github.com/sparkymat/archmark/localize"
 
 //line view/home.qtpl:3
-	"fmt"
-)
+import "fmt"
 
 //line view/home.qtpl:5
 import (
