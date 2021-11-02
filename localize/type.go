@@ -5,6 +5,7 @@ type Language string
 const (
 	English   Language = "en"
 	Malayalam Language = "ml"
+	German    Language = "de"
 )
 
 type StringIdentifier string

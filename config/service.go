@@ -73,6 +73,8 @@ func (s *service) DefaultLanguage() localize.Language {
 		return localize.English
 	case string(localize.Malayalam):
 		return localize.Malayalam
+	case string(localize.German):
+		return localize.German
 	default:
 		return localize.English
 	}

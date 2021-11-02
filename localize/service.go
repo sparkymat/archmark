@@ -11,6 +11,7 @@ func New() API {
 		translations: map[Language]map[StringIdentifier]string{
 			English:   englishStrings,
 			Malayalam: malayalamStrings,
+			German:    germanStrings,
 		},
 	}
 }
