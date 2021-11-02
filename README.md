@@ -38,17 +38,18 @@ After creating a user token, you can use it as follows (using curl as an example
 
 Both the app and the worker are configured using environment variables.
 
-| Variable         | Description                                                    |
-| ---------------- | -------------------------------------------------------------- |
-| `DB_HOSTNAME`    | Hostname of the machine where PostgreSQL is running            |
-| `DB_PORT`        | Port on which PostgreSQL is running                            |
-| `DB_USERNAME`    | PostgreSQL user                                                |
-| `DB_PASSWORD`    | PostgreSQL password                                            |
-| `DB_DATABASE`    | PostgreSQL database name                                       |
-| `DB_SSL_MODE`    | `true` if the connection to PostgreSQL should be done over SSL |
-| `ADMIN_PASSWORD` | Password for the `admin` user                                  |
-| `MONOLITH_PATH`  | Full path to the Monolith binary                               |
-| `DOWNLOAD_PATH`  | Full path to the folder where archived pages are to be stored  |
+| Variable           | Description                                                    |
+| ------------------ | -------------------------------------------------------------- |
+| `DB_HOSTNAME`      | Hostname of the machine where PostgreSQL is running            |
+| `DB_PORT`          | Port on which PostgreSQL is running                            |
+| `DB_USERNAME`      | PostgreSQL user                                                |
+| `DB_PASSWORD`      | PostgreSQL password                                            |
+| `DB_DATABASE`      | PostgreSQL database name                                       |
+| `DB_SSL_MODE`      | `true` if the connection to PostgreSQL should be done over SSL |
+| `ADMIN_PASSWORD`   | Password for the `admin` user                                  |
+| `MONOLITH_PATH`    | Full path to the Monolith binary                               |
+| `DOWNLOAD_PATH`    | Full path to the folder where archived pages are to be stored  |
+| `DEFAULT_LANGUAGE` | Language for the web app. Supported: en, ml                    |
 
 ## Screenshots
 

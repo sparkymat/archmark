@@ -15,8 +15,7 @@ func ShowError(c echo.Context) error {
 	}
 
 	lang := localize.English
-	cfg := getConfig(c)
-	if cfg != nil {
+	if cfg := getConfig(c); cfg != nil {
 		lang = cfg.DefaultLanguage()
 	}
 
@@ -32,8 +31,7 @@ func renderError(c echo.Context, message string) error {
 	}
 
 	lang := localize.English
-	cfg := getConfig(c)
-	if cfg != nil {
+	if cfg := getConfig(c); cfg != nil {
 		lang = cfg.DefaultLanguage()
 	}
 
