@@ -5,10 +5,12 @@
 package view
 
 //line view/api_tokens_index.qtpl:1
-import "github.com/sparkymat/archmark/presenter"
+import (
+	"github.com/sparkymat/archmark/presenter"
 
 //line view/api_tokens_index.qtpl:2
-import "github.com/sparkymat/archmark/localize"
+	"github.com/sparkymat/archmark/localize"
+)
 
 //line view/api_tokens_index.qtpl:4
 import (

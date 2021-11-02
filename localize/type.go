@@ -8,6 +8,19 @@ const (
 	German    Language = "de"
 )
 
+func LanguageFromString(langString string) Language {
+	switch langString {
+	case string(English):
+		return English
+	case string(Malayalam):
+		return Malayalam
+	case string(German):
+		return German
+	default:
+		return English
+	}
+}
+
 type StringIdentifier string
 
 const (

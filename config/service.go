@@ -68,16 +68,7 @@ func (s *service) DownloadPath() string {
 }
 
 func (s *service) DefaultLanguage() localize.Language {
-	switch s.envConfig.DefaultLanguage {
-	case string(localize.English):
-		return localize.English
-	case string(localize.Malayalam):
-		return localize.Malayalam
-	case string(localize.German):
-		return localize.German
-	default:
-		return localize.English
-	}
+	return localize.LanguageFromString(s.envConfig.DefaultLanguage)
 }
 
 type envConfig struct {

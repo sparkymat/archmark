@@ -9,7 +9,7 @@ var germanStrings = map[StringIdentifier]string{
 	APITokens:         "API-Token",
 	PasteURLHere:      "URL hier einfügen...",
 	Add:               "Hinzufügen",
-	//nolint:lll
+	//nolint:lll,revive
 	AddWarning:            "Bitte beachten Sie, dass es eine Weile dauern kann, bis das Archiv erstellt wird. In der Zwischenzeit können Sie den \"Original\"-Link verwenden.",
 	CreateNewToken:        "Neues Token erstellen",
 	Delete:                "Löschen",
