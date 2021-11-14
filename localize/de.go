@@ -20,4 +20,7 @@ var germanStrings = map[StringIdentifier]string{
 	DeleteBookmarkWarning: "Möchten Sie dieses Lesezeichen wirklich löschen?",
 	Cancel:                "Abbrechen",
 	InternalServerError:   "Interner Serverfehler. Bitte versuchen Sie es später erneut.",
+	Settings:              "Einstellungen",
+	SaveSettings:          "Einstellungen speichern",
+	SelectLanguage:        "Wählen Sie die Sprache für die App",
 }

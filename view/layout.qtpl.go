@@ -56,42 +56,48 @@ func StreamLayout(qw422016 *qt422016.Writer, localizer localize.API, lang locali
 	qw422016.E().S(localizer.Lookup(lang, localize.APITokens))
 //line view/layout.qtpl:19
 	qw422016.N().S(`</a>
+          <div class="flex-grow"></div>
+          <a href="/settings" class="text-white px-4 py-2 rounded-md text-sm font-medium">`)
+//line view/layout.qtpl:21
+	qw422016.E().S(localizer.Lookup(lang, localize.Settings))
+//line view/layout.qtpl:21
+	qw422016.N().S(`</a>
         </div>
       </nav>
       `)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:24
 	qw422016.N().S(content)
-//line view/layout.qtpl:22
+//line view/layout.qtpl:24
 	qw422016.N().S(`
       <script src="/javascript/index.js"></script>
     </body>
   </html>
 `)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 }
 
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 func WriteLayout(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, title string, content string) {
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	StreamLayout(qw422016, localizer, lang, title, content)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	qt422016.ReleaseWriter(qw422016)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 }
 
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 func Layout(localizer localize.API, lang localize.Language, title string, content string) string {
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	WriteLayout(qb422016, localizer, lang, title, content)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	qs422016 := string(qb422016.B)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 	return qs422016
-//line view/layout.qtpl:26
+//line view/layout.qtpl:28
 }

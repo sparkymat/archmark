@@ -20,4 +20,7 @@ var englishStrings = map[StringIdentifier]string{
 	DeleteBookmarkWarning: "Are you sure you want to delete this bookmark?",
 	Cancel:                "Cancel",
 	InternalServerError:   "Internal server error. Please try again later.",
+	Settings:              "Settings",
+	SaveSettings:          "Save settings",
+	SelectLanguage:        "Choose the language for the app",
 }

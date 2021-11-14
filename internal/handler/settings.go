@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/localize"
+	"github.com/sparkymat/archmark/presenter"
 	"github.com/sparkymat/archmark/view"
 )
 
@@ -30,7 +32,9 @@ func Settings(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	pageHTML := view.Settings(localizer, cfg.DefaultLanguage(), csrfToken)
+	presentedLanguages := presenter.SupportedLanguages(localize.SupportedLanguages)
+
+	pageHTML := view.Settings(localizer, cfg.DefaultLanguage(), csrfToken, presentedLanguages)
 	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark", pageHTML)
 
 	//nolint:wrapcheck

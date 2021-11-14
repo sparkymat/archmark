@@ -20,4 +20,7 @@ var malayalamStrings = map[StringIdentifier]string{
 	DeleteBookmarkWarning: "ഇത് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ?",
 	Cancel:                "വേണ്ട",
 	InternalServerError:   "സെർവർ തകരാർ. ദയവായി പിന്നീട് വീണ്ടും ശ്രമിക്കുക.",
+	Settings:              "സജ്ജീകരണങ്ങൾ",
+	SaveSettings:          "സജ്ജീകരണങ്ങൾ സംരക്ഷിക്കുക",
+	SelectLanguage:        "ആപ്പിനുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക",
 }

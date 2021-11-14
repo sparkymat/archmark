@@ -75,6 +75,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 	}))
 	authApp.GET("/", handler.Home)
 	authApp.GET("/settings", handler.Settings)
+	authApp.POST("/settings", handler.UpdateSettings)
 	authApp.GET("/add", handler.BookmarksNew)
 	authApp.POST("/bookmarks", handler.BookmarksCreate)
 	authApp.POST("/bookmarks/:id/destroy", handler.BookmarksDestroy)

@@ -1,4 +1,25 @@
 {% import "github.com/sparkymat/archmark/localize" %}
+{% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func Settings(localizer localize.API, lang localize.Language, csrfToken string) %}
+{% func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language) %}
+  <div>
+    <form action="/settings" method="POST">
+      <input type="hidden" name="csrf" value="{%s csrfToken %}">
+      <div class="container mx-auto mt-8 flex flex-col content-stretch">
+        <h3 class="text-2xl text-light py-2 border-b">Language</h3>
+        <div class="mt-4 flex flex-row flex-grow items-center">
+          <label for="language" class="text-lg">{%s localizer.Lookup(lang, localize.SelectLanguage) %}</label>
+          <div class="flex-grow"></div>
+          <select id="language" name="language" class="text-xl p-2 border-b-2 bg-transparent border-dashed">
+            {% for _, language := range languages %}
+              <option value="{%s language.Value %}">{%s language.Label %}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mt-16 flex flex-row justify-end">
+          <input type="submit" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4" value="{%s localizer.Lookup(lang, localize.SaveSettings) %}" />
+        </div>
+      </div>
+    </form>
+  </div>
 {% endfunc %}

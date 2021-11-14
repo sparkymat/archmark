@@ -17,6 +17,8 @@
           <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
           <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
           <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
+          <div class="flex-grow"></div>
+          <a href="/settings" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Settings) %}</a>
         </div>
       </nav>
       {%s= content %}

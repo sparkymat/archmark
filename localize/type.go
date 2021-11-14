@@ -8,6 +8,12 @@ const (
 	German    Language = "de"
 )
 
+var SupportedLanguages = []Language{
+	English,
+	Malayalam,
+	German,
+}
+
 func LanguageFromString(langString string) Language {
 	switch langString {
 	case string(English):
@@ -41,4 +47,7 @@ const (
 	DeleteBookmarkWarning StringIdentifier = "DeleteBookmarkWarning"
 	Cancel                StringIdentifier = "Cancel"
 	InternalServerError   StringIdentifier = "InternalServerError"
+	Settings              StringIdentifier = "Settings"
+	SaveSettings          StringIdentifier = "SaveSettings"
+	SelectLanguage        StringIdentifier = "SelectLanguage"
 )
