@@ -1,7 +1,7 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 {% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language) %}
+{% func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) %}
   <div>
     <form action="/settings" method="POST">
       <input type="hidden" name="csrf" value="{%s csrfToken %}">
@@ -12,7 +12,11 @@
           <div class="flex-grow"></div>
           <select id="language" name="language" class="text-xl p-2 border-b-2 bg-transparent border-dashed">
             {% for _, language := range languages %}
-              <option value="{%s language.Value %}">{%s language.Label %}</option>
+              {% if language.Value == selectedLanguage %}
+                <option value="{%s language.Value %}" selected>{%s language.Label %}</option>
+              {% else %}
+                <option value="{%s language.Value %}">{%s language.Label %}</option>
+              {% endif %}
             {% endfor %}
           </select>
         </div>

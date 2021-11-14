@@ -13,6 +13,7 @@ const (
 	ConfigKey   = "config"
 	DBKey       = "db"
 	LocalizeKey = "localize"
+	SettingsKey = "settings"
 )
 
 func ConfigInjector(cfg config.API, db database.API, localizer localize.API) func(echo.HandlerFunc) echo.HandlerFunc {

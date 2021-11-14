@@ -1,0 +1,24 @@
+package model
+
+import (
+	"time"
+
+	"github.com/sparkymat/archmark/config"
+)
+
+type Settings struct {
+	ID        uint64     `db:"id"`
+	CreatedAt time.Time  `db:"created_at"`
+	UpdatedAt time.Time  `db:"updated_at"`
+	DeletedAt *time.Time `db:"deleted_at"`
+	Language  string     `db:"language"`
+}
+
+func DefaultSettings(cfg config.API) Settings {
+	return Settings{
+		ID:        1,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Language:  string(cfg.DefaultLanguage()),
+	}
+}

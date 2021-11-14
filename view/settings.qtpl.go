@@ -24,7 +24,7 @@ var (
 )
 
 //line view/settings.qtpl:4
-func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language) {
+func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
 //line view/settings.qtpl:4
 	qw422016.N().S(`
   <div>
@@ -49,58 +49,82 @@ func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang loca
 	for _, language := range languages {
 //line view/settings.qtpl:14
 		qw422016.N().S(`
-              <option value="`)
+              `)
 //line view/settings.qtpl:15
-		qw422016.E().S(language.Value)
+		if language.Value == selectedLanguage {
 //line view/settings.qtpl:15
-		qw422016.N().S(`">`)
-//line view/settings.qtpl:15
-		qw422016.E().S(language.Label)
-//line view/settings.qtpl:15
-		qw422016.N().S(`</option>
+			qw422016.N().S(`
+                <option value="`)
+//line view/settings.qtpl:16
+			qw422016.E().S(language.Value)
+//line view/settings.qtpl:16
+			qw422016.N().S(`" selected>`)
+//line view/settings.qtpl:16
+			qw422016.E().S(language.Label)
+//line view/settings.qtpl:16
+			qw422016.N().S(`</option>
+              `)
+//line view/settings.qtpl:17
+		} else {
+//line view/settings.qtpl:17
+			qw422016.N().S(`
+                <option value="`)
+//line view/settings.qtpl:18
+			qw422016.E().S(language.Value)
+//line view/settings.qtpl:18
+			qw422016.N().S(`">`)
+//line view/settings.qtpl:18
+			qw422016.E().S(language.Label)
+//line view/settings.qtpl:18
+			qw422016.N().S(`</option>
+              `)
+//line view/settings.qtpl:19
+		}
+//line view/settings.qtpl:19
+		qw422016.N().S(`
             `)
-//line view/settings.qtpl:16
+//line view/settings.qtpl:20
 	}
-//line view/settings.qtpl:16
+//line view/settings.qtpl:20
 	qw422016.N().S(`
           </select>
         </div>
         <div class="mt-16 flex flex-row justify-end">
           <input type="submit" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4" value="`)
-//line view/settings.qtpl:20
+//line view/settings.qtpl:24
 	qw422016.E().S(localizer.Lookup(lang, localize.SaveSettings))
-//line view/settings.qtpl:20
+//line view/settings.qtpl:24
 	qw422016.N().S(`" />
         </div>
       </div>
     </form>
   </div>
 `)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
 }
 
-//line view/settings.qtpl:25
-func WriteSettings(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language) {
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
+func WriteSettings(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
+//line view/settings.qtpl:29
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/settings.qtpl:25
-	StreamSettings(qw422016, localizer, lang, csrfToken, languages)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
+	StreamSettings(qw422016, localizer, lang, csrfToken, languages, selectedLanguage)
+//line view/settings.qtpl:29
 	qt422016.ReleaseWriter(qw422016)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
 }
 
-//line view/settings.qtpl:25
-func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language) string {
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
+func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) string {
+//line view/settings.qtpl:29
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/settings.qtpl:25
-	WriteSettings(qb422016, localizer, lang, csrfToken, languages)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
+	WriteSettings(qb422016, localizer, lang, csrfToken, languages, selectedLanguage)
+//line view/settings.qtpl:29
 	qs422016 := string(qb422016.B)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
 	return qs422016
-//line view/settings.qtpl:25
+//line view/settings.qtpl:29
 }

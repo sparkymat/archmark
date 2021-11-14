@@ -39,6 +39,10 @@ type API interface {
 	DeleteAPIToken(ctx context.Context, id uint64) error
 	CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error)
 	LookupAPIToken(ctx context.Context, token string) (*model.APIToken, error)
+
+	// Settings
+	LoadSettings(ctx context.Context) (*model.Settings, error)
+	UpdateSettings(ctx context.Context, settings *model.Settings) error
 }
 
 func New(cfg Config) API {

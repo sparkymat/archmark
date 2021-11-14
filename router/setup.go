@@ -54,6 +54,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 	}))
 	app.Use(middleware.Recover())
 	app.Use(mw.ConfigInjector(cfg, db, localizer))
+	app.Use(mw.SettingsInjector(cfg, db))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
 	}))
@@ -91,6 +92,7 @@ func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 	}))
 	apiApp.Use(middleware.Recover())
 	apiApp.Use(mw.ConfigInjector(cfg, db, localizer))
+	apiApp.Use(mw.SettingsInjector(cfg, db))
 	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := db.LookupAPIToken(context.Background(), token)
 		if err != nil {

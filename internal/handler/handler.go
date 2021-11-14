@@ -7,7 +7,22 @@ import (
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/localize"
 	mw "github.com/sparkymat/archmark/middleware"
+	"github.com/sparkymat/archmark/model"
 )
+
+func getSettings(c echo.Context) *model.Settings {
+	settingsVal := c.Get(mw.SettingsKey)
+	if settingsVal == nil {
+		return nil
+	}
+
+	settings, ok := settingsVal.(*model.Settings)
+	if !ok {
+		return nil
+	}
+
+	return settings
+}
 
 func getCSRFToken(c echo.Context) string {
 	csrfTokenVal := c.Get(middleware.DefaultCSRFConfig.ContextKey)

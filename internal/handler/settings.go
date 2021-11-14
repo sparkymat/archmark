@@ -32,9 +32,16 @@ func Settings(c echo.Context) error {
 		return ShowError(c)
 	}
 
+	settings := getSettings(c)
+	if settings == nil {
+		log.Print("error: settings not found")
+
+		return ShowError(c)
+	}
+
 	presentedLanguages := presenter.SupportedLanguages(localize.SupportedLanguages)
 
-	pageHTML := view.Settings(localizer, cfg.DefaultLanguage(), csrfToken, presentedLanguages)
+	pageHTML := view.Settings(localizer, cfg.DefaultLanguage(), csrfToken, presentedLanguages, settings.Language)
 	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark", pageHTML)
 
 	//nolint:wrapcheck

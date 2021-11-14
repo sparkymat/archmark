@@ -17,7 +17,30 @@ func UpdateSettings(c echo.Context) error {
 	if err := c.Bind(&input); err != nil {
 		log.Printf("error: %v", err)
 
-		return renderError(c, "Unable to add bookmark. Please try again later.")
+		return renderError(c, "Unable to update settings. Please try again later.")
+	}
+
+	db := getDB(c)
+	if db == nil {
+		log.Print("error: db not found")
+
+		return ShowError(c)
+	}
+
+	settings := getSettings(c)
+	if settings == nil {
+		log.Print("error: settings not found")
+
+		return ShowError(c)
+	}
+
+	settings.Language = input.Language
+
+	err := db.UpdateSettings(c.Request().Context(), settings)
+	if err != nil {
+		log.Print("error: failed to update settings")
+
+		return ShowError(c)
 	}
 
 	//nolint:wrapcheck
