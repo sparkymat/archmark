@@ -20,5 +20,6 @@ func UpdateSettings(c echo.Context) error {
 		return renderError(c, "Unable to add bookmark. Please try again later.")
 	}
 
+	//nolint:wrapcheck
 	return c.Redirect(http.StatusSeeOther, "/settings")
 }
