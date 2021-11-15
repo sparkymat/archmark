@@ -35,7 +35,11 @@ func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang loca
 //line view/settings.qtpl:7
 	qw422016.N().S(`">
       <div class="container mx-auto mt-8 flex flex-col content-stretch">
-        <h3 class="text-2xl text-light py-2 border-b">Language</h3>
+        <h3 class="text-2xl text-light py-2 border-b">`)
+//line view/settings.qtpl:9
+	qw422016.E().S(localizer.Lookup(lang, localize.LanguageLabel))
+//line view/settings.qtpl:9
+	qw422016.N().S(`</h3>
         <div class="mt-4 flex flex-row flex-grow items-center">
           <label for="language" class="text-lg">`)
 //line view/settings.qtpl:11

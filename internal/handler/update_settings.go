@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/model"
 )
 
 type UpdateSettingsInput struct {
@@ -27,16 +28,18 @@ func UpdateSettings(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	settings := getSettings(c)
-	if settings == nil {
-		log.Print("error: settings not found")
+	cfg := getConfig(c)
+	if cfg == nil {
+		log.Print("error: config not found")
 
 		return ShowError(c)
 	}
 
-	settings.Language = input.Language
+	settingsModel, err := db.LoadSettings(c.Request().Context(), model.DefaultSettings(cfg))
 
-	err := db.UpdateSettings(c.Request().Context(), settings)
+	settingsModel.Language = input.Language
+
+	err = db.UpdateSettings(c.Request().Context(), settingsModel)
 	if err != nil {
 		log.Print("error: failed to update settings")
 

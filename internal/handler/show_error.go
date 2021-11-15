@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -9,30 +11,40 @@ import (
 )
 
 func ShowError(c echo.Context) error {
+	settings := getSettings(c)
+	if settings == nil {
+		log.Print("error: settings not found")
+
+		return ShowError(c)
+	}
+
 	localizer := getLocalizer(c)
 	if localizer == nil {
-		localizer = localize.New()
+		log.Print("error: localizer not found")
+
+		return ShowError(c)
 	}
 
-	lang := localize.English
-	if cfg := getConfig(c); cfg != nil {
-		lang = cfg.DefaultLanguage()
-	}
-
-	renderedError := localizer.Lookup(lang, localize.InternalServerError)
+	renderedError := localizer.Lookup(settings.Language(), localize.InternalServerError)
 
 	return renderError(c, renderedError)
 }
 
 func renderError(c echo.Context, message string) error {
-	localizer := getLocalizer(c)
-	if localizer == nil {
-		localizer = localize.New()
+	lang := localize.English
+
+	settings := getSettings(c)
+	if settings == nil {
+		cfg := getConfig(c)
+		if cfg != nil {
+			lang = cfg.DefaultLanguage()
+		}
 	}
 
-	lang := localize.English
-	if cfg := getConfig(c); cfg != nil {
-		lang = cfg.DefaultLanguage()
+	localizer := getLocalizer(c)
+	if localizer == nil {
+		log.Print("error: localizer not found")
+		return c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", message))
 	}
 
 	pageHTML := view.ShowError(message)

@@ -2,6 +2,8 @@ package database
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 
@@ -9,7 +11,7 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-func (s *service) LoadSettings(ctx context.Context) (*model.Settings, error) {
+func (s *service) LoadSettings(ctx context.Context, defaultSettings model.Settings) (*model.Settings, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -29,7 +31,16 @@ func (s *service) LoadSettings(ctx context.Context) (*model.Settings, error) {
 
 	err = s.conn.QueryRowxContext(ctx, querySQL).StructScan(&settings)
 	if err != nil {
-		return nil, fmt.Errorf("failed to run query. err: %w", err)
+		if errors.Is(err, sql.ErrNoRows) {
+			copiedSettings := defaultSettings
+			err = s.createSettings(ctx, &copiedSettings)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create settings. err: %w", err)
+			}
+			settings = copiedSettings
+		} else {
+			return nil, fmt.Errorf("failed to run query. err: %w", err)
+		}
 	}
 
 	return &settings, nil
@@ -54,6 +65,34 @@ func (s *service) UpdateSettings(ctx context.Context, settings *model.Settings) 
 	if err != nil {
 		return fmt.Errorf("failed to run query. err: %w", err)
 	}
+
+	return nil
+}
+
+func (s *service) createSettings(ctx context.Context, settings *model.Settings) error {
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	stmnt := psql.
+		Insert("settings").
+		Columns("language").
+		Values(settings.Language).
+		Suffix("RETURNING \"id\"")
+
+	querySQL, args, err := stmnt.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to generate sql. err: %w", err)
+	}
+
+	log.Printf("SQL: %s\n", querySQL)
+
+	var id uint64
+
+	err = s.conn.QueryRowxContext(ctx, querySQL, args...).Scan(&id)
+	if err != nil {
+		return fmt.Errorf("failed to run query. err: %w", err)
+	}
+
+	settings.ID = id
 
 	return nil
 }

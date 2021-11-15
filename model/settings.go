@@ -16,9 +16,6 @@ type Settings struct {
 
 func DefaultSettings(cfg config.API) Settings {
 	return Settings{
-		ID:        1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Language:  string(cfg.DefaultLanguage()),
+		Language: string(cfg.DefaultLanguage()),
 	}
 }

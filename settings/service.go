@@ -1,49 +1,31 @@
 package settings
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/localize"
+	"github.com/sparkymat/archmark/model"
 )
 
 type API interface {
-	Language(c echo.Context) localize.Language
-	SetLanguage(c echo.Context, lang localize.Language)
+	Language() localize.Language
 }
 
-func New() API {
-	return &service{}
+func New(settings *model.Settings, cfg config.API) API {
+	return &service{
+		settings: settings,
+		cfg:      cfg,
+	}
 }
 
-type service struct{}
+type service struct {
+	settings *model.Settings
+	cfg      config.API
+}
 
-func (*service) Language(c echo.Context) localize.Language {
-	langString, err := readValueFromCookie(c, "language")
-	if err != nil {
-		return localize.LanguageFromString("") // Default language
+func (s *service) Language() localize.Language {
+	if s.settings == nil {
+		return s.cfg.DefaultLanguage()
 	}
 
-	return localize.LanguageFromString(langString)
-}
-
-func (*service) SetLanguage(c echo.Context, lang localize.Language) {
-	writeValueToCookie(c, "language", string(lang))
-}
-
-func writeValueToCookie(c echo.Context, key, value string) {
-	cookie := new(http.Cookie)
-	cookie.Name = key
-	cookie.Value = value
-	c.SetCookie(cookie)
-}
-
-func readValueFromCookie(c echo.Context, key string) (string, error) {
-	cookie, err := c.Cookie(key)
-	if err != nil {
-		return "", fmt.Errorf("failed to get cookie. err: %w", err)
-	}
-
-	return cookie.Value, nil
+	return localize.LanguageFromString(s.settings.Language)
 }

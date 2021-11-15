@@ -6,7 +6,7 @@
     <form action="/settings" method="POST">
       <input type="hidden" name="csrf" value="{%s csrfToken %}">
       <div class="container mx-auto mt-8 flex flex-col content-stretch">
-        <h3 class="text-2xl text-light py-2 border-b">Language</h3>
+        <h3 class="text-2xl text-light py-2 border-b">{%s localizer.Lookup(lang, localize.LanguageLabel) %}</h3>
         <div class="mt-4 flex flex-row flex-grow items-center">
           <label for="language" class="text-lg">{%s localizer.Lookup(lang, localize.SelectLanguage) %}</label>
           <div class="flex-grow"></div>

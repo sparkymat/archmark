@@ -12,8 +12,8 @@ func SupportedLanguages(languageCodes []localize.Language) []Language {
 
 	languageLabelMap := map[localize.Language]string{
 		localize.English:   "English",
-		localize.German:    "German",
-		localize.Malayalam: "Malayalam",
+		localize.German:    "Deutsch",
+		localize.Malayalam: "മലയാളം",
 	}
 
 	for _, languageCode := range languageCodes {
