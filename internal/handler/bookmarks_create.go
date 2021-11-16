@@ -81,13 +81,13 @@ func createBookmarkModel(ctx context.Context, db database.Service, cfg config.Se
 		return nil, fmt.Errorf("invalid url. err: %w", err)
 	}
 
-	archiveAPI := archive.New(archive.Config{
+	archiveService := archive.New(archive.Config{
 		DownloadFolder: cfg.DownloadPath(),
 	})
 	fileHash := strings.ReplaceAll(uuid.New().String(), "-", "")
 	fileName := fmt.Sprintf("%s.html", fileHash)
 
-	page, err := archiveAPI.FetchDetails(ctx, urlString, fileName)
+	page, err := archiveService.FetchDetails(ctx, urlString, fileName)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch page details. err: %w", err)
 	}

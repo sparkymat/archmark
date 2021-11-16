@@ -30,22 +30,17 @@ type ArchivedPage struct {
 	FilePath    string
 }
 
-type API interface {
-	FetchDetails(ctx context.Context, url string, filename string) (*ArchivedPage, error)
-	RemoveArchiveFile(ctx context.Context, filename string) error
-}
-
-func New(cfg Config) API {
-	return &service{
+func New(cfg Config) Service {
+	return Service{
 		config: cfg,
 	}
 }
 
-type service struct {
+type Service struct {
 	config Config
 }
 
-func (s *service) FetchDetails(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
+func (s *Service) FetchDetails(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
 	// Check if file already exists
 	filePath := filepath.Join(s.config.DownloadFolder, fileName)
 	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {
@@ -100,7 +95,7 @@ func (s *service) FetchDetails(ctx context.Context, url string, fileName string)
 	return page, nil
 }
 
-func (s *service) RemoveArchiveFile(_ context.Context, fileName string) error {
+func (s *Service) RemoveArchiveFile(_ context.Context, fileName string) error {
 	filePath := filepath.Join(s.config.DownloadFolder, fileName)
 	if _, err := os.Stat(filePath); err != nil {
 		if os.IsNotExist(err) {
