@@ -19,7 +19,7 @@ const (
 	sixtyFourBits = 64
 )
 
-func saveWebPage(cfg config.API, db database.Service) func(ctx context.Context, args ...interface{}) error {
+func saveWebPage(cfg config.Service, db database.Service) func(ctx context.Context, args ...interface{}) error {
 	return func(ctx context.Context, args ...interface{}) error {
 		help := worker.HelperFor(ctx)
 		log.Printf("Working on job %s\n", help.Jid())

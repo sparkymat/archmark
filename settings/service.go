@@ -10,7 +10,7 @@ type API interface {
 	Language() localize.Language
 }
 
-func New(settings *model.Settings, cfg config.API) API {
+func New(settings *model.Settings, cfg config.Service) API {
 	return &service{
 		settings: settings,
 		cfg:      cfg,
@@ -19,7 +19,7 @@ func New(settings *model.Settings, cfg config.API) API {
 
 type service struct {
 	settings *model.Settings
-	cfg      config.API
+	cfg      config.Service
 }
 
 func (s *service) Language() localize.Language {

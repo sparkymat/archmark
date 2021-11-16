@@ -63,7 +63,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 		return nil, err
 	}
 
-	bookmark, err := createBookmarkModel(c.Request().Context(), *app.DB, app.Config, input.URL)
+	bookmark, err := createBookmarkModel(c.Request().Context(), *app.DB, *app.Config, input.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 	return bookmark, nil
 }
 
-func createBookmarkModel(ctx context.Context, db database.Service, cfg config.API, urlString string) (*model.Bookmark, error) {
+func createBookmarkModel(ctx context.Context, db database.Service, cfg config.Service, urlString string) (*model.Bookmark, error) {
 	if _, err := url.ParseRequestURI(urlString); err != nil {
 		return nil, fmt.Errorf("invalid url. err: %w", err)
 	}

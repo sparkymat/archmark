@@ -18,7 +18,7 @@ import (
 	"github.com/sparkymat/archmark/settings"
 )
 
-func Setup(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service) {
+func Setup(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service) {
 	e.Static("/css", "public/css")
 	e.Static("/javascript", "public/javascript")
 	e.Static("/b", cfg.DownloadPath())
@@ -53,7 +53,7 @@ func Setup(e *echo.Echo, cfg config.API, db database.Service, localizer localize
 	_ = w.Flush()
 }
 
-func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settingsService settings.API) {
+func registerWebRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.API) {
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -61,7 +61,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 	}))
 	app.Use(middleware.Recover())
 	app.Use(mw.ConfigInjector(mw.AppServices{
-		Config:    cfg,
+		Config:    &cfg,
 		DB:        &db,
 		Localizer: &localizer,
 		Settings:  settingsService,
@@ -96,14 +96,14 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 	authApp.POST("/tokens", handler.APITokensCreate)
 }
 
-func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settingsService settings.API) {
+func registerAPIRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.API) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	apiApp.Use(middleware.Recover())
 	apiApp.Use(mw.ConfigInjector(mw.AppServices{
-		Config:    cfg,
+		Config:    &cfg,
 		DB:        &db,
 		Localizer: &localizer,
 		Settings:  settingsService,
@@ -119,7 +119,7 @@ func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 	apiApp.POST("/add", handler.APIBookmarksCreate)
 }
 
-func createSettingsService(ctx context.Context, cfg config.API, db database.Service) (settings.API, error) {
+func createSettingsService(ctx context.Context, cfg config.Service, db database.Service) (settings.API, error) {
 	settingsModel, err := db.LoadSettings(ctx, model.DefaultSettings(cfg))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load settings. err: %w", err)

@@ -14,7 +14,7 @@ type Settings struct {
 	Language  string     `db:"language"`
 }
 
-func DefaultSettings(cfg config.API) Settings {
+func DefaultSettings(cfg config.Service) Settings {
 	return Settings{
 		Language: string(cfg.DefaultLanguage()),
 	}

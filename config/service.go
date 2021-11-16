@@ -8,34 +8,26 @@ import (
 	"github.com/sparkymat/archmark/localize"
 )
 
-type API interface {
-	DBConnectionString() string
-	AdminPassword() string
-	MonolithPath() string
-	DownloadPath() string
-	DefaultLanguage() localize.Language
-}
-
-func New() API {
+func New() Service {
 	envConfig := envConfig{}
 	if err := env.Parse(&envConfig); err != nil {
 		panic(err)
 	}
 
-	return &service{
+	return Service{
 		envConfig: envConfig,
 	}
 }
 
-type service struct {
+type Service struct {
 	envConfig envConfig
 }
 
-func (s *service) AdminPassword() string {
+func (s *Service) AdminPassword() string {
 	return s.envConfig.AdminPassword
 }
 
-func (s *service) DBConnectionString() string {
+func (s *Service) DBConnectionString() string {
 	connFragments := []string{
 		fmt.Sprintf("host=%s", s.envConfig.DBHostname),
 		fmt.Sprintf("port=%d", s.envConfig.DBPort),
@@ -59,15 +51,15 @@ func (s *service) DBConnectionString() string {
 	return strings.Join(connFragments, " ")
 }
 
-func (s *service) MonolithPath() string {
+func (s *Service) MonolithPath() string {
 	return s.envConfig.MonolithPath
 }
 
-func (s *service) DownloadPath() string {
+func (s *Service) DownloadPath() string {
 	return s.envConfig.DownloadPath
 }
 
-func (s *service) DefaultLanguage() localize.Language {
+func (s *Service) DefaultLanguage() localize.Language {
 	return localize.LanguageFromString(s.envConfig.DefaultLanguage)
 }
 
