@@ -51,10 +51,8 @@ func BookmarksCreate(c echo.Context) error {
 }
 
 func createBookmark(c echo.Context) (*model.Bookmark, error) {
-	cfg := getConfig(c)
-	db := getDB(c)
-
-	if cfg == nil || db == nil {
+	app := appServices(c)
+	if app == nil {
 		return nil, ErrConfigNotFound
 	}
 
@@ -65,7 +63,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 		return nil, err
 	}
 
-	bookmark, err := createBookmarkModel(c.Request().Context(), db, cfg, input.URL)
+	bookmark, err := createBookmarkModel(c.Request().Context(), *app.DB, app.Config, input.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +77,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 }
 
 //nolint:lll
-func createBookmarkModel(ctx context.Context, db database.API, cfg config.API, urlString string) (*model.Bookmark, error) {
+func createBookmarkModel(ctx context.Context, db database.Service, cfg config.API, urlString string) (*model.Bookmark, error) {
 	if _, err := url.ParseRequestURI(urlString); err != nil {
 		return nil, fmt.Errorf("invalid url. err: %w", err)
 	}

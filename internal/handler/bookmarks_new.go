@@ -9,16 +9,9 @@ import (
 )
 
 func BookmarksNew(c echo.Context) error {
-	localizer := getLocalizer(c)
-	if localizer == nil {
-		log.Print("error: localizer not found")
-
-		return ShowError(c)
-	}
-
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -30,8 +23,8 @@ func BookmarksNew(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	pageHTML := view.BookmarksNew(localizer, cfg.DefaultLanguage(), csrfToken)
-	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | add", pageHTML)
+	pageHTML := view.BookmarksNew(*app.Localizer, app.Settings.Language(), csrfToken)
+	htmlString := view.Layout(*app.Localizer, app.Settings.Language(), "archmark | add", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

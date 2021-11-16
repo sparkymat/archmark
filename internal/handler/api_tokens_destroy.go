@@ -14,9 +14,9 @@ const (
 )
 
 func APITokensDestroy(c echo.Context) error {
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db conn not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -30,7 +30,7 @@ func APITokensDestroy(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	if err = db.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
+	if err = app.DB.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
 		log.Printf("error: %v", err)
 
 		return ShowError(c)

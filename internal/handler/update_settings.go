@@ -21,21 +21,14 @@ func UpdateSettings(c echo.Context) error {
 		return renderError(c, "Unable to update settings. Please try again later.")
 	}
 
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
 
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
-
-		return ShowError(c)
-	}
-
-	settingsModel, err := db.LoadSettings(c.Request().Context(), model.DefaultSettings(cfg))
+	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(app.Config))
 	if err != nil {
 		log.Print("error: failed to load settings")
 
@@ -44,9 +37,16 @@ func UpdateSettings(c echo.Context) error {
 
 	settingsModel.Language = input.Language
 
-	err = db.UpdateSettings(c.Request().Context(), settingsModel)
+	err = app.DB.UpdateSettings(c.Request().Context(), settingsModel)
 	if err != nil {
 		log.Print("error: failed to update settings")
+
+		return ShowError(c)
+	}
+
+	err = app.RefreshSettings(c.Request().Context())
+	if err != nil {
+		log.Print("error: failed to refresh settings")
 
 		return ShowError(c)
 	}

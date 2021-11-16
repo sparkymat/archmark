@@ -24,7 +24,7 @@ var (
 )
 
 //line view/settings.qtpl:4
-func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
+func StreamSettings(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
 //line view/settings.qtpl:4
 	qw422016.N().S(`
   <div>
@@ -108,7 +108,7 @@ func StreamSettings(qw422016 *qt422016.Writer, localizer localize.API, lang loca
 }
 
 //line view/settings.qtpl:29
-func WriteSettings(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
+func WriteSettings(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
 //line view/settings.qtpl:29
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/settings.qtpl:29
@@ -119,7 +119,7 @@ func WriteSettings(qq422016 qtio422016.Writer, localizer localize.API, lang loca
 }
 
 //line view/settings.qtpl:29
-func Settings(localizer localize.API, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) string {
+func Settings(localizer localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) string {
 //line view/settings.qtpl:29
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/settings.qtpl:29

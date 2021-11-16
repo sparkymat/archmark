@@ -12,23 +12,9 @@ import (
 )
 
 func Settings(c echo.Context) error {
-	localizer := getLocalizer(c)
-	if localizer == nil {
-		log.Print("error: localizer not found")
-
-		return ShowError(c)
-	}
-
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
-
-		return ShowError(c)
-	}
-
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -40,24 +26,17 @@ func Settings(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	settings := getSettings(c)
-	if settings == nil {
-		log.Print("error: settings not found")
-
-		return ShowError(c)
-	}
-
 	presentedLanguages := presenter.SupportedLanguages(localize.SupportedLanguages)
 
-	settingsModel, err := db.LoadSettings(c.Request().Context(), model.DefaultSettings(cfg))
+	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(app.Config))
 	if err != nil {
 		log.Print("error: settings not found")
 
 		return ShowError(c)
 	}
 
-	pageHTML := view.Settings(localizer, settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
-	htmlString := view.Layout(localizer, settings.Language(), "archmark", pageHTML)
+	pageHTML := view.Settings(*app.Localizer, app.Settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
+	htmlString := view.Layout(*app.Localizer, app.Settings.Language(), "archmark", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

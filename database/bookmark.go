@@ -12,7 +12,7 @@ import (
 )
 
 //nolint:lll
-func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error) {
+func (s *Service) ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -65,7 +65,7 @@ func (s *service) ListBookmarks(ctx context.Context, query string, page uint64, 
 	return bookmarks, nil
 }
 
-func (s *service) FindBookmark(ctx context.Context, id uint64) (*model.Bookmark, error) {
+func (s *Service) FindBookmark(ctx context.Context, id uint64) (*model.Bookmark, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -90,7 +90,7 @@ func (s *service) FindBookmark(ctx context.Context, id uint64) (*model.Bookmark,
 	return &bookmark, nil
 }
 
-func (s *service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error {
+func (s *Service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -118,7 +118,7 @@ func (s *service) CreateBookmark(ctx context.Context, bookmark *model.Bookmark) 
 	return nil
 }
 
-func (s *service) MarkBookmarkCompleted(ctx context.Context, id uint64) error {
+func (s *Service) MarkBookmarkCompleted(ctx context.Context, id uint64) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -141,7 +141,7 @@ func (s *service) MarkBookmarkCompleted(ctx context.Context, id uint64) error {
 	return nil
 }
 
-func (s *service) CountBookmarks(ctx context.Context, query string) (uint64, error) {
+func (s *Service) CountBookmarks(ctx context.Context, query string) (uint64, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -170,7 +170,7 @@ func (s *service) CountBookmarks(ctx context.Context, query string) (uint64, err
 	return bookmarksCount, nil
 }
 
-func (s *service) DeleteBookmark(ctx context.Context, id uint64) error {
+func (s *Service) DeleteBookmark(ctx context.Context, id uint64) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.

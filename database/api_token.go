@@ -10,7 +10,7 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-func (s *service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
+func (s *Service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -54,7 +54,7 @@ func (s *service) ListAPITokens(ctx context.Context) ([]model.APIToken, error) {
 	return tokens, nil
 }
 
-func (s *service) DeleteAPIToken(ctx context.Context, id uint64) error {
+func (s *Service) DeleteAPIToken(ctx context.Context, id uint64) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -76,7 +76,7 @@ func (s *service) DeleteAPIToken(ctx context.Context, id uint64) error {
 	return nil
 }
 
-func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
+func (s *Service) CreateAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -105,7 +105,7 @@ func (s *service) CreateAPIToken(ctx context.Context, token string) (*model.APIT
 	}, nil
 }
 
-func (s *service) LookupAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
+func (s *Service) LookupAPIToken(ctx context.Context, token string) (*model.APIToken, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.

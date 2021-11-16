@@ -10,16 +10,9 @@ import (
 )
 
 func BookmarksDestroy(c echo.Context) error {
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db conn not found")
-
-		return ShowError(c)
-	}
-
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -33,21 +26,21 @@ func BookmarksDestroy(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	bookmark, err := db.FindBookmark(c.Request().Context(), bookmarkID)
+	bookmark, err := app.DB.FindBookmark(c.Request().Context(), bookmarkID)
 	if err != nil {
 		log.Printf("error: %v", err)
 
 		return ShowError(c)
 	}
 
-	if err = db.DeleteBookmark(c.Request().Context(), bookmarkID); err != nil {
+	if err = app.DB.DeleteBookmark(c.Request().Context(), bookmarkID); err != nil {
 		log.Printf("error: %v", err)
 
 		return ShowError(c)
 	}
 
 	archiveAPI := archive.New(archive.Config{
-		DownloadFolder: cfg.DownloadPath(),
+		DownloadFolder: app.Config.DownloadPath(),
 	})
 
 	if err = archiveAPI.RemoveArchiveFile(c.Request().Context(), bookmark.FileName); err != nil {

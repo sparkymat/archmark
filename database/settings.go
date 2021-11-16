@@ -11,7 +11,7 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-func (s *service) LoadSettings(ctx context.Context, defaultSettings model.Settings) (*model.Settings, error) {
+func (s *Service) LoadSettings(ctx context.Context, defaultSettings model.Settings) (*model.Settings, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -48,7 +48,7 @@ func (s *service) LoadSettings(ctx context.Context, defaultSettings model.Settin
 	return &settings, nil
 }
 
-func (s *service) UpdateSettings(ctx context.Context, settings *model.Settings) error {
+func (s *Service) UpdateSettings(ctx context.Context, settings *model.Settings) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.
@@ -71,7 +71,7 @@ func (s *service) UpdateSettings(ctx context.Context, settings *model.Settings) 
 	return nil
 }
 
-func (s *service) createSettings(ctx context.Context, settings *model.Settings) error {
+func (s *Service) createSettings(ctx context.Context, settings *model.Settings) error {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	stmnt := psql.

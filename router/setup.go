@@ -14,15 +14,22 @@ import (
 	"github.com/sparkymat/archmark/internal/handler"
 	"github.com/sparkymat/archmark/localize"
 	mw "github.com/sparkymat/archmark/middleware"
+	"github.com/sparkymat/archmark/model"
+	"github.com/sparkymat/archmark/settings"
 )
 
-func Setup(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
+func Setup(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service) {
 	e.Static("/css", "public/css")
 	e.Static("/javascript", "public/javascript")
 	e.Static("/b", cfg.DownloadPath())
 
-	registerWebRoutes(e, cfg, db, localizer)
-	registerAPIRoutes(e, cfg, db, localizer)
+	settings, err := createSettingsService(context.Background(), cfg, db)
+	if err != nil {
+		panic(err)
+	}
+
+	registerWebRoutes(e, cfg, db, localizer, settings)
+	registerAPIRoutes(e, cfg, db, localizer, settings)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{
@@ -46,15 +53,19 @@ func Setup(e *echo.Echo, cfg config.API, db database.API, localizer localize.API
 	_ = w.Flush()
 }
 
-func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
+func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settings settings.API) {
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	app.Use(middleware.Recover())
-	app.Use(mw.ConfigInjector(cfg, db, localizer))
-	app.Use(mw.SettingsInjector(cfg, db))
+	app.Use(mw.ConfigInjector(mw.AppServices{
+		Config:    cfg,
+		DB:        &db,
+		Localizer: &localizer,
+		Settings:  settings,
+	}))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
 	}))
@@ -85,14 +96,18 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 	authApp.POST("/tokens", handler.APITokensCreate)
 }
 
-func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API, localizer localize.API) {
+func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settings settings.API) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	apiApp.Use(middleware.Recover())
-	apiApp.Use(mw.ConfigInjector(cfg, db, localizer))
-	apiApp.Use(mw.SettingsInjector(cfg, db))
+	apiApp.Use(mw.ConfigInjector(mw.AppServices{
+		Config:    cfg,
+		DB:        &db,
+		Localizer: &localizer,
+		Settings:  settings,
+	}))
 	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := db.LookupAPIToken(context.Background(), token)
 		if err != nil {
@@ -102,4 +117,13 @@ func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.API, localizer 
 		return true, nil
 	}))
 	apiApp.POST("/add", handler.APIBookmarksCreate)
+}
+
+func createSettingsService(ctx context.Context, cfg config.API, db database.Service) (settings.API, error) {
+	settingsModel, err := db.LoadSettings(ctx, model.DefaultSettings(cfg))
+	if err != nil {
+		return nil, err
+	}
+
+	return settings.New(settingsModel, cfg), nil
 }

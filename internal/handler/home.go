@@ -24,9 +24,9 @@ func Home(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -42,28 +42,14 @@ func Home(c echo.Context) error {
 		input.Page = 1
 	}
 
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db conn not found")
-
-		return ShowError(c)
-	}
-
-	localizer := getLocalizer(c)
-	if localizer == nil {
-		log.Print("error: localizer not found")
-
-		return ShowError(c)
-	}
-
-	bookmarks, err := db.ListBookmarks(c.Request().Context(), input.Query, input.Page, pageSize)
+	bookmarks, err := app.DB.ListBookmarks(c.Request().Context(), input.Query, input.Page, pageSize)
 	if err != nil {
 		log.Printf("error: %v", err)
 
 		return ShowError(c)
 	}
 
-	bookmarksCount, err := db.CountBookmarks(c.Request().Context(), input.Query)
+	bookmarksCount, err := app.DB.CountBookmarks(c.Request().Context(), input.Query)
 	if err != nil {
 		log.Printf("error: %v", err)
 
@@ -71,8 +57,8 @@ func Home(c echo.Context) error {
 	}
 
 	presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, bookmarksCount)
-	pageHTML := view.Home(localizer, cfg.DefaultLanguage(), csrfToken, input.Query != "", input.Query, presentedBookmarks)
-	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark", pageHTML)
+	pageHTML := view.Home(*app.Localizer, app.Settings.Language(), csrfToken, input.Query != "", input.Query, presentedBookmarks)
+	htmlString := view.Layout(*app.Localizer, app.Settings.Language(), "archmark", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

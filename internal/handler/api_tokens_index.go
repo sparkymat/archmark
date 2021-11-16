@@ -17,28 +17,14 @@ func APITokensIndex(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db conn not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
 
-	localizer := getLocalizer(c)
-	if localizer == nil {
-		log.Print("error: localizer not found")
-
-		return ShowError(c)
-	}
-
-	cfg := getConfig(c)
-	if cfg == nil {
-		log.Print("error: config not found")
-
-		return ShowError(c)
-	}
-
-	tokens, err := db.ListAPITokens(c.Request().Context())
+	tokens, err := app.DB.ListAPITokens(c.Request().Context())
 	if err != nil {
 		log.Printf("error: %v", err)
 
@@ -46,8 +32,8 @@ func APITokensIndex(c echo.Context) error {
 	}
 
 	presentedTokens := presenter.PresentAPITokens(tokens)
-	pageHTML := view.ApiTokensIndex(localizer, cfg.DefaultLanguage(), csrfToken, presentedTokens)
-	htmlString := view.Layout(localizer, cfg.DefaultLanguage(), "archmark | tokens", pageHTML)
+	pageHTML := view.ApiTokensIndex(*app.Localizer, app.Settings.Language(), csrfToken, presentedTokens)
+	htmlString := view.Layout(*app.Localizer, app.Settings.Language(), "archmark | tokens", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

@@ -13,9 +13,9 @@ import (
 const tokenLength = 32
 
 func APITokensCreate(c echo.Context) error {
-	db := getDB(c)
-	if db == nil {
-		log.Print("error: db conn not found")
+	app := appServices(c)
+	if app == nil {
+		log.Print("error: app services not found")
 
 		return ShowError(c)
 	}
@@ -27,7 +27,7 @@ func APITokensCreate(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	if _, err = db.CreateAPIToken(c.Request().Context(), token); err != nil {
+	if _, err = app.DB.CreateAPIToken(c.Request().Context(), token); err != nil {
 		log.Printf("error: %v", err.Error())
 
 		return ShowError(c)
