@@ -5,12 +5,10 @@
 package view
 
 //line view/api_tokens_index.qtpl:1
-import (
-	"github.com/sparkymat/archmark/presenter"
+import "github.com/sparkymat/archmark/presenter"
 
 //line view/api_tokens_index.qtpl:2
-	"github.com/sparkymat/archmark/localize"
-)
+import "github.com/sparkymat/archmark/localize"
 
 //line view/api_tokens_index.qtpl:4
 import (
@@ -26,7 +24,7 @@ var (
 )
 
 //line view/api_tokens_index.qtpl:4
-func StreamApiTokensIndex(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+func StreamApiTokensIndex(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:4
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -87,7 +85,7 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, localizer localize.API, lan
 }
 
 //line view/api_tokens_index.qtpl:26
-func WriteApiTokensIndex(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+func WriteApiTokensIndex(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:26
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/api_tokens_index.qtpl:26
@@ -98,7 +96,7 @@ func WriteApiTokensIndex(qq422016 qtio422016.Writer, localizer localize.API, lan
 }
 
 //line view/api_tokens_index.qtpl:26
-func ApiTokensIndex(localizer localize.API, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
+func ApiTokensIndex(localizer localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
 //line view/api_tokens_index.qtpl:26
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/api_tokens_index.qtpl:26

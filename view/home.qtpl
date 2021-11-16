@@ -2,7 +2,7 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 {% import "fmt" %}
 
-{% func Home(localizer localize.API, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">

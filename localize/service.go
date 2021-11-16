@@ -2,12 +2,8 @@ package localize
 
 import "fmt"
 
-type API interface {
-	Lookup(lang Language, identifier StringIdentifier, args ...interface{}) string
-}
-
-func New() API {
-	return &service{
+func New() Service {
+	return Service{
 		translations: map[Language]map[StringIdentifier]string{
 			English:   englishStrings,
 			Malayalam: malayalamStrings,
@@ -16,11 +12,11 @@ func New() API {
 	}
 }
 
-type service struct {
+type Service struct {
 	translations map[Language]map[StringIdentifier]string
 }
 
-func (s *service) Lookup(lang Language, identifier StringIdentifier, args ...interface{}) string {
+func (s *Service) Lookup(lang Language, identifier StringIdentifier, args ...interface{}) string {
 	stringMap, ok := s.translations[lang]
 	if !ok {
 		return "?"

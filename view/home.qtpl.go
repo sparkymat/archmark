@@ -5,15 +5,13 @@
 package view
 
 //line view/home.qtpl:1
-import (
-	"github.com/sparkymat/archmark/presenter"
+import "github.com/sparkymat/archmark/presenter"
 
 //line view/home.qtpl:2
-	"github.com/sparkymat/archmark/localize"
+import "github.com/sparkymat/archmark/localize"
 
 //line view/home.qtpl:3
-	"fmt"
-)
+import "fmt"
 
 //line view/home.qtpl:5
 import (
@@ -29,7 +27,7 @@ var (
 )
 
 //line view/home.qtpl:5
-func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func StreamHome(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:5
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -226,7 +224,7 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.API, lang localize
 }
 
 //line view/home.qtpl:71
-func WriteHome(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func WriteHome(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:71
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/home.qtpl:71
@@ -237,7 +235,7 @@ func WriteHome(qq422016 qtio422016.Writer, localizer localize.API, lang localize
 }
 
 //line view/home.qtpl:71
-func Home(localizer localize.API, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
+func Home(localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
 //line view/home.qtpl:71
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/home.qtpl:71

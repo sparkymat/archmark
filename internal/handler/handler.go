@@ -66,13 +66,13 @@ func getConfig(c echo.Context) config.API {
 	return cfg
 }
 
-func getLocalizer(c echo.Context) localize.API {
+func getLocalizer(c echo.Context) *localize.Service {
 	localizeVal := c.Get(mw.LocalizeKey)
 	if localizeVal == nil {
 		return nil
 	}
 
-	localizer, ok := localizeVal.(localize.API)
+	localizer, ok := localizeVal.(*localize.Service)
 	if !ok {
 		return nil
 	}

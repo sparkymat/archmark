@@ -21,7 +21,7 @@ var (
 )
 
 //line view/layout.qtpl:3
-func StreamLayout(qw422016 *qt422016.Writer, localizer localize.API, lang localize.Language, title string, content string) {
+func StreamLayout(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, title string, content string) {
 //line view/layout.qtpl:3
 	qw422016.N().S(`
   <!DOCTYPE html>
@@ -77,7 +77,7 @@ func StreamLayout(qw422016 *qt422016.Writer, localizer localize.API, lang locali
 }
 
 //line view/layout.qtpl:28
-func WriteLayout(qq422016 qtio422016.Writer, localizer localize.API, lang localize.Language, title string, content string) {
+func WriteLayout(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, title string, content string) {
 //line view/layout.qtpl:28
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/layout.qtpl:28
@@ -88,7 +88,7 @@ func WriteLayout(qq422016 qtio422016.Writer, localizer localize.API, lang locali
 }
 
 //line view/layout.qtpl:28
-func Layout(localizer localize.API, lang localize.Language, title string, content string) string {
+func Layout(localizer localize.Service, lang localize.Language, title string, content string) string {
 //line view/layout.qtpl:28
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/layout.qtpl:28

@@ -5,12 +5,10 @@
 package view
 
 //line view/settings.qtpl:1
-import (
-	"github.com/sparkymat/archmark/localize"
+import "github.com/sparkymat/archmark/localize"
 
 //line view/settings.qtpl:2
-	"github.com/sparkymat/archmark/presenter"
-)
+import "github.com/sparkymat/archmark/presenter"
 
 //line view/settings.qtpl:4
 import (
