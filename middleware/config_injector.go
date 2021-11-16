@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/config"
@@ -37,7 +38,7 @@ func ConfigInjector(appServices AppServices) func(echo.HandlerFunc) echo.Handler
 func (app *AppServices) RefreshSettings(ctx context.Context) error {
 	settingsModel, err := app.DB.LoadSettings(ctx, model.DefaultSettings(app.Config))
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to load settings. err: %w", err)
 	}
 
 	app.Settings = settings.New(settingsModel, app.Config)

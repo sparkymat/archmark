@@ -5,6 +5,8 @@ linters:
     - varnamelen
 
 linters-settings:
+  lll:
+    line-length: 160
   revive:
     ignore-generated-header: true
     severity: error

@@ -23,13 +23,13 @@ func Setup(e *echo.Echo, cfg config.API, db database.Service, localizer localize
 	e.Static("/javascript", "public/javascript")
 	e.Static("/b", cfg.DownloadPath())
 
-	settings, err := createSettingsService(context.Background(), cfg, db)
+	settingsService, err := createSettingsService(context.Background(), cfg, db)
 	if err != nil {
 		panic(err)
 	}
 
-	registerWebRoutes(e, cfg, db, localizer, settings)
-	registerAPIRoutes(e, cfg, db, localizer, settings)
+	registerWebRoutes(e, cfg, db, localizer, settingsService)
+	registerAPIRoutes(e, cfg, db, localizer, settingsService)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	methodWhitelist := map[string]interface{}{
@@ -53,7 +53,7 @@ func Setup(e *echo.Echo, cfg config.API, db database.Service, localizer localize
 	_ = w.Flush()
 }
 
-func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settings settings.API) {
+func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settingsService settings.API) {
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -64,7 +64,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 		Config:    cfg,
 		DB:        &db,
 		Localizer: &localizer,
-		Settings:  settings,
+		Settings:  settingsService,
 	}))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
@@ -96,7 +96,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 	authApp.POST("/tokens", handler.APITokensCreate)
 }
 
-func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settings settings.API) {
+func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, localizer localize.Service, settingsService settings.API) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
@@ -106,7 +106,7 @@ func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 		Config:    cfg,
 		DB:        &db,
 		Localizer: &localizer,
-		Settings:  settings,
+		Settings:  settingsService,
 	}))
 	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := db.LookupAPIToken(context.Background(), token)
@@ -122,7 +122,7 @@ func registerAPIRoutes(e *echo.Echo, cfg config.API, db database.Service, locali
 func createSettingsService(ctx context.Context, cfg config.API, db database.Service) (settings.API, error) {
 	settingsModel, err := db.LoadSettings(ctx, model.DefaultSettings(cfg))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to load settings. err: %w", err)
 	}
 
 	return settings.New(settingsModel, cfg), nil

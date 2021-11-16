@@ -57,7 +57,6 @@ func (s *service) FetchDetails(ctx context.Context, url string, fileName string)
 		return nil, fmt.Errorf("failed to create http request. err: %w", err)
 	}
 
-	//nolint:lll
 	req.Header.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36")
 
 	resp, err := http.DefaultClient.Do(req)

@@ -11,7 +11,6 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-//nolint:lll
 func (s *Service) ListBookmarks(ctx context.Context, query string, page uint64, pageSize uint64) ([]model.Bookmark, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
