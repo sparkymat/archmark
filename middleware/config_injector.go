@@ -22,7 +22,7 @@ type AppServices struct {
 	Config    *config.Service
 	DB        *database.Service
 	Localizer *localize.Service
-	Settings  settings.API
+	Settings  *settings.Service
 }
 
 func ConfigInjector(appServices AppServices) func(echo.HandlerFunc) echo.HandlerFunc {
@@ -36,12 +36,13 @@ func ConfigInjector(appServices AppServices) func(echo.HandlerFunc) echo.Handler
 }
 
 func (app *AppServices) RefreshSettings(ctx context.Context) error {
-	settingsModel, err := app.DB.LoadSettings(ctx, model.DefaultSettings(*app.Config))
+	settingsModel, err := app.DB.LoadSettings(ctx, model.DefaultSettings(app.Config))
 	if err != nil {
 		return fmt.Errorf("failed to load settings. err: %w", err)
 	}
 
-	app.Settings = settings.New(settingsModel, *app.Config)
+	settingsService := settings.New(settingsModel, app.Config)
+	app.Settings = &settingsService
 
 	return nil
 }

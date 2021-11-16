@@ -28,7 +28,7 @@ func Settings(c echo.Context) error {
 
 	presentedLanguages := presenter.SupportedLanguages(localize.SupportedLanguages)
 
-	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(*app.Config))
+	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(app.Config))
 	if err != nil {
 		log.Print("error: settings not found")
 

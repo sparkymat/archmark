@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/sparkymat/archmark/config"
+	"github.com/sparkymat/archmark/localize"
 )
 
 type Settings struct {
@@ -14,8 +15,10 @@ type Settings struct {
 	Language  string     `db:"language"`
 }
 
-func DefaultSettings(cfg config.Service) Settings {
-	return Settings{
-		Language: string(cfg.DefaultLanguage()),
+func DefaultSettings(cfg *config.Service) Settings {
+	if cfg == nil {
+		return Settings{Language: string(localize.English)}
 	}
+
+	return Settings{Language: string(cfg.DefaultLanguage())}
 }

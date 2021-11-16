@@ -6,24 +6,24 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-type API interface {
-	Language() localize.Language
-}
-
-func New(settings *model.Settings, cfg config.Service) API {
-	return &service{
+func New(settings *model.Settings, cfg *config.Service) Service {
+	return Service{
 		settings: settings,
 		cfg:      cfg,
 	}
 }
 
-type service struct {
+type Service struct {
 	settings *model.Settings
-	cfg      config.Service
+	cfg      *config.Service
 }
 
-func (s *service) Language() localize.Language {
+func (s *Service) Language() localize.Language {
 	if s.settings == nil {
+		if s.cfg == nil {
+			return localize.English
+		}
+
 		return s.cfg.DefaultLanguage()
 	}
 

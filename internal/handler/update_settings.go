@@ -28,7 +28,7 @@ func UpdateSettings(c echo.Context) error {
 		return ShowError(c)
 	}
 
-	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(*app.Config))
+	settingsModel, err := app.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(app.Config))
 	if err != nil {
 		log.Print("error: failed to load settings")
 

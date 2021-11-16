@@ -53,7 +53,7 @@ func Setup(e *echo.Echo, cfg config.Service, db database.Service, localizer loca
 	_ = w.Flush()
 }
 
-func registerWebRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.API) {
+func registerWebRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.Service) {
 	app := e.Group("")
 
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -64,7 +64,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.Service, db database.Service, lo
 		Config:    &cfg,
 		DB:        &db,
 		Localizer: &localizer,
-		Settings:  settingsService,
+		Settings:  &settingsService,
 	}))
 	app.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
@@ -96,7 +96,7 @@ func registerWebRoutes(e *echo.Echo, cfg config.Service, db database.Service, lo
 	authApp.POST("/tokens", handler.APITokensCreate)
 }
 
-func registerAPIRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.API) {
+func registerAPIRoutes(e *echo.Echo, cfg config.Service, db database.Service, localizer localize.Service, settingsService settings.Service) {
 	apiApp := e.Group("/api")
 	apiApp.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
@@ -106,7 +106,7 @@ func registerAPIRoutes(e *echo.Echo, cfg config.Service, db database.Service, lo
 		Config:    &cfg,
 		DB:        &db,
 		Localizer: &localizer,
-		Settings:  settingsService,
+		Settings:  &settingsService,
 	}))
 	apiApp.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := db.LookupAPIToken(context.Background(), token)
@@ -119,11 +119,11 @@ func registerAPIRoutes(e *echo.Echo, cfg config.Service, db database.Service, lo
 	apiApp.POST("/add", handler.APIBookmarksCreate)
 }
 
-func createSettingsService(ctx context.Context, cfg config.Service, db database.Service) (settings.API, error) {
-	settingsModel, err := db.LoadSettings(ctx, model.DefaultSettings(cfg))
+func createSettingsService(ctx context.Context, cfg config.Service, db database.Service) (settings.Service, error) {
+	settingsModel, err := db.LoadSettings(ctx, model.DefaultSettings(&cfg))
 	if err != nil {
-		return nil, fmt.Errorf("failed to load settings. err: %w", err)
+		return settings.Service{}, fmt.Errorf("failed to load settings. err: %w", err)
 	}
 
-	return settings.New(settingsModel, cfg), nil
+	return settings.New(settingsModel, &cfg), nil
 }
