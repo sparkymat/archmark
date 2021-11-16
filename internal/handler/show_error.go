@@ -33,17 +33,20 @@ func ShowError(c echo.Context) error {
 func renderError(c echo.Context, message string) error {
 	lang := localize.English
 
-	settings := getSettings(c)
-	if settings == nil {
+	if settings := getSettings(c); settings == nil {
 		cfg := getConfig(c)
 		if cfg != nil {
 			lang = cfg.DefaultLanguage()
 		}
+	} else {
+		lang = settings.Language()
 	}
 
 	localizer := getLocalizer(c)
 	if localizer == nil {
 		log.Print("error: localizer not found")
+
+		//nolint:wrapcheck
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", message))
 	}
 

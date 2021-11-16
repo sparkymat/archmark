@@ -16,6 +16,8 @@ func SettingsInjector(cfg config.API, db database.API) func(echo.HandlerFunc) ec
 			settingsModel, err := db.LoadSettings(c.Request().Context(), model.DefaultSettings(cfg))
 			if err != nil {
 				log.Printf("failed to load settings. err: %v\n", err)
+
+				//nolint:wrapcheck
 				return err
 			}
 

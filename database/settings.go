@@ -31,16 +31,18 @@ func (s *service) LoadSettings(ctx context.Context, defaultSettings model.Settin
 
 	err = s.conn.QueryRowxContext(ctx, querySQL).StructScan(&settings)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			copiedSettings := defaultSettings
-			err = s.createSettings(ctx, &copiedSettings)
-			if err != nil {
-				return nil, fmt.Errorf("failed to create settings. err: %w", err)
-			}
-			settings = copiedSettings
-		} else {
+		if !errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("failed to run query. err: %w", err)
 		}
+
+		copiedSettings := defaultSettings
+
+		err = s.createSettings(ctx, &copiedSettings)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create settings. err: %w", err)
+		}
+
+		settings = copiedSettings
 	}
 
 	return &settings, nil

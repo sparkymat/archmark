@@ -36,6 +36,11 @@ func UpdateSettings(c echo.Context) error {
 	}
 
 	settingsModel, err := db.LoadSettings(c.Request().Context(), model.DefaultSettings(cfg))
+	if err != nil {
+		log.Print("error: failed to load settings")
+
+		return ShowError(c)
+	}
 
 	settingsModel.Language = input.Language
 

@@ -8,7 +8,7 @@ const (
 	German    Language = "de"
 )
 
-var SupportedLanguages = []Language{
+var SupportedLanguages = []Language{ //nolint:gochecknoglobals
 	English,
 	Malayalam,
 	German,
