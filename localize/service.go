@@ -2,8 +2,8 @@ package localize
 
 import "fmt"
 
-func New() Service {
-	return Service{
+func New() *Service {
+	return &Service{
 		translations: map[Language]map[StringIdentifier]string{
 			English:   englishStrings,
 			Malayalam: malayalamStrings,

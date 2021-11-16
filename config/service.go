@@ -8,13 +8,13 @@ import (
 	"github.com/sparkymat/archmark/localize"
 )
 
-func New() Service {
+func New() *Service {
 	envConfig := envConfig{}
 	if err := env.Parse(&envConfig); err != nil {
 		panic(err)
 	}
 
-	return Service{
+	return &Service{
 		envConfig: envConfig,
 	}
 }

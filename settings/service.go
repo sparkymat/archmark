@@ -6,8 +6,8 @@ import (
 	"github.com/sparkymat/archmark/model"
 )
 
-func New(settings *model.Settings, cfg *config.Service) Service {
-	return Service{
+func New(settings *model.Settings, cfg *config.Service) *Service {
+	return &Service{
 		settings: settings,
 		cfg:      cfg,
 	}

@@ -21,7 +21,7 @@ type Config struct {
 	ConnectionString string
 }
 
-func New(cfg Config) Service {
+func New(cfg Config) *Service {
 	dbConn, err := sqlx.Connect("postgres", cfg.ConnectionString)
 	if err != nil {
 		panic(err)
@@ -32,7 +32,7 @@ func New(cfg Config) Service {
 		panic(err)
 	}
 
-	return Service{
+	return &Service{
 		conn: dbConn,
 	}
 }

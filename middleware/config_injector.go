@@ -1,48 +1,22 @@
 package middleware
 
 import (
-	"context"
-	"fmt"
-
 	"github.com/labstack/echo/v4"
-	"github.com/sparkymat/archmark/config"
-	"github.com/sparkymat/archmark/database"
-	"github.com/sparkymat/archmark/localize"
-	"github.com/sparkymat/archmark/model"
-	"github.com/sparkymat/archmark/settings"
+	"github.com/sparkymat/archmark/app"
 )
 
 type ContextKey string
 
 const (
-	AppServicesKey = "app_services"
+	AppServicesKey = "app"
 )
 
-type AppServices struct {
-	Config    *config.Service
-	DB        *database.Service
-	Localizer *localize.Service
-	Settings  *settings.Service
-}
-
-func ConfigInjector(appServices AppServices) func(echo.HandlerFunc) echo.HandlerFunc {
+func ConfigInjector(appService *app.Service) func(echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set(AppServicesKey, &appServices)
+			c.Set(AppServicesKey, appService)
 
 			return next(c)
 		}
 	}
-}
-
-func (app *AppServices) RefreshSettings(ctx context.Context) error {
-	settingsModel, err := app.DB.LoadSettings(ctx, model.DefaultSettings(app.Config))
-	if err != nil {
-		return fmt.Errorf("failed to load settings. err: %w", err)
-	}
-
-	settingsService := settings.New(settingsModel, app.Config)
-	app.Settings = &settingsService
-
-	return nil
 }
