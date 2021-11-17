@@ -27,7 +27,7 @@ var (
 )
 
 //line view/home.qtpl:5
-func StreamHome(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func StreamHome(qw422016 *qt422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:5
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -224,7 +224,7 @@ func StreamHome(qw422016 *qt422016.Writer, localizer localize.Service, lang loca
 }
 
 //line view/home.qtpl:71
-func WriteHome(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func WriteHome(qq422016 qtio422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:71
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/home.qtpl:71
@@ -235,7 +235,7 @@ func WriteHome(qq422016 qtio422016.Writer, localizer localize.Service, lang loca
 }
 
 //line view/home.qtpl:71
-func Home(localizer localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
+func Home(localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
 //line view/home.qtpl:71
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/home.qtpl:71

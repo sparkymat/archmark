@@ -11,7 +11,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/app"
 	"github.com/sparkymat/archmark/internal/handler"
-	mw "github.com/sparkymat/archmark/middleware"
 )
 
 func Setup(e *echo.Echo, appService *app.Service) {
@@ -51,7 +50,6 @@ func registerWebRoutes(e *echo.Echo, appService *app.Service) {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	appGroup.Use(middleware.Recover())
-	appGroup.Use(mw.ConfigInjector(appService))
 	appGroup.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "form:csrf",
 	}))
@@ -59,7 +57,7 @@ func registerWebRoutes(e *echo.Echo, appService *app.Service) {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
-	appGroup.GET("/error", handler.ShowError)
+	appGroup.GET("/error", handler.ShowError(appService))
 
 	authAppGroup := appGroup.Group("")
 	authAppGroup.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
@@ -71,15 +69,15 @@ func registerWebRoutes(e *echo.Echo, appService *app.Service) {
 
 		return false, nil
 	}))
-	authAppGroup.GET("/", handler.Home)
-	authAppGroup.GET("/settings", handler.Settings)
-	authAppGroup.POST("/settings", handler.UpdateSettings)
-	authAppGroup.GET("/add", handler.BookmarksNew)
-	authAppGroup.POST("/bookmarks", handler.BookmarksCreate)
-	authAppGroup.POST("/bookmarks/:id/destroy", handler.BookmarksDestroy)
-	authAppGroup.GET("/tokens", handler.APITokensIndex)
-	authAppGroup.POST("/tokens/:id/destroy", handler.APITokensDestroy)
-	authAppGroup.POST("/tokens", handler.APITokensCreate)
+	authAppGroup.GET("/", handler.Home(appService))
+	authAppGroup.GET("/settings", handler.Settings(appService))
+	authAppGroup.POST("/settings", handler.UpdateSettings(appService))
+	authAppGroup.GET("/add", handler.BookmarksNew(appService))
+	authAppGroup.POST("/bookmarks", handler.BookmarksCreate(appService))
+	authAppGroup.POST("/bookmarks/:id/destroy", handler.BookmarksDestroy(appService))
+	authAppGroup.GET("/tokens", handler.APITokensIndex(appService))
+	authAppGroup.POST("/tokens/:id/destroy", handler.APITokensDestroy(appService))
+	authAppGroup.POST("/tokens", handler.APITokensCreate(appService))
 }
 
 func registerAPIRoutes(e *echo.Echo, appService *app.Service) {
@@ -88,7 +86,6 @@ func registerAPIRoutes(e *echo.Echo, appService *app.Service) {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	apiAppGroup.Use(middleware.Recover())
-	apiAppGroup.Use(mw.ConfigInjector(appService))
 	apiAppGroup.Use(middleware.KeyAuth(func(token string, c echo.Context) (bool, error) {
 		_, err := appService.DB.LookupAPIToken(context.Background(), token)
 		if err != nil {
@@ -97,5 +94,5 @@ func registerAPIRoutes(e *echo.Echo, appService *app.Service) {
 
 		return true, nil
 	}))
-	apiAppGroup.POST("/add", handler.APIBookmarksCreate)
+	apiAppGroup.POST("/add", handler.APIBookmarksCreate(appService))
 }

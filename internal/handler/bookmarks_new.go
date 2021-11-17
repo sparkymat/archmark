@@ -5,27 +5,23 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/app"
 	"github.com/sparkymat/archmark/view"
 )
 
-func BookmarksNew(c echo.Context) error {
-	app := appServices(c)
-	if app == nil {
-		log.Print("error: app services not found")
+func BookmarksNew(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		csrfToken := getCSRFToken(c)
+		if csrfToken == "" {
+			log.Print("error: csrf token not found")
 
-		return ShowError(c)
+			return ShowError(appService)(c)
+		}
+
+		pageHTML := view.BookmarksNew(appService.Localizer, appService.Settings.Language(), csrfToken)
+		htmlString := view.Layout(appService.Localizer, appService.Settings.Language(), "archmark | add", pageHTML)
+
+		//nolint:wrapcheck
+		return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 	}
-
-	csrfToken := getCSRFToken(c)
-	if csrfToken == "" {
-		log.Print("error: csrf token not found")
-
-		return ShowError(c)
-	}
-
-	pageHTML := view.BookmarksNew(*app.Localizer, app.Settings.Language(), csrfToken)
-	htmlString := view.Layout(*app.Localizer, app.Settings.Language(), "archmark | add", pageHTML)
-
-	//nolint:wrapcheck
-	return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 }

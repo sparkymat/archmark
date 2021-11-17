@@ -1,41 +1,26 @@
 package handler
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/app"
 	"github.com/sparkymat/archmark/localize"
 	"github.com/sparkymat/archmark/view"
 )
 
-func ShowError(c echo.Context) error {
-	app := appServices(c)
-	if app == nil {
-		log.Print("error: app services not found")
+func ShowError(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		renderedError := appService.Localizer.Lookup(appService.Settings.Language(), localize.InternalServerError)
 
-		return ShowError(c)
+		return renderError(c, appService, renderedError)
 	}
-
-	renderedError := app.Localizer.Lookup(app.Settings.Language(), localize.InternalServerError)
-
-	return renderError(c, renderedError)
 }
 
-func renderError(c echo.Context, message string) error {
+func renderError(c echo.Context, appService *app.Service, message string) error {
 	lang := localize.English
-
-	app := appServices(c)
-	if app == nil {
-		log.Print("error: app services not found")
-
-		//nolint:wrapcheck
-		return c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", message))
-	}
-
 	pageHTML := view.ShowError(message)
-	htmlString := view.Layout(*app.Localizer, lang, "archmark", pageHTML)
+	htmlString := view.Layout(appService.Localizer, lang, "archmark", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

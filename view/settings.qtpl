@@ -1,7 +1,7 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 {% import "github.com/sparkymat/archmark/presenter" %}
 
-{% func Settings(localizer localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) %}
+{% func Settings(localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) %}
   <div>
     <form action="/settings" method="POST">
       <input type="hidden" name="csrf" value="{%s csrfToken %}">

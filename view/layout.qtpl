@@ -1,6 +1,6 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 
-{% func Layout(localizer localize.Service, lang localize.Language, title string, content string) %}
+{% func Layout(localizer *localize.Service, lang localize.Language, title string, content string) %}
   <!DOCTYPE html>
   <html>
     <head>

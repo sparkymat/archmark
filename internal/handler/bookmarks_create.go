@@ -12,6 +12,7 @@ import (
 	faktory "github.com/contribsys/faktory/client"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/app"
 	"github.com/sparkymat/archmark/archive"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
@@ -24,38 +25,37 @@ type BookmarksCreateInput struct {
 	URL string `json:"url" form:"url" binding:"required"`
 }
 
-func APIBookmarksCreate(c echo.Context) error {
-	bookmark, err := createBookmark(c)
-	if err != nil {
+func APIBookmarksCreate(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		bookmark, err := createBookmark(c, appService)
+		if err != nil {
+			//nolint:wrapcheck
+			return c.JSON(http.StatusOK, map[string]string{
+				"error": err.Error(),
+			})
+		}
+
 		//nolint:wrapcheck
-		return c.JSON(http.StatusOK, map[string]string{
-			"error": err.Error(),
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"id": bookmark.ID,
 		})
 	}
-
-	//nolint:wrapcheck
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"id": bookmark.ID,
-	})
 }
 
-func BookmarksCreate(c echo.Context) error {
-	if _, err := createBookmark(c); err != nil {
-		log.Printf("error: %v", err)
+func BookmarksCreate(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if _, err := createBookmark(c, appService); err != nil {
+			log.Printf("error: %v", err)
 
-		return renderError(c, "Unable to add bookmark. Please try again later.")
+			return renderError(c, appService, "Unable to add bookmark. Please try again later.")
+		}
+
+		//nolint:wrapcheck
+		return c.Redirect(http.StatusSeeOther, "/")
 	}
-
-	//nolint:wrapcheck
-	return c.Redirect(http.StatusSeeOther, "/")
 }
 
-func createBookmark(c echo.Context) (*model.Bookmark, error) {
-	app := appServices(c)
-	if app == nil {
-		return nil, ErrConfigNotFound
-	}
-
+func createBookmark(c echo.Context, appService *app.Service) (*model.Bookmark, error) {
 	var input BookmarksCreateInput
 
 	if err := c.Bind(&input); err != nil {
@@ -63,7 +63,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 		return nil, err
 	}
 
-	bookmark, err := createBookmarkModel(c.Request().Context(), *app.DB, *app.Config, input.URL)
+	bookmark, err := createBookmarkModel(c.Request().Context(), appService.DB, appService.Config, input.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func createBookmark(c echo.Context) (*model.Bookmark, error) {
 	return bookmark, nil
 }
 
-func createBookmarkModel(ctx context.Context, db database.Service, cfg config.Service, urlString string) (*model.Bookmark, error) {
+func createBookmarkModel(ctx context.Context, db *database.Service, cfg *config.Service, urlString string) (*model.Bookmark, error) {
 	if _, err := url.ParseRequestURI(urlString); err != nil {
 		return nil, fmt.Errorf("invalid url. err: %w", err)
 	}
