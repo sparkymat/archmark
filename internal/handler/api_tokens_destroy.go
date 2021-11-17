@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/app"
 )
 
 const (
@@ -13,29 +14,24 @@ const (
 	sixtyFourBits = 64
 )
 
-func APITokensDestroy(c echo.Context) error {
-	app := appServices(c)
-	if app == nil {
-		log.Print("error: app services not found")
+func APITokensDestroy(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		tokenIDString := c.Param("id")
 
-		return ShowError(c)
+		tokenID, err := strconv.ParseUint(tokenIDString, base10, sixtyFourBits)
+		if err != nil {
+			log.Printf("error: %v", err)
+
+			return ShowError(appService)(c)
+		}
+
+		if err = appService.DB.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
+			log.Printf("error: %v", err)
+
+			return ShowError(appService)(c)
+		}
+
+		//nolint:wrapcheck
+		return c.Redirect(http.StatusSeeOther, "/tokens")
 	}
-
-	tokenIDString := c.Param("id")
-
-	tokenID, err := strconv.ParseUint(tokenIDString, base10, sixtyFourBits)
-	if err != nil {
-		log.Printf("error: %v", err)
-
-		return ShowError(c)
-	}
-
-	if err = app.DB.DeleteAPIToken(c.Request().Context(), tokenID); err != nil {
-		log.Printf("error: %v", err)
-
-		return ShowError(c)
-	}
-
-	//nolint:wrapcheck
-	return c.Redirect(http.StatusSeeOther, "/tokens")
 }

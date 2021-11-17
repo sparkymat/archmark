@@ -8,33 +8,29 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sparkymat/archmark/app"
 )
 
 const tokenLength = 32
 
-func APITokensCreate(c echo.Context) error {
-	app := appServices(c)
-	if app == nil {
-		log.Print("error: app services not found")
+func APITokensCreate(appService *app.Service) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token, err := randomHex(tokenLength)
+		if err != nil {
+			log.Printf("error: %v", err.Error())
 
-		return ShowError(c)
+			return ShowError(appService)(c)
+		}
+
+		if _, err = appService.DB.CreateAPIToken(c.Request().Context(), token); err != nil {
+			log.Printf("error: %v", err.Error())
+
+			return ShowError(appService)(c)
+		}
+
+		//nolint:wrapcheck
+		return c.Redirect(http.StatusSeeOther, "/tokens")
 	}
-
-	token, err := randomHex(tokenLength)
-	if err != nil {
-		log.Printf("error: %v", err.Error())
-
-		return ShowError(c)
-	}
-
-	if _, err = app.DB.CreateAPIToken(c.Request().Context(), token); err != nil {
-		log.Printf("error: %v", err.Error())
-
-		return ShowError(c)
-	}
-
-	//nolint:wrapcheck
-	return c.Redirect(http.StatusSeeOther, "/tokens")
 }
 
 func randomHex(n int) (string, error) {

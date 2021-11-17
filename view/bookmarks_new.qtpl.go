@@ -21,7 +21,7 @@ var (
 )
 
 //line view/bookmarks_new.qtpl:3
-func StreamBookmarksNew(qw422016 *qt422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string) {
+func StreamBookmarksNew(qw422016 *qt422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string) {
 //line view/bookmarks_new.qtpl:3
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -55,7 +55,7 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, localizer localize.Service, l
 }
 
 //line view/bookmarks_new.qtpl:14
-func WriteBookmarksNew(qq422016 qtio422016.Writer, localizer localize.Service, lang localize.Language, csrfToken string) {
+func WriteBookmarksNew(qq422016 qtio422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string) {
 //line view/bookmarks_new.qtpl:14
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/bookmarks_new.qtpl:14
@@ -66,7 +66,7 @@ func WriteBookmarksNew(qq422016 qtio422016.Writer, localizer localize.Service, l
 }
 
 //line view/bookmarks_new.qtpl:14
-func BookmarksNew(localizer localize.Service, lang localize.Language, csrfToken string) string {
+func BookmarksNew(localizer *localize.Service, lang localize.Language, csrfToken string) string {
 //line view/bookmarks_new.qtpl:14
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/bookmarks_new.qtpl:14

@@ -1,7 +1,7 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 {% import "github.com/sparkymat/archmark/localize" %}
 
-{% func ApiTokensIndex(localizer localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) %}
+{% func ApiTokensIndex(localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <div class="flex flex-row justify-end">
