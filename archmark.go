@@ -35,7 +35,7 @@ func main() {
 	}
 
 	localizer := localize.New()
-	styler := style.New()
+	styler := style.New(style.DarkTheme)
 
 	settingsService, err := createSettingsService(context.Background(), cfg, db)
 	if err != nil {

@@ -48,7 +48,7 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, styler *style.Service, locali
 //line view/bookmarks_new.qtpl:10
 	qw422016.E().S(styler.Button(style.ButtonPrimary))
 //line view/bookmarks_new.qtpl:10
-	qw422016.N().S(`">
+	qw422016.N().S(` ml-2">
       </div>
     </form>
     <p class="text-l p-4 mt-4 border-2 border-gray-400 text-gray-400 border-dashed italic">`)
