@@ -40,8 +40,16 @@ func StreamLayout(qw422016 *qt422016.Writer, styler *style.Service, localizer *l
       <link rel="stylesheet" type="text/css" href="/css/tailwind-2.min.css">
       <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
-    <body>
-      <nav class="bg-gray-800">
+    <body class="`)
+//line view/layout.qtpl:14
+	qw422016.E().S(styler.BackgroundColor())
+//line view/layout.qtpl:14
+	qw422016.N().S(`">
+      <nav class="`)
+//line view/layout.qtpl:15
+	qw422016.E().S(styler.Navbar())
+//line view/layout.qtpl:15
+	qw422016.N().S(`">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
           <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">`)

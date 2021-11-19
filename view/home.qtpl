@@ -24,22 +24,22 @@
         {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
-              <a class="flex flex-row items-center" href="{%s bookmark.URL %}" target="_blank">
+              <a class="flex flex-row items-center {%s styler.MainLink() %}" href="{%s bookmark.URL %}" target="_blank">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">{%s bookmark.Title %}</div>
               </a>
             {% else %}
-              <a class="flex flex-row items-center font-light" href="#">
+              <a class="flex flex-row items-center {%s styler.MainLinkDisabled() %}" href="#">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">[{%s localizer.Lookup(lang, localize.Pending) %}] {%s bookmark.Title %}</div>
               </a>
             {% endif %}
             <div class="">
-              <span class="text-sm text-gray-400 mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
+              <span class="{%s styler.HintText() %} mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="{%s styler.ActionLinkPrimary() %} mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
               <span>•</span>
-              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
+              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="{%s styler.ActionLinkAlert() %} mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
             </div>
           </li>
         {% endfor %}

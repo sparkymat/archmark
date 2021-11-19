@@ -93,7 +93,11 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 		if bookmark.IsActive {
 //line view/home.qtpl:26
 			qw422016.N().S(`
-              <a class="flex flex-row items-center" href="`)
+              <a class="flex flex-row items-center `)
+//line view/home.qtpl:27
+			qw422016.E().S(styler.MainLink())
+//line view/home.qtpl:27
+			qw422016.N().S(`" href="`)
 //line view/home.qtpl:27
 			qw422016.E().S(bookmark.URL)
 //line view/home.qtpl:27
@@ -114,7 +118,11 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 		} else {
 //line view/home.qtpl:31
 			qw422016.N().S(`
-              <a class="flex flex-row items-center font-light" href="#">
+              <a class="flex flex-row items-center `)
+//line view/home.qtpl:32
+			qw422016.E().S(styler.MainLinkDisabled())
+//line view/home.qtpl:32
+			qw422016.N().S(`" href="#">
                 <div class="text-md">`)
 //line view/home.qtpl:33
 			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
@@ -136,7 +144,11 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:36
 		qw422016.N().S(`
             <div class="">
-              <span class="text-sm text-gray-400 mr-2">`)
+              <span class="`)
+//line view/home.qtpl:38
+		qw422016.E().S(styler.HintText())
+//line view/home.qtpl:38
+		qw422016.N().S(` mr-2">`)
 //line view/home.qtpl:38
 		qw422016.E().S(localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp))
 //line view/home.qtpl:38
@@ -146,7 +158,11 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:40
 		qw422016.E().S(bookmark.OriginalURL)
 //line view/home.qtpl:40
-		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">`)
+		qw422016.N().S(`" target="_blank" class="`)
+//line view/home.qtpl:40
+		qw422016.E().S(styler.ActionLinkPrimary())
+//line view/home.qtpl:40
+		qw422016.N().S(` mx-2">`)
 //line view/home.qtpl:40
 		qw422016.E().S(localizer.Lookup(lang, localize.OpenOriginalLink))
 //line view/home.qtpl:40
@@ -156,7 +172,11 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:42
 		qw422016.N().DUL(bookmark.ID)
 //line view/home.qtpl:42
-		qw422016.N().S(`)" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">`)
+		qw422016.N().S(`)" class="`)
+//line view/home.qtpl:42
+		qw422016.E().S(styler.ActionLinkAlert())
+//line view/home.qtpl:42
+		qw422016.N().S(` mx-2">`)
 //line view/home.qtpl:42
 		qw422016.E().S(localizer.Lookup(lang, localize.Delete))
 //line view/home.qtpl:42
