@@ -52,8 +52,8 @@ func Home(appService *app.Service) echo.HandlerFunc {
 		}
 
 		presentedBookmarks := presenter.PresentBookmarks(bookmarks, input.Query, input.Page, pageSize, bookmarksCount)
-		pageHTML := view.Home(appService.Localizer, appService.Settings.Language(), csrfToken, input.Query != "", input.Query, presentedBookmarks)
-		htmlString := view.Layout(appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
+		pageHTML := view.Home(appService.Styler, appService.Localizer, appService.Settings.Language(), csrfToken, input.Query != "", input.Query, presentedBookmarks)
+		htmlString := view.Layout(appService.Styler, appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))

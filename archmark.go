@@ -16,6 +16,7 @@ import (
 	"github.com/sparkymat/archmark/model"
 	"github.com/sparkymat/archmark/router"
 	"github.com/sparkymat/archmark/settings"
+	"github.com/sparkymat/archmark/style"
 )
 
 func main() {
@@ -34,13 +35,14 @@ func main() {
 	}
 
 	localizer := localize.New()
+	styler := style.New()
 
 	settingsService, err := createSettingsService(context.Background(), cfg, db)
 	if err != nil {
 		panic(err)
 	}
 
-	appService := app.New(cfg, db, localizer, settingsService)
+	appService := app.New(cfg, db, localizer, settingsService, styler)
 
 	r := echo.New()
 	router.Setup(r, appService)

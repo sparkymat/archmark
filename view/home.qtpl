@@ -1,8 +1,9 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 {% import "github.com/sparkymat/archmark/localize" %}
+{% import "github.com/sparkymat/archmark/style" %}
 {% import "fmt" %}
 
-{% func Home(localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
@@ -11,7 +12,7 @@
       {% if showSearchHeader %}
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
-          <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+          <a href="/" class="{%s styler.Button(style.ButtonPrimary) %}">Clear</a>
         </div>
       {% endif %}
       {% if len(bookmarksList.Bookmarks) == 0 %}
@@ -61,8 +62,8 @@
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="{%s csrfToken %}">
           <div class="p-3 mt-2 flex flex-row justify-end">
-            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
-            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+            <a href="javascript:hideBookmarkDeleteModal()" class="{%s styler.Button(style.ButtonSecondary) %} mr-2">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
+            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="{%s styler.Button(style.ButtonAlert) %}">
           </div>
         </form>
       </div>

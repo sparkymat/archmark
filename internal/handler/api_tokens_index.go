@@ -27,8 +27,8 @@ func APITokensIndex(appService *app.Service) echo.HandlerFunc {
 		}
 
 		presentedTokens := presenter.PresentAPITokens(tokens)
-		pageHTML := view.ApiTokensIndex(appService.Localizer, appService.Settings.Language(), csrfToken, presentedTokens)
-		htmlString := view.Layout(appService.Localizer, appService.Settings.Language(), "archmark | tokens", pageHTML)
+		pageHTML := view.ApiTokensIndex(appService.Styler, appService.Localizer, appService.Settings.Language(), csrfToken, presentedTokens)
+		htmlString := view.Layout(appService.Styler, appService.Localizer, appService.Settings.Language(), "archmark | tokens", pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))
