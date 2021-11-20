@@ -24,7 +24,7 @@ var (
 )
 
 //line view/layout.qtpl:4
-func StreamLayout(qw422016 *qt422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, title string, content string) {
+func StreamLayout(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, title string, content string) {
 //line view/layout.qtpl:4
 	qw422016.N().S(`
   <!DOCTYPE html>
@@ -42,12 +42,12 @@ func StreamLayout(qw422016 *qt422016.Writer, styler *style.Service, localizer *l
     </head>
     <body class="`)
 //line view/layout.qtpl:14
-	qw422016.E().S(styler.BackgroundColor())
+	qw422016.E().S(theme.BackgroundColor)
 //line view/layout.qtpl:14
 	qw422016.N().S(`">
       <nav class="`)
 //line view/layout.qtpl:15
-	qw422016.E().S(styler.Navbar())
+	qw422016.E().S(theme.NavbarBackground)
 //line view/layout.qtpl:15
 	qw422016.N().S(`">
         <div class="flex flex-row align-center">
@@ -88,22 +88,22 @@ func StreamLayout(qw422016 *qt422016.Writer, styler *style.Service, localizer *l
 }
 
 //line view/layout.qtpl:29
-func WriteLayout(qq422016 qtio422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, title string, content string) {
+func WriteLayout(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, title string, content string) {
 //line view/layout.qtpl:29
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/layout.qtpl:29
-	StreamLayout(qw422016, styler, localizer, lang, title, content)
+	StreamLayout(qw422016, theme, localizer, lang, title, content)
 //line view/layout.qtpl:29
 	qt422016.ReleaseWriter(qw422016)
 //line view/layout.qtpl:29
 }
 
 //line view/layout.qtpl:29
-func Layout(styler *style.Service, localizer *localize.Service, lang localize.Language, title string, content string) string {
+func Layout(theme style.Theme, localizer *localize.Service, lang localize.Language, title string, content string) string {
 //line view/layout.qtpl:29
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/layout.qtpl:29
-	WriteLayout(qb422016, styler, localizer, lang, title, content)
+	WriteLayout(qb422016, theme, localizer, lang, title, content)
 //line view/layout.qtpl:29
 	qs422016 := string(qb422016.B)
 //line view/layout.qtpl:29

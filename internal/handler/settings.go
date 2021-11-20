@@ -31,7 +31,7 @@ func Settings(appService *app.Service) echo.HandlerFunc {
 		}
 
 		pageHTML := view.Settings(appService.Localizer, appService.Settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
-		htmlString := view.Layout(appService.Styler, appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
+		htmlString := view.Layout(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))

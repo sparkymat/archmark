@@ -24,7 +24,7 @@ var (
 )
 
 //line view/bookmarks_new.qtpl:4
-func StreamBookmarksNew(qw422016 *qt422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string) {
+func StreamBookmarksNew(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) {
 //line view/bookmarks_new.qtpl:4
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -46,7 +46,7 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, styler *style.Service, locali
 //line view/bookmarks_new.qtpl:10
 	qw422016.N().S(`" class="`)
 //line view/bookmarks_new.qtpl:10
-	qw422016.E().S(styler.Button(style.ButtonPrimary))
+	qw422016.E().S(theme.Button.Primary)
 //line view/bookmarks_new.qtpl:10
 	qw422016.N().S(` ml-2">
       </div>
@@ -62,22 +62,22 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, styler *style.Service, locali
 }
 
 //line view/bookmarks_new.qtpl:15
-func WriteBookmarksNew(qq422016 qtio422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string) {
+func WriteBookmarksNew(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) {
 //line view/bookmarks_new.qtpl:15
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/bookmarks_new.qtpl:15
-	StreamBookmarksNew(qw422016, styler, localizer, lang, csrfToken)
+	StreamBookmarksNew(qw422016, theme, localizer, lang, csrfToken)
 //line view/bookmarks_new.qtpl:15
 	qt422016.ReleaseWriter(qw422016)
 //line view/bookmarks_new.qtpl:15
 }
 
 //line view/bookmarks_new.qtpl:15
-func BookmarksNew(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string) string {
+func BookmarksNew(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) string {
 //line view/bookmarks_new.qtpl:15
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/bookmarks_new.qtpl:15
-	WriteBookmarksNew(qb422016, styler, localizer, lang, csrfToken)
+	WriteBookmarksNew(qb422016, theme, localizer, lang, csrfToken)
 //line view/bookmarks_new.qtpl:15
 	qs422016 := string(qb422016.B)
 //line view/bookmarks_new.qtpl:15

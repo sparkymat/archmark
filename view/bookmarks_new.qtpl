@@ -1,13 +1,13 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 {% import "github.com/sparkymat/archmark/style" %}
 
-{% func BookmarksNew(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string) %}
+{% func BookmarksNew(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) %}
   <div class="container mx-auto">
     <form action="/bookmarks" method="POST">
       <input type="hidden" name="csrf" value="{%s csrfToken %}">
       <div class="flex flex-row mt-4">
         <input type="text" name="url" class="text-xl flex-grow p-2 border outline-white" placeholder="{%s localizer.Lookup(lang, localize.PasteURLHere) %}" autofocus>
-        <input type="submit" value="{%s localizer.Lookup(lang, localize.Add) %}" class="{%s styler.Button(style.ButtonPrimary) %} ml-2">
+        <input type="submit" value="{%s localizer.Lookup(lang, localize.Add) %}" class="{%s theme.Button.Primary %} ml-2">
       </div>
     </form>
     <p class="text-l p-4 mt-4 border-2 border-gray-400 text-gray-400 border-dashed italic">{%s localizer.Lookup(lang, localize.AddWarning) %}</p>

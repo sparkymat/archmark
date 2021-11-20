@@ -3,7 +3,7 @@
 {% import "github.com/sparkymat/archmark/style" %}
 {% import "fmt" %}
 
-{% func Home(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
@@ -12,7 +12,7 @@
       {% if showSearchHeader %}
         <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
           <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
-          <a href="/" class="{%s styler.Button(style.ButtonPrimary) %}">Clear</a>
+          <a href="/" class="{%s theme.Button.Primary %}">Clear</a>
         </div>
       {% endif %}
       {% if len(bookmarksList.Bookmarks) == 0 %}
@@ -24,22 +24,22 @@
         {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
-              <a class="flex flex-row items-center {%s styler.MainLink() %}" href="{%s bookmark.URL %}" target="_blank">
+              <a class="flex flex-row items-center {%s theme.MainLink %}" href="{%s bookmark.URL %}" target="_blank">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">{%s bookmark.Title %}</div>
               </a>
             {% else %}
-              <a class="flex flex-row items-center {%s styler.MainLinkDisabled() %}" href="#">
+              <a class="flex flex-row items-center {%s theme.MainLinkDisabled %}" href="#">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">[{%s localizer.Lookup(lang, localize.Pending) %}] {%s bookmark.Title %}</div>
               </a>
             {% endif %}
             <div class="">
-              <span class="{%s styler.HintText() %} mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
+              <span class="{%s theme.HintText %} mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="{%s styler.ActionLinkPrimary() %} mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="{%s theme.ActionLinkPrimary %} mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
               <span>•</span>
-              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="{%s styler.ActionLinkAlert() %} mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
+              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="{%s theme.ActionLinkAlert %} mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
             </div>
           </li>
         {% endfor %}
@@ -62,8 +62,8 @@
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="{%s csrfToken %}">
           <div class="p-3 mt-2 flex flex-row justify-end">
-            <a href="javascript:hideBookmarkDeleteModal()" class="{%s styler.Button(style.ButtonSecondary) %} mr-2">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
-            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="{%s styler.Button(style.ButtonAlert) %}">
+            <a href="javascript:hideBookmarkDeleteModal()" class="{%s theme.Button.Secondary %} mr-2">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
+            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="{%s theme.Button.Alert %}">
           </div>
         </form>
       </div>

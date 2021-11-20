@@ -1,7 +1,7 @@
 {% import "github.com/sparkymat/archmark/localize" %}
 {% import "github.com/sparkymat/archmark/style" %}
 
-{% func Layout(styler *style.Service, localizer *localize.Service, lang localize.Language, title string, content string) %}
+{% func Layout(theme style.Theme, localizer *localize.Service, lang localize.Language, title string, content string) %}
   <!DOCTYPE html>
   <html>
     <head>
@@ -11,8 +11,8 @@
       <link rel="stylesheet" type="text/css" href="/css/tailwind-2.min.css">
       <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
-    <body class="{%s styler.BackgroundColor() %}">
-      <nav class="{%s styler.Navbar() %}">
+    <body class="{%s theme.BackgroundColor %}">
+      <nav class="{%s theme.NavbarBackground %}">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
           <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>

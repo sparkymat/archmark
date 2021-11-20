@@ -27,7 +27,7 @@ var (
 )
 
 //line view/api_tokens_index.qtpl:5
-func StreamApiTokensIndex(qw422016 *qt422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+func StreamApiTokensIndex(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:5
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -45,7 +45,7 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, styler *style.Service, loca
 //line view/api_tokens_index.qtpl:11
 	qw422016.N().S(`" class="`)
 //line view/api_tokens_index.qtpl:11
-	qw422016.E().S(styler.Button(style.ButtonPrimary))
+	qw422016.E().S(theme.Button.Primary)
 //line view/api_tokens_index.qtpl:11
 	qw422016.N().S(`">
         </form>
@@ -92,22 +92,22 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, styler *style.Service, loca
 }
 
 //line view/api_tokens_index.qtpl:27
-func WriteApiTokensIndex(qq422016 qtio422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+func WriteApiTokensIndex(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
 //line view/api_tokens_index.qtpl:27
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/api_tokens_index.qtpl:27
-	StreamApiTokensIndex(qw422016, styler, localizer, lang, csrfToken, tokens)
+	StreamApiTokensIndex(qw422016, theme, localizer, lang, csrfToken, tokens)
 //line view/api_tokens_index.qtpl:27
 	qt422016.ReleaseWriter(qw422016)
 //line view/api_tokens_index.qtpl:27
 }
 
 //line view/api_tokens_index.qtpl:27
-func ApiTokensIndex(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
+func ApiTokensIndex(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
 //line view/api_tokens_index.qtpl:27
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/api_tokens_index.qtpl:27
-	WriteApiTokensIndex(qb422016, styler, localizer, lang, csrfToken, tokens)
+	WriteApiTokensIndex(qb422016, theme, localizer, lang, csrfToken, tokens)
 //line view/api_tokens_index.qtpl:27
 	qs422016 := string(qb422016.B)
 //line view/api_tokens_index.qtpl:27

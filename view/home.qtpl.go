@@ -30,7 +30,7 @@ var (
 )
 
 //line view/home.qtpl:6
-func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func StreamHome(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:6
 	qw422016.N().S(`
   <div class="container mx-auto">
@@ -55,7 +55,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 		qw422016.N().S(`'</span>
           <a href="/" class="`)
 //line view/home.qtpl:15
-		qw422016.E().S(styler.Button(style.ButtonPrimary))
+		qw422016.E().S(theme.Button.Primary)
 //line view/home.qtpl:15
 		qw422016.N().S(`">Clear</a>
         </div>
@@ -95,7 +95,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 			qw422016.N().S(`
               <a class="flex flex-row items-center `)
 //line view/home.qtpl:27
-			qw422016.E().S(styler.MainLink())
+			qw422016.E().S(theme.MainLink)
 //line view/home.qtpl:27
 			qw422016.N().S(`" href="`)
 //line view/home.qtpl:27
@@ -120,7 +120,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 			qw422016.N().S(`
               <a class="flex flex-row items-center `)
 //line view/home.qtpl:32
-			qw422016.E().S(styler.MainLinkDisabled())
+			qw422016.E().S(theme.MainLinkDisabled)
 //line view/home.qtpl:32
 			qw422016.N().S(`" href="#">
                 <div class="text-md">`)
@@ -146,7 +146,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
             <div class="">
               <span class="`)
 //line view/home.qtpl:38
-		qw422016.E().S(styler.HintText())
+		qw422016.E().S(theme.HintText)
 //line view/home.qtpl:38
 		qw422016.N().S(` mr-2">`)
 //line view/home.qtpl:38
@@ -160,7 +160,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:40
 		qw422016.N().S(`" target="_blank" class="`)
 //line view/home.qtpl:40
-		qw422016.E().S(styler.ActionLinkPrimary())
+		qw422016.E().S(theme.ActionLinkPrimary)
 //line view/home.qtpl:40
 		qw422016.N().S(` mx-2">`)
 //line view/home.qtpl:40
@@ -174,7 +174,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:42
 		qw422016.N().S(`)" class="`)
 //line view/home.qtpl:42
-		qw422016.E().S(styler.ActionLinkAlert())
+		qw422016.E().S(theme.ActionLinkAlert)
 //line view/home.qtpl:42
 		qw422016.N().S(` mx-2">`)
 //line view/home.qtpl:42
@@ -233,7 +233,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
           <div class="p-3 mt-2 flex flex-row justify-end">
             <a href="javascript:hideBookmarkDeleteModal()" class="`)
 //line view/home.qtpl:65
-	qw422016.E().S(styler.Button(style.ButtonSecondary))
+	qw422016.E().S(theme.Button.Secondary)
 //line view/home.qtpl:65
 	qw422016.N().S(` mr-2">`)
 //line view/home.qtpl:65
@@ -246,7 +246,7 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 //line view/home.qtpl:66
 	qw422016.N().S(`" class="`)
 //line view/home.qtpl:66
-	qw422016.E().S(styler.Button(style.ButtonAlert))
+	qw422016.E().S(theme.Button.Alert)
 //line view/home.qtpl:66
 	qw422016.N().S(`">
           </div>
@@ -259,22 +259,22 @@ func StreamHome(qw422016 *qt422016.Writer, styler *style.Service, localizer *loc
 }
 
 //line view/home.qtpl:72
-func WriteHome(qq422016 qtio422016.Writer, styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+func WriteHome(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
 //line view/home.qtpl:72
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line view/home.qtpl:72
-	StreamHome(qw422016, styler, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+	StreamHome(qw422016, theme, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
 //line view/home.qtpl:72
 	qt422016.ReleaseWriter(qw422016)
 //line view/home.qtpl:72
 }
 
 //line view/home.qtpl:72
-func Home(styler *style.Service, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
+func Home(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
 //line view/home.qtpl:72
 	qb422016 := qt422016.AcquireByteBuffer()
 //line view/home.qtpl:72
-	WriteHome(qb422016, styler, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+	WriteHome(qb422016, theme, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
 //line view/home.qtpl:72
 	qs422016 := string(qb422016.B)
 //line view/home.qtpl:72
