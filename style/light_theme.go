@@ -27,5 +27,10 @@ func LightTheme() Theme {
 		},
 		NavbarBackground: "bg-gray-800",
 		NavbarLink:       "text-white px-4 py-2 rounded-md text-sm font-medium",
+		Table: TableStyles{
+			RowBackground:    "bg-gray-200",
+			RowAltBackground: "bg-gray-100",
+			RowText:          "text-md italic break-all text-black",
+		},
 	}
 }

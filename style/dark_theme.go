@@ -27,5 +27,10 @@ func DarkTheme() Theme {
 		},
 		NavbarBackground: "bg-gray-800",
 		NavbarLink:       "text-gray-500 px-4 py-2 rounded-md text-sm font-medium",
+		Table: TableStyles{
+			RowBackground:    "bg-gray-800",
+			RowAltBackground: "bg-gray-600",
+			RowText:          "text-md italic break-all text-white",
+		},
 	}
 }

@@ -2,6 +2,7 @@ package localize
 
 //nolint:gochecknoglobals
 var germanStrings = map[StringIdentifier]string{
+	ActiveTokens: "Aktive Token",
 	//nolint:lll,revive
 	AddWarning:            "Bitte beachten Sie, dass es eine Weile dauern kann, bis das Archiv erstellt wird. In der Zwischenzeit können Sie den \"Original\"-Link verwenden.",
 	APITokens:             "API-Token",

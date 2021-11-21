@@ -2,6 +2,7 @@ package localize
 
 //nolint:gochecknoglobals
 var malayalamStrings = map[StringIdentifier]string{
+	ActiveTokens:          "സജീവ ടോക്കണുകൾ",
 	AddWarning:            "ആർക്കൈവ് ജനറേറ്റുചെയ്യുന്നതിന് കുറച്ച് സമയമെടുത്തേക്കാം എന്നത് ശ്രദ്ധിക്കുക. അതിനിടയിൽ, നിങ്ങൾക്ക് 'ഒറിജിനൽ' ലിങ്ക് ഉപയോഗിക്കാം. ",
 	APITokens:             "API ടോക്കണുകൾ ",
 	Add:                   "ചേർക്കുക",

@@ -2,6 +2,7 @@ package localize
 
 //nolint:gochecknoglobals
 var englishStrings = map[StringIdentifier]string{
+	ActiveTokens:          "Active Tokens",
 	AddWarning:            "Please note that it might take a while for the archive to be generated. In the meantime, you can use the 'original' link.",
 	APITokens:             "API Tokens",
 	Add:                   "Add",

@@ -13,6 +13,7 @@ type Theme struct {
 	Modal             ModalStyles
 	NavbarBackground  string
 	NavbarLink        string
+	Table             TableStyles
 }
 
 type BannerStyles struct {
@@ -34,4 +35,10 @@ type ModalStyles struct {
 	BackgroundColor string
 	HeaderText      string
 	BodyText        string
+}
+
+type TableStyles struct {
+	RowBackground    string
+	RowAltBackground string
+	RowText          string
 }
