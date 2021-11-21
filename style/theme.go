@@ -10,6 +10,7 @@ type Theme struct {
 	HintText          string
 	MainLink          string
 	MainLinkDisabled  string
+	Modal             ModalStyles
 	NavbarBackground  string
 	NavbarLink        string
 }
@@ -27,4 +28,10 @@ type ButtonStyles struct {
 
 type FormStyles struct {
 	Input string
+}
+
+type ModalStyles struct {
+	BackgroundColor string
+	HeaderText      string
+	BodyText        string
 }

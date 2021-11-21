@@ -53,11 +53,11 @@
   </div>
   <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
    	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
-    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg {%s theme.Modal.BackgroundColor %}">
       <div class="">
         <div class="text-center p-2 flex-auto justify-center">
-          <h3 class="text-lg font-bold py-4 ">{%s localizer.Lookup(lang, localize.DeleteBookmarkTitle) %}</h3>
-          <p class="text-md text-gray-400 px-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkWarning) %}</p>
+          <h3 class="{%s theme.Modal.HeaderText %} py-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkTitle) %}</h3>
+          <p class="{%s theme.Modal.BodyText %} px-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkWarning) %}</p>
         </div>
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="{%s csrfToken %}">

@@ -20,6 +20,11 @@ func LightTheme() Theme {
 		HintText:         "text-sm text-gray-400",
 		MainLink:         "font-light text-black",
 		MainLinkDisabled: "font-light text-gray-300",
+		Modal: ModalStyles{
+			BackgroundColor: "bg-white",
+			HeaderText:      "text-lg font-bold text-black",
+			BodyText:        "text-md text-gray-400",
+		},
 		NavbarBackground: "bg-gray-800",
 		NavbarLink:       "text-white px-4 py-2 rounded-md text-sm font-medium",
 	}

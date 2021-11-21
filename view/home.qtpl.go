@@ -222,15 +222,27 @@ func StreamHome(qw422016 *qt422016.Writer, theme style.Theme, localizer *localiz
   </div>
   <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
    	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
-    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg `)
+//line view/home.qtpl:56
+	qw422016.E().S(theme.Modal.BackgroundColor)
+//line view/home.qtpl:56
+	qw422016.N().S(`">
       <div class="">
         <div class="text-center p-2 flex-auto justify-center">
-          <h3 class="text-lg font-bold py-4 ">`)
+          <h3 class="`)
+//line view/home.qtpl:59
+	qw422016.E().S(theme.Modal.HeaderText)
+//line view/home.qtpl:59
+	qw422016.N().S(` py-4">`)
 //line view/home.qtpl:59
 	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkTitle))
 //line view/home.qtpl:59
 	qw422016.N().S(`</h3>
-          <p class="text-md text-gray-400 px-4">`)
+          <p class="`)
+//line view/home.qtpl:60
+	qw422016.E().S(theme.Modal.BodyText)
+//line view/home.qtpl:60
+	qw422016.N().S(` px-4">`)
 //line view/home.qtpl:60
 	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkWarning))
 //line view/home.qtpl:60

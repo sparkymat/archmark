@@ -20,6 +20,11 @@ func DarkTheme() Theme {
 		HintText:         "text-sm text-gray-200",
 		MainLink:         "text-white",
 		MainLinkDisabled: "text-gray-500",
+		Modal: ModalStyles{
+			BackgroundColor: "bg-gray-800",
+			HeaderText:      "text-lg font-bold text-white",
+			BodyText:        "text-md text-gray-400 text-gray-200",
+		},
 		NavbarBackground: "bg-gray-800",
 		NavbarLink:       "text-gray-500 px-4 py-2 rounded-md text-sm font-medium",
 	}
