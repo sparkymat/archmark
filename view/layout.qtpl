@@ -15,9 +15,9 @@
       <nav class="{%s theme.NavbarBackground %}">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
-          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
-          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
-          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
+          <a href="/" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
+          <a href="/add" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
+          <a href="/tokens" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
           <div class="flex-grow"></div>
           <a href="/settings" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Settings) %}</a>
         </div>

@@ -52,17 +52,29 @@ func StreamLayout(qw422016 *qt422016.Writer, theme style.Theme, localizer *local
 	qw422016.N().S(`">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
-          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">`)
+          <a href="/" class="`)
+//line view/layout.qtpl:18
+	qw422016.E().S(theme.NavbarLink)
+//line view/layout.qtpl:18
+	qw422016.N().S(`">`)
 //line view/layout.qtpl:18
 	qw422016.E().S(localizer.Lookup(lang, localize.Bookmarks))
 //line view/layout.qtpl:18
 	qw422016.N().S(`</a>
-          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">`)
+          <a href="/add" class="`)
+//line view/layout.qtpl:19
+	qw422016.E().S(theme.NavbarLink)
+//line view/layout.qtpl:19
+	qw422016.N().S(`">`)
 //line view/layout.qtpl:19
 	qw422016.E().S(localizer.Lookup(lang, localize.AddNew))
 //line view/layout.qtpl:19
 	qw422016.N().S(`</a>
-          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">`)
+          <a href="/tokens" class="`)
+//line view/layout.qtpl:20
+	qw422016.E().S(theme.NavbarLink)
+//line view/layout.qtpl:20
+	qw422016.N().S(`">`)
 //line view/layout.qtpl:20
 	qw422016.E().S(localizer.Lookup(lang, localize.APITokens))
 //line view/layout.qtpl:20

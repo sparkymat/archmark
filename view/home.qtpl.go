@@ -36,7 +36,11 @@ func StreamHome(qw422016 *qt422016.Writer, theme style.Theme, localizer *localiz
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
-        <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="`)
+        <input type="text" name="q" class="flex-grow `)
+//line view/home.qtpl:10
+	qw422016.E().S(theme.Form.Input)
+//line view/home.qtpl:10
+	qw422016.N().S(`" placeholder="`)
 //line view/home.qtpl:10
 	qw422016.E().S(localizer.Lookup(lang, localize.SearchPlaceholder))
 //line view/home.qtpl:10
@@ -47,8 +51,16 @@ func StreamHome(qw422016 *qt422016.Writer, theme style.Theme, localizer *localiz
 	if showSearchHeader {
 //line view/home.qtpl:12
 		qw422016.N().S(`
-        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
-          <span class="text-xl italic">Showing results for '`)
+        <div class="`)
+//line view/home.qtpl:13
+		qw422016.E().S(theme.Banner.Container)
+//line view/home.qtpl:13
+		qw422016.N().S(`">
+          <span class="`)
+//line view/home.qtpl:14
+		qw422016.E().S(theme.Banner.Text)
+//line view/home.qtpl:14
+		qw422016.N().S(`">Showing results for '`)
 //line view/home.qtpl:14
 		qw422016.E().S(searchQuery)
 //line view/home.qtpl:14
