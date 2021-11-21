@@ -20,6 +20,7 @@ type Service struct {
 	Styler    *style.Service
 }
 
+//nolint:lll,revive
 func New(configService *config.Service, db *database.Service, localizer *localize.Service, settingsService *settings.Service, stylerService *style.Service) *Service {
 	return &Service{
 		Config:    configService,
