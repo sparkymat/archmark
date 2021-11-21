@@ -63,6 +63,10 @@ func (s *Service) DefaultLanguage() localize.Language {
 	return localize.LanguageFromString(s.envConfig.DefaultLanguage)
 }
 
+func (s *Service) DefaultTheme() string {
+	return s.envConfig.DefaultTheme
+}
+
 type envConfig struct {
 	DBHostname      string `env:"DB_HOSTNAME,required"`
 	DBPort          int64  `env:"DB_PORT,required"`
@@ -74,4 +78,5 @@ type envConfig struct {
 	MonolithPath    string `env:"MONOLITH_PATH,required"`
 	DownloadPath    string `env:"DOWNLOAD_PATH,required"`
 	DefaultLanguage string `env:"DEFAULT_LANGUAGE"`
+	DefaultTheme    string `env:"DEFAULT_THEME"`
 }

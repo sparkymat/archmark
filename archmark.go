@@ -35,12 +35,13 @@ func main() {
 	}
 
 	localizer := localize.New()
-	styler := style.New(style.ThemeDark)
 
 	settingsService, err := createSettingsService(context.Background(), cfg, db)
 	if err != nil {
 		panic(err)
 	}
+
+	styler := style.New(settingsService.Theme())
 
 	appService := app.New(cfg, db, localizer, settingsService, styler)
 

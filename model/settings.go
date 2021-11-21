@@ -5,6 +5,7 @@ import (
 
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/localize"
+	"github.com/sparkymat/archmark/style"
 )
 
 type Settings struct {
@@ -13,12 +14,19 @@ type Settings struct {
 	UpdatedAt time.Time  `db:"updated_at"`
 	DeletedAt *time.Time `db:"deleted_at"`
 	Language  string     `db:"language"`
+	Theme     string     `db:"theme"`
 }
 
 func DefaultSettings(cfg *config.Service) Settings {
 	if cfg == nil {
-		return Settings{Language: string(localize.English)}
+		return Settings{
+			Language: string(localize.English),
+			Theme:    style.ThemeLight,
+		}
 	}
 
-	return Settings{Language: string(cfg.DefaultLanguage())}
+	return Settings{
+		Language: string(cfg.DefaultLanguage()),
+		Theme:    cfg.DefaultTheme(),
+	}
 }
