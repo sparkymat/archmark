@@ -59,7 +59,11 @@ Both the app and the worker are configured using environment variables.
 
 ![bookmarks](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/bookmarks.png)
 
+![bookmarksdark](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/bookmarksdark.png)
+
 ![deleteconfirm](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/deleteconfirm.png)
 
 ![tokens](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/tokens.png)
+
+![settings](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/settings.png)
 
