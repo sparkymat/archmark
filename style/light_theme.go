@@ -9,7 +9,7 @@ func LightTheme() Theme {
 			Container: "px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center",
 			Text:      "text-xl italic text-gray-600",
 		},
-		BodyText: "text-lg text-black",
+		BodyText: "text-lg text-gray-700 font-light",
 		Button: ButtonStyles{
 			Primary:   "text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2",
 			Secondary: "text-l text-white bg-gray-300 hover:bg-gray-500 rounded shadow-md px-8 py-2",
