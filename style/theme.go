@@ -5,6 +5,7 @@ type Theme struct {
 	ActionLinkPrimary string
 	BackgroundColor   string
 	Banner            BannerStyles
+	BodyText          string
 	Button            ButtonStyles
 	Form              FormStyles
 	HintText          string
@@ -13,6 +14,7 @@ type Theme struct {
 	Modal             ModalStyles
 	NavbarBackground  string
 	NavbarLink        string
+	SectionHeader     string
 	Table             TableStyles
 }
 
@@ -28,7 +30,8 @@ type ButtonStyles struct {
 }
 
 type FormStyles struct {
-	Input string
+	Input  string
+	Select string
 }
 
 type ModalStyles struct {

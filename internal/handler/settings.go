@@ -30,7 +30,7 @@ func Settings(appService *app.Service) echo.HandlerFunc {
 			return ShowError(appService)(c)
 		}
 
-		pageHTML := view.Settings(appService.Localizer, appService.Settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
+		pageHTML := view.Settings(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
 		htmlString := view.Layout(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
 
 		//nolint:wrapcheck

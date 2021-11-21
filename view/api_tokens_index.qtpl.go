@@ -50,7 +50,11 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, theme style.Theme, localize
 	qw422016.N().S(`">
         </form>
       </div>
-      <h3 class="text-2xl text-light py-2 border-b">`)
+      <h3 class="`)
+//line view/api_tokens_index.qtpl:14
+	qw422016.E().S(theme.SectionHeader)
+//line view/api_tokens_index.qtpl:14
+	qw422016.N().S(`">`)
 //line view/api_tokens_index.qtpl:14
 	qw422016.E().S(localizer.Lookup(lang, localize.ActiveTokens))
 //line view/api_tokens_index.qtpl:14
@@ -104,7 +108,7 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, theme style.Theme, localize
 //line view/api_tokens_index.qtpl:28
 		qw422016.E().S(token.ID)
 //line view/api_tokens_index.qtpl:28
-		qw422016.N().S(`/destroy" method="POST">
+		qw422016.N().S(`/destroy" method="POST" class="flex">
                   <input type="hidden" name="csrf" value="`)
 //line view/api_tokens_index.qtpl:29
 		qw422016.E().S(csrfToken)
@@ -114,7 +118,11 @@ func StreamApiTokensIndex(qw422016 *qt422016.Writer, theme style.Theme, localize
 //line view/api_tokens_index.qtpl:30
 		qw422016.E().S(localizer.Lookup(lang, localize.Delete))
 //line view/api_tokens_index.qtpl:30
-		qw422016.N().S(`" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+		qw422016.N().S(`" class="`)
+//line view/api_tokens_index.qtpl:30
+		qw422016.E().S(theme.Button.Alert)
+//line view/api_tokens_index.qtpl:30
+		qw422016.N().S(` flex-grow">
                 </form>
               </td>
             </tr>
