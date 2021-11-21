@@ -1,6 +1,23 @@
 package style
 
-func New(theme Theme) *Service {
+const (
+	ThemeLight = "light"
+	ThemeDark  = "dark"
+)
+
+func New(themeName string) *Service {
+	var theme Theme
+
+	themeFn, themeFound := map[string]func() Theme{
+		ThemeLight: lightTheme,
+		ThemeDark:  darkTheme,
+	}[themeName]
+	if themeFound {
+		theme = themeFn()
+	} else {
+		theme = lightTheme()
+	}
+
 	return &Service{
 		theme: theme,
 	}

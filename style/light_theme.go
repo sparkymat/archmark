@@ -1,6 +1,6 @@
 package style
 
-func LightTheme() Theme {
+func lightTheme() Theme {
 	return Theme{
 		ActionLinkAlert:   "text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed",
 		ActionLinkPrimary: "text-sm text-gray-400 hover:text-blue-600 border-b-2 border-dashed",
