@@ -2,6 +2,7 @@ package localize
 
 //nolint:gochecknoglobals
 var englishStrings = map[StringIdentifier]string{
+	ActiveTokens:          "Active Tokens",
 	AddWarning:            "Please note that it might take a while for the archive to be generated. In the meantime, you can use the 'original' link.",
 	APITokens:             "API Tokens",
 	Add:                   "Add",
@@ -22,5 +23,9 @@ var englishStrings = map[StringIdentifier]string{
 	SaveSettings:          "Save settings",
 	SearchPlaceholder:     "Type query and hit Enter to search",
 	SelectLanguage:        "Choose the language for the app",
+	SelectTheme:           "Choose a theme for the app",
 	Settings:              "Settings",
+	ThemeDark:             "Dark",
+	ThemeLabel:            "Theme",
+	ThemeLight:            "Light",
 }

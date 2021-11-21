@@ -11,240 +11,299 @@ import "github.com/sparkymat/archmark/presenter"
 import "github.com/sparkymat/archmark/localize"
 
 //line view/home.qtpl:3
+import "github.com/sparkymat/archmark/style"
+
+//line view/home.qtpl:4
 import "fmt"
 
-//line view/home.qtpl:5
+//line view/home.qtpl:6
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line view/home.qtpl:5
+//line view/home.qtpl:6
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line view/home.qtpl:5
-func StreamHome(qw422016 *qt422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
-//line view/home.qtpl:5
+//line view/home.qtpl:6
+func StreamHome(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+//line view/home.qtpl:6
 	qw422016.N().S(`
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
-        <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="`)
-//line view/home.qtpl:9
+        <input type="text" name="q" class="flex-grow `)
+//line view/home.qtpl:10
+	qw422016.E().S(theme.Form.Input)
+//line view/home.qtpl:10
+	qw422016.N().S(`" placeholder="`)
+//line view/home.qtpl:10
 	qw422016.E().S(localizer.Lookup(lang, localize.SearchPlaceholder))
-//line view/home.qtpl:9
+//line view/home.qtpl:10
 	qw422016.N().S(`" autofocus>
       </form>
       `)
-//line view/home.qtpl:11
+//line view/home.qtpl:12
 	if showSearchHeader {
-//line view/home.qtpl:11
+//line view/home.qtpl:12
 		qw422016.N().S(`
-        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
-          <span class="text-xl italic">Showing results for '`)
+        <div class="`)
 //line view/home.qtpl:13
+		qw422016.E().S(theme.Banner.Container)
+//line view/home.qtpl:13
+		qw422016.N().S(`">
+          <span class="`)
+//line view/home.qtpl:14
+		qw422016.E().S(theme.Banner.Text)
+//line view/home.qtpl:14
+		qw422016.N().S(`">Showing results for '`)
+//line view/home.qtpl:14
 		qw422016.E().S(searchQuery)
-//line view/home.qtpl:13
+//line view/home.qtpl:14
 		qw422016.N().S(`'</span>
-          <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+          <a href="/" class="`)
+//line view/home.qtpl:15
+		qw422016.E().S(theme.Button.Primary)
+//line view/home.qtpl:15
+		qw422016.N().S(`">Clear</a>
         </div>
       `)
-//line view/home.qtpl:16
+//line view/home.qtpl:17
 	}
-//line view/home.qtpl:16
+//line view/home.qtpl:17
 	qw422016.N().S(`
       `)
-//line view/home.qtpl:17
+//line view/home.qtpl:18
 	if len(bookmarksList.Bookmarks) == 0 {
-//line view/home.qtpl:17
+//line view/home.qtpl:18
 		qw422016.N().S(`
         <div class="flex flex-col items-center mt-16">
           <p class="border border-dashed border-gray-400 py-4 px-8 text-xl text-gray-600">`)
-//line view/home.qtpl:19
+//line view/home.qtpl:20
 		qw422016.E().S(localizer.Lookup(lang, localize.NoBookmarksFound))
-//line view/home.qtpl:19
+//line view/home.qtpl:20
 		qw422016.N().S(`</p>
         </div>
       `)
-//line view/home.qtpl:21
+//line view/home.qtpl:22
 	}
-//line view/home.qtpl:21
+//line view/home.qtpl:22
 	qw422016.N().S(`
       <ul class="my-2">
         `)
-//line view/home.qtpl:23
+//line view/home.qtpl:24
 	for _, bookmark := range bookmarksList.Bookmarks {
-//line view/home.qtpl:23
+//line view/home.qtpl:24
 		qw422016.N().S(`
           <li class="py-4">
             `)
-//line view/home.qtpl:25
+//line view/home.qtpl:26
 		if bookmark.IsActive {
-//line view/home.qtpl:25
+//line view/home.qtpl:26
 			qw422016.N().S(`
-              <a class="flex flex-row items-center" href="`)
-//line view/home.qtpl:26
+              <a class="flex flex-row items-center `)
+//line view/home.qtpl:27
+			qw422016.E().S(theme.MainLink)
+//line view/home.qtpl:27
+			qw422016.N().S(`" href="`)
+//line view/home.qtpl:27
 			qw422016.E().S(bookmark.URL)
-//line view/home.qtpl:26
+//line view/home.qtpl:27
 			qw422016.N().S(`" target="_blank">
                 <div class="text-md">`)
-//line view/home.qtpl:27
+//line view/home.qtpl:28
 			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
-//line view/home.qtpl:27
+//line view/home.qtpl:28
 			qw422016.N().S(`</div>
                 <div class="text-xl ml-2">`)
-//line view/home.qtpl:28
+//line view/home.qtpl:29
 			qw422016.E().S(bookmark.Title)
-//line view/home.qtpl:28
+//line view/home.qtpl:29
 			qw422016.N().S(`</div>
               </a>
             `)
-//line view/home.qtpl:30
+//line view/home.qtpl:31
 		} else {
-//line view/home.qtpl:30
+//line view/home.qtpl:31
 			qw422016.N().S(`
-              <a class="flex flex-row items-center font-light" href="#">
+              <a class="flex flex-row items-center `)
+//line view/home.qtpl:32
+			qw422016.E().S(theme.MainLinkDisabled)
+//line view/home.qtpl:32
+			qw422016.N().S(`" href="#">
                 <div class="text-md">`)
-//line view/home.qtpl:32
+//line view/home.qtpl:33
 			qw422016.N().S(fmt.Sprintf("%d.", bookmark.Index))
-//line view/home.qtpl:32
+//line view/home.qtpl:33
 			qw422016.N().S(`</div>
                 <div class="text-xl ml-2">[`)
-//line view/home.qtpl:33
+//line view/home.qtpl:34
 			qw422016.E().S(localizer.Lookup(lang, localize.Pending))
-//line view/home.qtpl:33
+//line view/home.qtpl:34
 			qw422016.N().S(`] `)
-//line view/home.qtpl:33
+//line view/home.qtpl:34
 			qw422016.E().S(bookmark.Title)
-//line view/home.qtpl:33
+//line view/home.qtpl:34
 			qw422016.N().S(`</div>
               </a>
             `)
-//line view/home.qtpl:35
+//line view/home.qtpl:36
 		}
-//line view/home.qtpl:35
+//line view/home.qtpl:36
 		qw422016.N().S(`
             <div class="">
-              <span class="text-sm text-gray-400 mr-2">`)
-//line view/home.qtpl:37
+              <span class="`)
+//line view/home.qtpl:38
+		qw422016.E().S(theme.HintText)
+//line view/home.qtpl:38
+		qw422016.N().S(` mr-2">`)
+//line view/home.qtpl:38
 		qw422016.E().S(localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp))
-//line view/home.qtpl:37
+//line view/home.qtpl:38
 		qw422016.N().S(`</span>
               <span>•</span>
               <a href="`)
-//line view/home.qtpl:39
+//line view/home.qtpl:40
 		qw422016.E().S(bookmark.OriginalURL)
-//line view/home.qtpl:39
-		qw422016.N().S(`" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">`)
-//line view/home.qtpl:39
+//line view/home.qtpl:40
+		qw422016.N().S(`" target="_blank" class="`)
+//line view/home.qtpl:40
+		qw422016.E().S(theme.ActionLinkPrimary)
+//line view/home.qtpl:40
+		qw422016.N().S(` mx-2">`)
+//line view/home.qtpl:40
 		qw422016.E().S(localizer.Lookup(lang, localize.OpenOriginalLink))
-//line view/home.qtpl:39
+//line view/home.qtpl:40
 		qw422016.N().S(`</a>
               <span>•</span>
               <a href="javascript:showBookmarkDeleteModal(`)
-//line view/home.qtpl:41
+//line view/home.qtpl:42
 		qw422016.N().DUL(bookmark.ID)
-//line view/home.qtpl:41
-		qw422016.N().S(`)" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">`)
-//line view/home.qtpl:41
+//line view/home.qtpl:42
+		qw422016.N().S(`)" class="`)
+//line view/home.qtpl:42
+		qw422016.E().S(theme.ActionLinkAlert)
+//line view/home.qtpl:42
+		qw422016.N().S(` mx-2">`)
+//line view/home.qtpl:42
 		qw422016.E().S(localizer.Lookup(lang, localize.Delete))
-//line view/home.qtpl:41
+//line view/home.qtpl:42
 		qw422016.N().S(`</a>
             </div>
           </li>
         `)
-//line view/home.qtpl:44
+//line view/home.qtpl:45
 	}
-//line view/home.qtpl:44
+//line view/home.qtpl:45
 	qw422016.N().S(`
       </ul>
       `)
-//line view/home.qtpl:46
+//line view/home.qtpl:47
 	if bookmarksList.ShowNextLink {
-//line view/home.qtpl:46
+//line view/home.qtpl:47
 		qw422016.N().S(`
         <div class="flex flex-row p-2 mx-auto">
           <a href="`)
-//line view/home.qtpl:48
+//line view/home.qtpl:49
 		qw422016.E().S(bookmarksList.NextPageLink)
-//line view/home.qtpl:48
+//line view/home.qtpl:49
 		qw422016.N().S(`" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-5 py-2 shadow-md">Show more</a>
         </div>
       `)
-//line view/home.qtpl:50
+//line view/home.qtpl:51
 	}
-//line view/home.qtpl:50
+//line view/home.qtpl:51
 	qw422016.N().S(`
     </div>
   </div>
   <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
    	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
-    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg `)
+//line view/home.qtpl:56
+	qw422016.E().S(theme.Modal.BackgroundColor)
+//line view/home.qtpl:56
+	qw422016.N().S(`">
       <div class="">
         <div class="text-center p-2 flex-auto justify-center">
-          <h3 class="text-lg font-bold py-4 ">`)
-//line view/home.qtpl:58
+          <h3 class="`)
+//line view/home.qtpl:59
+	qw422016.E().S(theme.Modal.HeaderText)
+//line view/home.qtpl:59
+	qw422016.N().S(` py-4">`)
+//line view/home.qtpl:59
 	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkTitle))
-//line view/home.qtpl:58
+//line view/home.qtpl:59
 	qw422016.N().S(`</h3>
-          <p class="text-md text-gray-400 px-4">`)
-//line view/home.qtpl:59
+          <p class="`)
+//line view/home.qtpl:60
+	qw422016.E().S(theme.Modal.BodyText)
+//line view/home.qtpl:60
+	qw422016.N().S(` px-4">`)
+//line view/home.qtpl:60
 	qw422016.E().S(localizer.Lookup(lang, localize.DeleteBookmarkWarning))
-//line view/home.qtpl:59
+//line view/home.qtpl:60
 	qw422016.N().S(`</p>
         </div>
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="`)
-//line view/home.qtpl:62
+//line view/home.qtpl:63
 	qw422016.E().S(csrfToken)
-//line view/home.qtpl:62
+//line view/home.qtpl:63
 	qw422016.N().S(`">
           <div class="p-3 mt-2 flex flex-row justify-end">
-            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">`)
-//line view/home.qtpl:64
+            <a href="javascript:hideBookmarkDeleteModal()" class="`)
+//line view/home.qtpl:65
+	qw422016.E().S(theme.Button.Secondary)
+//line view/home.qtpl:65
+	qw422016.N().S(` mr-2">`)
+//line view/home.qtpl:65
 	qw422016.E().S(localizer.Lookup(lang, localize.Cancel))
-//line view/home.qtpl:64
+//line view/home.qtpl:65
 	qw422016.N().S(`</a>
             <input type="submit" value="`)
-//line view/home.qtpl:65
+//line view/home.qtpl:66
 	qw422016.E().S(localizer.Lookup(lang, localize.Delete))
-//line view/home.qtpl:65
-	qw422016.N().S(`" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+//line view/home.qtpl:66
+	qw422016.N().S(`" class="`)
+//line view/home.qtpl:66
+	qw422016.E().S(theme.Button.Alert)
+//line view/home.qtpl:66
+	qw422016.N().S(`">
           </div>
         </form>
       </div>
     </div>
   </div>
 `)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
 }
 
-//line view/home.qtpl:71
-func WriteHome(qq422016 qtio422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
-//line view/home.qtpl:71
+//line view/home.qtpl:72
+func WriteHome(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) {
+//line view/home.qtpl:72
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/home.qtpl:71
-	StreamHome(qw422016, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
+	StreamHome(qw422016, theme, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+//line view/home.qtpl:72
 	qt422016.ReleaseWriter(qw422016)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
 }
 
-//line view/home.qtpl:71
-func Home(localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
-//line view/home.qtpl:71
+//line view/home.qtpl:72
+func Home(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) string {
+//line view/home.qtpl:72
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/home.qtpl:71
-	WriteHome(qb422016, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
+	WriteHome(qb422016, theme, localizer, lang, csrfToken, showSearchHeader, searchQuery, bookmarksList)
+//line view/home.qtpl:72
 	qs422016 := string(qb422016.B)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/home.qtpl:71
+//line view/home.qtpl:72
 	return qs422016
-//line view/home.qtpl:71
+//line view/home.qtpl:72
 }

@@ -20,7 +20,7 @@ func ShowError(appService *app.Service) echo.HandlerFunc {
 func renderError(c echo.Context, appService *app.Service, message string) error {
 	lang := localize.English
 	pageHTML := view.ShowError(message)
-	htmlString := view.Layout(appService.Localizer, lang, "archmark", pageHTML)
+	htmlString := view.Layout(appService.Styler.Theme(), appService.Localizer, lang, "archmark", pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

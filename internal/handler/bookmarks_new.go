@@ -18,8 +18,8 @@ func BookmarksNew(appService *app.Service) echo.HandlerFunc {
 			return ShowError(appService)(c)
 		}
 
-		pageHTML := view.BookmarksNew(appService.Localizer, appService.Settings.Language(), csrfToken)
-		htmlString := view.Layout(appService.Localizer, appService.Settings.Language(), "archmark | add", pageHTML)
+		pageHTML := view.BookmarksNew(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), csrfToken)
+		htmlString := view.Layout(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), "archmark | add", pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))

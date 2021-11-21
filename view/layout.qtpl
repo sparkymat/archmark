@@ -1,6 +1,7 @@
 {% import "github.com/sparkymat/archmark/localize" %}
+{% import "github.com/sparkymat/archmark/style" %}
 
-{% func Layout(localizer *localize.Service, lang localize.Language, title string, content string) %}
+{% func Layout(theme style.Theme, localizer *localize.Service, lang localize.Language, title string, content string) %}
   <!DOCTYPE html>
   <html>
     <head>
@@ -10,13 +11,13 @@
       <link rel="stylesheet" type="text/css" href="/css/tailwind-2.min.css">
       <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
-    <body>
-      <nav class="bg-gray-800">
+    <body class="{%s theme.BackgroundColor %}">
+      <nav class="{%s theme.NavbarBackground %}">
         <div class="flex flex-row align-center">
           <span class="text-white self-center px-4">archmark!</span>
-          <a href="/" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
-          <a href="/add" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
-          <a href="/tokens" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
+          <a href="/" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.Bookmarks) %}</a>
+          <a href="/add" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.AddNew) %}</a>
+          <a href="/tokens" class="{%s theme.NavbarLink %}">{%s localizer.Lookup(lang, localize.APITokens) %}</a>
           <div class="flex-grow"></div>
           <a href="/settings" class="text-white px-4 py-2 rounded-md text-sm font-medium">{%s localizer.Lookup(lang, localize.Settings) %}</a>
         </div>

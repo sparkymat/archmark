@@ -30,6 +30,7 @@ func LanguageFromString(langString string) Language {
 type StringIdentifier string
 
 const (
+	ActiveTokens          StringIdentifier = "ActiveTokens"
 	APITokens             StringIdentifier = "APITokens"
 	Add                   StringIdentifier = "Add"
 	AddNew                StringIdentifier = "AddNew"
@@ -50,5 +51,9 @@ const (
 	SaveSettings          StringIdentifier = "SaveSettings"
 	SearchPlaceholder     StringIdentifier = "SearchPlaceholder"
 	SelectLanguage        StringIdentifier = "SelectLanguage"
+	SelectTheme           StringIdentifier = "SelectTheme"
 	Settings              StringIdentifier = "Settings"
+	ThemeLabel            StringIdentifier = "ThemeLabel"
+	ThemeDark             StringIdentifier = "ThemeDark"
+	ThemeLight            StringIdentifier = "ThemeLight"
 )

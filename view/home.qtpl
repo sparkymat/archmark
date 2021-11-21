@@ -1,17 +1,18 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 {% import "github.com/sparkymat/archmark/localize" %}
+{% import "github.com/sparkymat/archmark/style" %}
 {% import "fmt" %}
 
-{% func Home(localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
+{% func Home(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, showSearchHeader bool, searchQuery string, bookmarksList presenter.BookmarksList) %}
   <div class="container mx-auto">
     <div class="flex flex-col mt-4 mb-16">
       <form action="/" method="GET" class="flex flex-row">
-        <input type="text" name="q" class="flex-grow text-xl mt-2 p-2 border outline-white" placeholder="{%s localizer.Lookup(lang, localize.SearchPlaceholder) %}" autofocus>
+        <input type="text" name="q" class="flex-grow {%s theme.Form.Input %}" placeholder="{%s localizer.Lookup(lang, localize.SearchPlaceholder) %}" autofocus>
       </form>
       {% if showSearchHeader %}
-        <div class="px-4 py-2 mt-4 bg-gray-200 rounded-sm border border-dashed flex flex-row justify-between items-center">
-          <span class="text-xl italic">Showing results for '{%s searchQuery %}'</span>
-          <a href="/" class="text-lg text-white bg-gray-600 hover:bg-gray-800 rounded px-4 py-2 shadow-md">Clear</a>
+        <div class="{%s theme.Banner.Container %}">
+          <span class="{%s theme.Banner.Text %}">Showing results for '{%s searchQuery %}'</span>
+          <a href="/" class="{%s theme.Button.Primary %}">Clear</a>
         </div>
       {% endif %}
       {% if len(bookmarksList.Bookmarks) == 0 %}
@@ -23,22 +24,22 @@
         {% for _, bookmark := range bookmarksList.Bookmarks %}
           <li class="py-4">
             {% if bookmark.IsActive %}
-              <a class="flex flex-row items-center" href="{%s bookmark.URL %}" target="_blank">
+              <a class="flex flex-row items-center {%s theme.MainLink %}" href="{%s bookmark.URL %}" target="_blank">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">{%s bookmark.Title %}</div>
               </a>
             {% else %}
-              <a class="flex flex-row items-center font-light" href="#">
+              <a class="flex flex-row items-center {%s theme.MainLinkDisabled %}" href="#">
                 <div class="text-md">{%s= fmt.Sprintf("%d.", bookmark.Index) %}</div>
                 <div class="text-xl ml-2">[{%s localizer.Lookup(lang, localize.Pending) %}] {%s bookmark.Title %}</div>
               </a>
             {% endif %}
             <div class="">
-              <span class="text-sm text-gray-400 mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
+              <span class="{%s theme.HintText %} mr-2">{%s localizer.Lookup(lang, localize.AddedTimeStamp, bookmark.TimeStamp) %}</span>
               <span>•</span>
-              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="text-sm text-gray-400 hover:text-blue-400 border-b-2 border-dashed mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
+              <a href="{%s bookmark.OriginalURL %}" target="_blank" class="{%s theme.ActionLinkPrimary %} mx-2">{%s localizer.Lookup(lang, localize.OpenOriginalLink) %}</a>
               <span>•</span>
-              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="text-sm text-gray-400 hover:text-red-400 border-b-2 border-dashed mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
+              <a href="javascript:showBookmarkDeleteModal({%dul bookmark.ID %})" class="{%s theme.ActionLinkAlert %} mx-2">{%s localizer.Lookup(lang, localize.Delete) %}</a>
             </div>
           </li>
         {% endfor %}
@@ -52,17 +53,17 @@
   </div>
   <div class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="bookmark-delete-modal" style="display:none;">
    	<div class="absolute bg-black opacity-80 inset-0 z-0" onClick="hideBookmarkDeleteModal()"></div>
-    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg bg-white">
+    <div class="w-full max-w-lg p-2 relative mx-auto my-auto rounded shadow-lg {%s theme.Modal.BackgroundColor %}">
       <div class="">
         <div class="text-center p-2 flex-auto justify-center">
-          <h3 class="text-lg font-bold py-4 ">{%s localizer.Lookup(lang, localize.DeleteBookmarkTitle) %}</h3>
-          <p class="text-md text-gray-400 px-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkWarning) %}</p>
+          <h3 class="{%s theme.Modal.HeaderText %} py-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkTitle) %}</h3>
+          <p class="{%s theme.Modal.BodyText %} px-4">{%s localizer.Lookup(lang, localize.DeleteBookmarkWarning) %}</p>
         </div>
         <form action="/bookmarks/__ID__/destroy" method="POST" id="bookmark-delete-form">
           <input type="hidden" name="csrf" value="{%s csrfToken %}">
           <div class="p-3 mt-2 flex flex-row justify-end">
-            <a href="javascript:hideBookmarkDeleteModal()" class="text-lg text-gray-white bg-gray-300 hover:bg-gray-400 rounded px-5 py-2 mr-2 shadow-md">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
-            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
+            <a href="javascript:hideBookmarkDeleteModal()" class="{%s theme.Button.Secondary %} mr-2">{%s localizer.Lookup(lang, localize.Cancel) %}</a>
+            <input type="submit" value="{%s localizer.Lookup(lang, localize.Delete) %}" class="{%s theme.Button.Alert %}">
           </div>
         </form>
       </div>

@@ -4,6 +4,7 @@ import (
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/localize"
 	"github.com/sparkymat/archmark/model"
+	"github.com/sparkymat/archmark/style"
 )
 
 func New(settings *model.Settings, cfg *config.Service) *Service {
@@ -28,4 +29,16 @@ func (s *Service) Language() localize.Language {
 	}
 
 	return localize.LanguageFromString(s.settings.Language)
+}
+
+func (s *Service) Theme() string {
+	if s.settings == nil {
+		if s.cfg == nil {
+			return style.ThemeLight
+		}
+
+		return s.cfg.DefaultTheme()
+	}
+
+	return s.settings.Theme
 }

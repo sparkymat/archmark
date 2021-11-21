@@ -9,6 +9,7 @@ import (
 	"github.com/sparkymat/archmark/localize"
 	"github.com/sparkymat/archmark/model"
 	"github.com/sparkymat/archmark/settings"
+	"github.com/sparkymat/archmark/style"
 )
 
 type Service struct {
@@ -16,14 +17,17 @@ type Service struct {
 	DB        *database.Service
 	Localizer *localize.Service
 	Settings  *settings.Service
+	Styler    *style.Service
 }
 
-func New(configService *config.Service, db *database.Service, localizer *localize.Service, settingsService *settings.Service) *Service {
+//nolint:lll,revive
+func New(configService *config.Service, db *database.Service, localizer *localize.Service, settingsService *settings.Service, stylerService *style.Service) *Service {
 	return &Service{
 		Config:    configService,
 		DB:        db,
 		Localizer: localizer,
 		Settings:  settingsService,
+		Styler:    stylerService,
 	}
 }
 
@@ -34,6 +38,7 @@ func (s *Service) RefreshSettings(ctx context.Context) error {
 	}
 
 	s.Settings = settings.New(settingsModel, s.Config)
+	s.Styler = style.New(settingsModel.Theme)
 
 	return nil
 }

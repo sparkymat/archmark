@@ -2,6 +2,7 @@ package localize
 
 //nolint:gochecknoglobals
 var germanStrings = map[StringIdentifier]string{
+	ActiveTokens: "Aktive Token",
 	//nolint:lll,revive
 	AddWarning:            "Bitte beachten Sie, dass es eine Weile dauern kann, bis das Archiv erstellt wird. In der Zwischenzeit können Sie den \"Original\"-Link verwenden.",
 	APITokens:             "API-Token",
@@ -23,5 +24,9 @@ var germanStrings = map[StringIdentifier]string{
 	SaveSettings:          "Einstellungen speichern",
 	SearchPlaceholder:     "Geben Sie query ein und drücken Sie die Eingabetaste, um zu suchen.",
 	SelectLanguage:        "Wählen Sie die Sprache für die App",
+	SelectTheme:           "Wählen Sie ein Thema für die App",
 	Settings:              "Einstellungen",
+	ThemeDark:             "Dunkles Thema",
+	ThemeLabel:            "Thema",
+	ThemeLight:            "Lichtthema",
 }

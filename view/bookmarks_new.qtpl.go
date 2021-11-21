@@ -7,75 +7,96 @@ package view
 //line view/bookmarks_new.qtpl:1
 import "github.com/sparkymat/archmark/localize"
 
-//line view/bookmarks_new.qtpl:3
+//line view/bookmarks_new.qtpl:2
+import "github.com/sparkymat/archmark/style"
+
+//line view/bookmarks_new.qtpl:4
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line view/bookmarks_new.qtpl:3
+//line view/bookmarks_new.qtpl:4
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line view/bookmarks_new.qtpl:3
-func StreamBookmarksNew(qw422016 *qt422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string) {
-//line view/bookmarks_new.qtpl:3
+//line view/bookmarks_new.qtpl:4
+func StreamBookmarksNew(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) {
+//line view/bookmarks_new.qtpl:4
 	qw422016.N().S(`
   <div class="container mx-auto">
     <form action="/bookmarks" method="POST">
       <input type="hidden" name="csrf" value="`)
-//line view/bookmarks_new.qtpl:6
+//line view/bookmarks_new.qtpl:7
 	qw422016.E().S(csrfToken)
-//line view/bookmarks_new.qtpl:6
+//line view/bookmarks_new.qtpl:7
 	qw422016.N().S(`">
       <div class="flex flex-row mt-4">
-        <input type="text" name="url" class="text-xl flex-grow p-2 border outline-white" placeholder="`)
-//line view/bookmarks_new.qtpl:8
+        <input type="text" name="url" class="`)
+//line view/bookmarks_new.qtpl:9
+	qw422016.E().S(theme.Form.Input)
+//line view/bookmarks_new.qtpl:9
+	qw422016.N().S(` flex-grow" placeholder="`)
+//line view/bookmarks_new.qtpl:9
 	qw422016.E().S(localizer.Lookup(lang, localize.PasteURLHere))
-//line view/bookmarks_new.qtpl:8
+//line view/bookmarks_new.qtpl:9
 	qw422016.N().S(`" autofocus>
         <input type="submit" value="`)
-//line view/bookmarks_new.qtpl:9
+//line view/bookmarks_new.qtpl:10
 	qw422016.E().S(localizer.Lookup(lang, localize.Add))
-//line view/bookmarks_new.qtpl:9
-	qw422016.N().S(`" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4">
+//line view/bookmarks_new.qtpl:10
+	qw422016.N().S(`" class="`)
+//line view/bookmarks_new.qtpl:10
+	qw422016.E().S(theme.Button.Primary)
+//line view/bookmarks_new.qtpl:10
+	qw422016.N().S(` ml-2">
       </div>
     </form>
-    <p class="text-l p-4 mt-4 border-2 border-gray-400 text-gray-400 border-dashed italic">`)
-//line view/bookmarks_new.qtpl:12
+    <div class="`)
+//line view/bookmarks_new.qtpl:13
+	qw422016.E().S(theme.Banner.Container)
+//line view/bookmarks_new.qtpl:13
+	qw422016.N().S(`">
+      <span class="`)
+//line view/bookmarks_new.qtpl:14
+	qw422016.E().S(theme.Banner.Text)
+//line view/bookmarks_new.qtpl:14
+	qw422016.N().S(` m-2">`)
+//line view/bookmarks_new.qtpl:14
 	qw422016.E().S(localizer.Lookup(lang, localize.AddWarning))
-//line view/bookmarks_new.qtpl:12
-	qw422016.N().S(`</p>
+//line view/bookmarks_new.qtpl:14
+	qw422016.N().S(`</span>
+    </div>
   </div>
 `)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
 }
 
-//line view/bookmarks_new.qtpl:14
-func WriteBookmarksNew(qq422016 qtio422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string) {
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
+func WriteBookmarksNew(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) {
+//line view/bookmarks_new.qtpl:17
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/bookmarks_new.qtpl:14
-	StreamBookmarksNew(qw422016, localizer, lang, csrfToken)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
+	StreamBookmarksNew(qw422016, theme, localizer, lang, csrfToken)
+//line view/bookmarks_new.qtpl:17
 	qt422016.ReleaseWriter(qw422016)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
 }
 
-//line view/bookmarks_new.qtpl:14
-func BookmarksNew(localizer *localize.Service, lang localize.Language, csrfToken string) string {
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
+func BookmarksNew(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) string {
+//line view/bookmarks_new.qtpl:17
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/bookmarks_new.qtpl:14
-	WriteBookmarksNew(qb422016, localizer, lang, csrfToken)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
+	WriteBookmarksNew(qb422016, theme, localizer, lang, csrfToken)
+//line view/bookmarks_new.qtpl:17
 	qs422016 := string(qb422016.B)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
 	return qs422016
-//line view/bookmarks_new.qtpl:14
+//line view/bookmarks_new.qtpl:17
 }

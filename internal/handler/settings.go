@@ -22,6 +22,7 @@ func Settings(appService *app.Service) echo.HandlerFunc {
 		}
 
 		presentedLanguages := presenter.SupportedLanguages(localize.SupportedLanguages)
+		presentedThemes := presenter.SupportedThemes(appService.Localizer, appService.Settings.Language())
 
 		settingsModel, err := appService.DB.LoadSettings(c.Request().Context(), model.DefaultSettings(appService.Config))
 		if err != nil {
@@ -30,8 +31,16 @@ func Settings(appService *app.Service) echo.HandlerFunc {
 			return ShowError(appService)(c)
 		}
 
-		pageHTML := view.Settings(appService.Localizer, appService.Settings.Language(), csrfToken, presentedLanguages, settingsModel.Language)
-		htmlString := view.Layout(appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
+		pageHTML := view.Settings(
+			appService.Styler.Theme(),
+			appService.Localizer,
+			appService.Settings.Language(),
+			csrfToken, presentedLanguages,
+			settingsModel.Language,
+			presentedThemes,
+			settingsModel.Theme,
+		)
+		htmlString := view.Layout(appService.Styler.Theme(), appService.Localizer, appService.Settings.Language(), "archmark", pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))

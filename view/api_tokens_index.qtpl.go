@@ -10,102 +10,157 @@ import "github.com/sparkymat/archmark/presenter"
 //line view/api_tokens_index.qtpl:2
 import "github.com/sparkymat/archmark/localize"
 
-//line view/api_tokens_index.qtpl:4
+//line view/api_tokens_index.qtpl:3
+import "github.com/sparkymat/archmark/style"
+
+//line view/api_tokens_index.qtpl:5
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line view/api_tokens_index.qtpl:4
+//line view/api_tokens_index.qtpl:5
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line view/api_tokens_index.qtpl:4
-func StreamApiTokensIndex(qw422016 *qt422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
-//line view/api_tokens_index.qtpl:4
+//line view/api_tokens_index.qtpl:5
+func StreamApiTokensIndex(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+//line view/api_tokens_index.qtpl:5
 	qw422016.N().S(`
   <div class="container mx-auto">
     <div class="flex flex-col mt-4">
       <div class="flex flex-row justify-end">
         <form action="/tokens" method="POST">
           <input type="hidden" name="csrf" value="`)
-//line view/api_tokens_index.qtpl:9
+//line view/api_tokens_index.qtpl:10
 	qw422016.E().S(csrfToken)
-//line view/api_tokens_index.qtpl:9
+//line view/api_tokens_index.qtpl:10
 	qw422016.N().S(`">
           <input type="submit" value="`)
-//line view/api_tokens_index.qtpl:10
+//line view/api_tokens_index.qtpl:11
 	qw422016.E().S(localizer.Lookup(lang, localize.CreateNewToken))
-//line view/api_tokens_index.qtpl:10
-	qw422016.N().S(`" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-4 py-2">
+//line view/api_tokens_index.qtpl:11
+	qw422016.N().S(`" class="`)
+//line view/api_tokens_index.qtpl:11
+	qw422016.E().S(theme.Button.Primary)
+//line view/api_tokens_index.qtpl:11
+	qw422016.N().S(`">
         </form>
       </div>
-      <ul>
-        `)
+      <h3 class="`)
 //line view/api_tokens_index.qtpl:14
-	for _, token := range tokens {
+	qw422016.E().S(theme.SectionHeader)
 //line view/api_tokens_index.qtpl:14
+	qw422016.N().S(`">`)
+//line view/api_tokens_index.qtpl:14
+	qw422016.E().S(localizer.Lookup(lang, localize.ActiveTokens))
+//line view/api_tokens_index.qtpl:14
+	qw422016.N().S(`</h3>
+      <table>
+        <thead></thead>
+        <tbody>
+          `)
+//line view/api_tokens_index.qtpl:18
+	for i, token := range tokens {
+//line view/api_tokens_index.qtpl:18
 		qw422016.N().S(`
-          <li class="md:mx-0 mx-4 p-4 mt-4 border-2 border-dashed flex flex-row justify-between items-center rounded">
-            <span class="text-md italic break-all">`)
-//line view/api_tokens_index.qtpl:16
+            `)
+//line view/api_tokens_index.qtpl:19
+		if i%2 == 0 {
+//line view/api_tokens_index.qtpl:19
+			qw422016.N().S(`
+              <tr class="`)
+//line view/api_tokens_index.qtpl:20
+			qw422016.E().S(theme.Table.RowBackground)
+//line view/api_tokens_index.qtpl:20
+			qw422016.N().S(`">
+            `)
+//line view/api_tokens_index.qtpl:21
+		} else {
+//line view/api_tokens_index.qtpl:21
+			qw422016.N().S(`
+              <tr class="`)
+//line view/api_tokens_index.qtpl:22
+			qw422016.E().S(theme.Table.RowAltBackground)
+//line view/api_tokens_index.qtpl:22
+			qw422016.N().S(`">
+            `)
+//line view/api_tokens_index.qtpl:23
+		}
+//line view/api_tokens_index.qtpl:23
+		qw422016.N().S(`
+              <td class="p-2">
+                <span class="`)
+//line view/api_tokens_index.qtpl:25
+		qw422016.E().S(theme.Table.RowText)
+//line view/api_tokens_index.qtpl:25
+		qw422016.N().S(`">`)
+//line view/api_tokens_index.qtpl:25
 		qw422016.E().S(token.Token)
-//line view/api_tokens_index.qtpl:16
+//line view/api_tokens_index.qtpl:25
 		qw422016.N().S(`</span>
-            <form action="/tokens/`)
-//line view/api_tokens_index.qtpl:17
+              </td>
+              <td class="p-2">
+                <form action="/tokens/`)
+//line view/api_tokens_index.qtpl:28
 		qw422016.E().S(token.ID)
-//line view/api_tokens_index.qtpl:17
-		qw422016.N().S(`/destroy" method="POST">
-              <input type="hidden" name="csrf" value="`)
-//line view/api_tokens_index.qtpl:18
+//line view/api_tokens_index.qtpl:28
+		qw422016.N().S(`/destroy" method="POST" class="flex">
+                  <input type="hidden" name="csrf" value="`)
+//line view/api_tokens_index.qtpl:29
 		qw422016.E().S(csrfToken)
-//line view/api_tokens_index.qtpl:18
+//line view/api_tokens_index.qtpl:29
 		qw422016.N().S(`">
-              <input type="submit" value="`)
-//line view/api_tokens_index.qtpl:19
+                  <input type="submit" value="`)
+//line view/api_tokens_index.qtpl:30
 		qw422016.E().S(localizer.Lookup(lang, localize.Delete))
-//line view/api_tokens_index.qtpl:19
-		qw422016.N().S(`" class="text-lg text-white bg-red-600 hover:bg-red-800 rounded px-5 py-2 shadow-md">
-            </form>
-          </li>
-        `)
-//line view/api_tokens_index.qtpl:22
+//line view/api_tokens_index.qtpl:30
+		qw422016.N().S(`" class="`)
+//line view/api_tokens_index.qtpl:30
+		qw422016.E().S(theme.Button.Alert)
+//line view/api_tokens_index.qtpl:30
+		qw422016.N().S(` flex-grow">
+                </form>
+              </td>
+            </tr>
+          `)
+//line view/api_tokens_index.qtpl:34
 	}
-//line view/api_tokens_index.qtpl:22
+//line view/api_tokens_index.qtpl:34
 	qw422016.N().S(`
-      </ul>
+        </tbody>
+      </table>
     </div>
   </div>
 `)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
 }
 
-//line view/api_tokens_index.qtpl:26
-func WriteApiTokensIndex(qq422016 qtio422016.Writer, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
+func WriteApiTokensIndex(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) {
+//line view/api_tokens_index.qtpl:39
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/api_tokens_index.qtpl:26
-	StreamApiTokensIndex(qw422016, localizer, lang, csrfToken, tokens)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
+	StreamApiTokensIndex(qw422016, theme, localizer, lang, csrfToken, tokens)
+//line view/api_tokens_index.qtpl:39
 	qt422016.ReleaseWriter(qw422016)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
 }
 
-//line view/api_tokens_index.qtpl:26
-func ApiTokensIndex(localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
+func ApiTokensIndex(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, tokens []presenter.APIToken) string {
+//line view/api_tokens_index.qtpl:39
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/api_tokens_index.qtpl:26
-	WriteApiTokensIndex(qb422016, localizer, lang, csrfToken, tokens)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
+	WriteApiTokensIndex(qb422016, theme, localizer, lang, csrfToken, tokens)
+//line view/api_tokens_index.qtpl:39
 	qs422016 := string(qb422016.B)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
 	return qs422016
-//line view/api_tokens_index.qtpl:26
+//line view/api_tokens_index.qtpl:39
 }

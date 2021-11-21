@@ -8,4 +8,5 @@ type ConfigAPI interface {
 	MonolithPath() string
 	DownloadPath() string
 	DefaultLanguage() localize.Language
+	DefaultTheme() string
 }
