@@ -35,7 +35,11 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, theme style.Theme, localizer 
 //line view/bookmarks_new.qtpl:7
 	qw422016.N().S(`">
       <div class="flex flex-row mt-4">
-        <input type="text" name="url" class="text-xl flex-grow p-2 border outline-white" placeholder="`)
+        <input type="text" name="url" class="`)
+//line view/bookmarks_new.qtpl:9
+	qw422016.E().S(theme.Form.Input)
+//line view/bookmarks_new.qtpl:9
+	qw422016.N().S(` flex-grow" placeholder="`)
 //line view/bookmarks_new.qtpl:9
 	qw422016.E().S(localizer.Lookup(lang, localize.PasteURLHere))
 //line view/bookmarks_new.qtpl:9
@@ -51,38 +55,48 @@ func StreamBookmarksNew(qw422016 *qt422016.Writer, theme style.Theme, localizer 
 	qw422016.N().S(` ml-2">
       </div>
     </form>
-    <p class="text-l p-4 mt-4 border-2 border-gray-400 text-gray-400 border-dashed italic">`)
+    <div class="`)
 //line view/bookmarks_new.qtpl:13
+	qw422016.E().S(theme.Banner.Container)
+//line view/bookmarks_new.qtpl:13
+	qw422016.N().S(`">
+      <span class="`)
+//line view/bookmarks_new.qtpl:14
+	qw422016.E().S(theme.Banner.Text)
+//line view/bookmarks_new.qtpl:14
+	qw422016.N().S(` m-2">`)
+//line view/bookmarks_new.qtpl:14
 	qw422016.E().S(localizer.Lookup(lang, localize.AddWarning))
-//line view/bookmarks_new.qtpl:13
-	qw422016.N().S(`</p>
+//line view/bookmarks_new.qtpl:14
+	qw422016.N().S(`</span>
+    </div>
   </div>
 `)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 }
 
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 func WriteBookmarksNew(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) {
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	StreamBookmarksNew(qw422016, theme, localizer, lang, csrfToken)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	qt422016.ReleaseWriter(qw422016)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 }
 
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 func BookmarksNew(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string) string {
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	WriteBookmarksNew(qb422016, theme, localizer, lang, csrfToken)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	qs422016 := string(qb422016.B)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 	return qs422016
-//line view/bookmarks_new.qtpl:15
+//line view/bookmarks_new.qtpl:17
 }

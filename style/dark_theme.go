@@ -15,7 +15,7 @@ func DarkTheme() Theme {
 			Alert:     "text-l text-black bg-red-400 hover:bg-red-800 rounded shadow-md px-8 py-2",
 		},
 		Form: FormStyles{
-			Input: "text-xl mt-2 p-2 border bg-gray-900 text-white",
+			Input: "text-xl p-2 border bg-gray-900 text-white",
 		},
 		HintText:         "text-sm text-gray-200",
 		MainLink:         "text-white",

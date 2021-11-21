@@ -15,7 +15,7 @@ func LightTheme() Theme {
 			Alert:     "text-l text-white bg-red-600 hover:bg-red-800 rounded shadow-md px-8 py-2",
 		},
 		Form: FormStyles{
-			Input: "text-xl mt-2 p-2 border bg-white text-black",
+			Input: "text-xl p-2 border bg-white text-black",
 		},
 		HintText:         "text-sm text-gray-400",
 		MainLink:         "font-light text-black",
