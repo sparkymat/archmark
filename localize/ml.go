@@ -23,5 +23,9 @@ var malayalamStrings = map[StringIdentifier]string{
 	SaveSettings:          "സജ്ജീകരണങ്ങൾ സംരക്ഷിക്കുക",
 	SearchPlaceholder:     "തിരയാൻ, ഇവിടെ ടൈപ്പ് ചെയ്യുക",
 	SelectLanguage:        "ആപ്പിനുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക",
+	SelectTheme:           "ആപ്പിനായി ഒരു തീം തിരഞ്ഞെടുക്കുക",
 	Settings:              "സജ്ജീകരണങ്ങൾ",
+	ThemeDark:             "ഇരുണ്ട",
+	ThemeLabel:            "തീം",
+	ThemeLight:            "ലൈറ്റ്",
 }

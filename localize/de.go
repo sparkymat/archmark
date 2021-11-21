@@ -24,5 +24,9 @@ var germanStrings = map[StringIdentifier]string{
 	SaveSettings:          "Einstellungen speichern",
 	SearchPlaceholder:     "Geben Sie query ein und drücken Sie die Eingabetaste, um zu suchen.",
 	SelectLanguage:        "Wählen Sie die Sprache für die App",
+	SelectTheme:           "Wählen Sie ein Thema für die App",
 	Settings:              "Einstellungen",
+	ThemeDark:             "Dunkles Thema",
+	ThemeLabel:            "Thema",
+	ThemeLight:            "Lichtthema",
 }

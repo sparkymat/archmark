@@ -27,7 +27,7 @@ var (
 )
 
 //line view/settings.qtpl:5
-func StreamSettings(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
+func StreamSettings(qw422016 *qt422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string, themes []presenter.Theme, selectedTheme string) {
 //line view/settings.qtpl:5
 	qw422016.N().S(`
   <div>
@@ -108,42 +108,112 @@ func StreamSettings(qw422016 *qt422016.Writer, theme style.Theme, localizer *loc
 	qw422016.N().S(`
           </select>
         </div>
+        <h3 class="`)
+//line view/settings.qtpl:24
+	qw422016.E().S(theme.SectionHeader)
+//line view/settings.qtpl:24
+	qw422016.N().S(`">`)
+//line view/settings.qtpl:24
+	qw422016.E().S(localizer.Lookup(lang, localize.ThemeLabel))
+//line view/settings.qtpl:24
+	qw422016.N().S(`</h3>
+        <div class="mt-4 flex flex-row flex-grow items-center">
+          <label for="language" class="`)
+//line view/settings.qtpl:26
+	qw422016.E().S(theme.BodyText)
+//line view/settings.qtpl:26
+	qw422016.N().S(`">`)
+//line view/settings.qtpl:26
+	qw422016.E().S(localizer.Lookup(lang, localize.SelectTheme))
+//line view/settings.qtpl:26
+	qw422016.N().S(`</label>
+          <div class="flex-grow"></div>
+          <select id="theme" name="theme" class="`)
+//line view/settings.qtpl:28
+	qw422016.E().S(theme.Form.Select)
+//line view/settings.qtpl:28
+	qw422016.N().S(`">
+            `)
+//line view/settings.qtpl:29
+	for _, theme := range themes {
+//line view/settings.qtpl:29
+		qw422016.N().S(`
+              `)
+//line view/settings.qtpl:30
+		if theme.Value == selectedTheme {
+//line view/settings.qtpl:30
+			qw422016.N().S(`
+                <option value="`)
+//line view/settings.qtpl:31
+			qw422016.E().S(theme.Value)
+//line view/settings.qtpl:31
+			qw422016.N().S(`" selected>`)
+//line view/settings.qtpl:31
+			qw422016.E().S(theme.Label)
+//line view/settings.qtpl:31
+			qw422016.N().S(`</option>
+              `)
+//line view/settings.qtpl:32
+		} else {
+//line view/settings.qtpl:32
+			qw422016.N().S(`
+                <option value="`)
+//line view/settings.qtpl:33
+			qw422016.E().S(theme.Value)
+//line view/settings.qtpl:33
+			qw422016.N().S(`">`)
+//line view/settings.qtpl:33
+			qw422016.E().S(theme.Label)
+//line view/settings.qtpl:33
+			qw422016.N().S(`</option>
+              `)
+//line view/settings.qtpl:34
+		}
+//line view/settings.qtpl:34
+		qw422016.N().S(`
+            `)
+//line view/settings.qtpl:35
+	}
+//line view/settings.qtpl:35
+	qw422016.N().S(`
+          </select>
+        </div>
         <div class="mt-16 flex flex-row justify-end">
           <input type="submit" class="text-l text-white bg-gray-600 hover:bg-gray-800 rounded shadow-md px-8 py-2 ml-4" value="`)
-//line view/settings.qtpl:25
+//line view/settings.qtpl:39
 	qw422016.E().S(localizer.Lookup(lang, localize.SaveSettings))
-//line view/settings.qtpl:25
+//line view/settings.qtpl:39
 	qw422016.N().S(`" />
         </div>
       </div>
     </form>
   </div>
 `)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
 }
 
-//line view/settings.qtpl:30
-func WriteSettings(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) {
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
+func WriteSettings(qq422016 qtio422016.Writer, theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string, themes []presenter.Theme, selectedTheme string) {
+//line view/settings.qtpl:44
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/settings.qtpl:30
-	StreamSettings(qw422016, theme, localizer, lang, csrfToken, languages, selectedLanguage)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
+	StreamSettings(qw422016, theme, localizer, lang, csrfToken, languages, selectedLanguage, themes, selectedTheme)
+//line view/settings.qtpl:44
 	qt422016.ReleaseWriter(qw422016)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
 }
 
-//line view/settings.qtpl:30
-func Settings(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) string {
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
+func Settings(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string, themes []presenter.Theme, selectedTheme string) string {
+//line view/settings.qtpl:44
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/settings.qtpl:30
-	WriteSettings(qb422016, theme, localizer, lang, csrfToken, languages, selectedLanguage)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
+	WriteSettings(qb422016, theme, localizer, lang, csrfToken, languages, selectedLanguage, themes, selectedTheme)
+//line view/settings.qtpl:44
 	qs422016 := string(qb422016.B)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
 	return qs422016
-//line view/settings.qtpl:30
+//line view/settings.qtpl:44
 }

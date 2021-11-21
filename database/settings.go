@@ -53,8 +53,8 @@ func (s *Service) UpdateSettings(ctx context.Context, settings *model.Settings) 
 
 	stmnt := psql.
 		Insert("settings").
-		Columns("language").
-		Values(settings.Language)
+		Columns("language", "theme").
+		Values(settings.Language, settings.Theme)
 
 	querySQL, args, err := stmnt.ToSql()
 	if err != nil {
@@ -76,8 +76,8 @@ func (s *Service) createSettings(ctx context.Context, settings *model.Settings) 
 
 	stmnt := psql.
 		Insert("settings").
-		Columns("language").
-		Values(settings.Language).
+		Columns("language", "theme").
+		Values(settings.Language, settings.Theme).
 		Suffix("RETURNING \"id\"")
 
 	querySQL, args, err := stmnt.ToSql()

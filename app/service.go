@@ -37,6 +37,7 @@ func (s *Service) RefreshSettings(ctx context.Context) error {
 	}
 
 	s.Settings = settings.New(settingsModel, s.Config)
+	s.Styler = style.New(settingsModel.Theme)
 
 	return nil
 }

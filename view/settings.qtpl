@@ -2,7 +2,7 @@
 {% import "github.com/sparkymat/archmark/presenter" %}
 {% import "github.com/sparkymat/archmark/style" %}
 
-{% func Settings(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string) %}
+{% func Settings(theme style.Theme, localizer *localize.Service, lang localize.Language, csrfToken string, languages []presenter.Language, selectedLanguage string, themes []presenter.Theme, selectedTheme string) %}
   <div>
     <form action="/settings" method="POST">
       <input type="hidden" name="csrf" value="{%s csrfToken %}">
@@ -17,6 +17,20 @@
                 <option value="{%s language.Value %}" selected>{%s language.Label %}</option>
               {% else %}
                 <option value="{%s language.Value %}">{%s language.Label %}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <h3 class="{%s theme.SectionHeader %}">{%s localizer.Lookup(lang, localize.ThemeLabel) %}</h3>
+        <div class="mt-4 flex flex-row flex-grow items-center">
+          <label for="language" class="{%s theme.BodyText %}">{%s localizer.Lookup(lang, localize.SelectTheme) %}</label>
+          <div class="flex-grow"></div>
+          <select id="theme" name="theme" class="{%s theme.Form.Select %}">
+            {% for _, theme := range themes %}
+              {% if theme.Value == selectedTheme %}
+                <option value="{%s theme.Value %}" selected>{%s theme.Label %}</option>
+              {% else %}
+                <option value="{%s theme.Value %}">{%s theme.Label %}</option>
               {% endif %}
             {% endfor %}
           </select>

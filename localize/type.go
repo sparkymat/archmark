@@ -51,5 +51,9 @@ const (
 	SaveSettings          StringIdentifier = "SaveSettings"
 	SearchPlaceholder     StringIdentifier = "SearchPlaceholder"
 	SelectLanguage        StringIdentifier = "SelectLanguage"
+	SelectTheme           StringIdentifier = "SelectTheme"
 	Settings              StringIdentifier = "Settings"
+	ThemeLabel            StringIdentifier = "ThemeLabel"
+	ThemeDark             StringIdentifier = "ThemeDark"
+	ThemeLight            StringIdentifier = "ThemeLight"
 )

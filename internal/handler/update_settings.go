@@ -11,6 +11,7 @@ import (
 
 type UpdateSettingsInput struct {
 	Language string `form:"language"`
+	Theme    string `form:"theme"`
 }
 
 func UpdateSettings(appService *app.Service) echo.HandlerFunc {
@@ -31,6 +32,7 @@ func UpdateSettings(appService *app.Service) echo.HandlerFunc {
 		}
 
 		settingsModel.Language = input.Language
+		settingsModel.Theme = input.Theme
 
 		err = appService.DB.UpdateSettings(c.Request().Context(), settingsModel)
 		if err != nil {
