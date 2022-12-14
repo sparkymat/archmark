@@ -67,3 +67,4 @@ Both the app and the worker are configured using environment variables.
 
 ![settings](https://raw.githubusercontent.com/sparkymat/archmark/master/docs/settings.png)
 
+
