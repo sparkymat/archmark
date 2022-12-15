@@ -1,3 +1,11 @@
+clone:
+  git:
+    image: ubuntu:22.10
+    environment:
+      - GIT_SSL_NO_VERIFY=1
+    commands:
+      - echo '192.168.1.73 git.oxhead.home >> /etc/hosts'
+      - git clone $(CI_REPO_REMOTE)
 pipeline:
   lint:
     image: golangci/golangci-lint
