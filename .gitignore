@@ -15,7 +15,5 @@
 # vendor/
 tmp/
 .env
-archmark-linux
-archmark-worker-linux
 
 dist/

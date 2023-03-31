@@ -1,0 +1,15 @@
+{% func BasicLayout(title string, csrfToken string, content string) %}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta name="csrf-token" content="{%s csrfToken %}">
+      <title>{%s title %}</title>
+    </head>
+    <body>
+      {%s= content %}
+      <script src="/js/app/index.js"></script>
+    </body>
+  </html>
+{% endfunc %}
