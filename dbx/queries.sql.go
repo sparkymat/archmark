@@ -9,6 +9,61 @@ import (
 	"context"
 )
 
+const countBookmarksList = `-- name: CountBookmarksList :one
+SELECT COUNT(*)
+  FROM bookmarks b
+  WHERE b.user_id = $1::bigint
+`
+
+func (q *Queries) CountBookmarksList(ctx context.Context, userID int64) (int64, error) {
+	row := q.db.QueryRow(ctx, countBookmarksList, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const fetchBookmarksList = `-- name: FetchBookmarksList :many
+SELECT b.id, b.user_id, b.url, b.title, b.created_at, b.updated_at
+  FROM bookmarks b
+  WHERE b.user_id = $1::bigint
+  ORDER BY b.created_at DESC
+  LIMIT $3::int
+  OFFSET $2::int
+`
+
+type FetchBookmarksListParams struct {
+	UserID     int64
+	PageOffset int32
+	PageLimit  int32
+}
+
+func (q *Queries) FetchBookmarksList(ctx context.Context, arg FetchBookmarksListParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchBookmarksList, arg.UserID, arg.PageOffset, arg.PageLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Url,
+			&i.Title,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const fetchUserByUsername = `-- name: FetchUserByUsername :one
 SELECT u.id, u.username, u.name, u.encrypted_password, u.created_at, u.updated_at
   FROM users u

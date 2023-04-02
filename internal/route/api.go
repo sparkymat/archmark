@@ -4,13 +4,16 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/auth"
+	"github.com/sparkymat/archmark/internal/handler/api"
 )
 
 func registerAPIRoutes(app *echo.Group, cfg ConfigService, db DatabaseService) {
-	apiV2 := app.Group("api/v2")
-	apiV2.Use(auth.APIMiddleware(cfg, db))
+	apiGroup := app.Group("api")
+	apiGroup.Use(auth.APIMiddleware(cfg, db))
 
-	apiV2.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	apiGroup.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "header:X-CSRF-Token",
 	}))
+
+	apiGroup.GET("/bookmarks", api.BookmarksList(cfg, db))
 }

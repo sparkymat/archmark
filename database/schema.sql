@@ -35,6 +35,39 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bookmarks (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    url text NOT NULL,
+    title text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: bookmarks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bookmarks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bookmarks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -78,10 +111,25 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: bookmarks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: bookmarks bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bookmarks
+    ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
 
 
 --
@@ -109,10 +157,25 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: bookmarks bookmarks_updated_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER bookmarks_updated_at BEFORE UPDATE ON public.bookmarks FOR EACH ROW EXECUTE FUNCTION public.moddatetime('updated_at');
+
+
+--
 -- Name: users users_updated_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.moddatetime('updated_at');
+
+
+--
+-- Name: bookmarks bookmarks_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bookmarks
+    ADD CONSTRAINT bookmarks_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --

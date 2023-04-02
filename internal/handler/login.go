@@ -56,7 +56,7 @@ func renderLoginPage(c echo.Context, email string, errorMessage string) error {
 	}
 
 	pageHTML := view.Login(csrfToken, email, errorMessage)
-	htmlString := view.Layout("archmark | login", pageHTML)
+	htmlString := view.Layout("archmark | login", csrfToken, pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

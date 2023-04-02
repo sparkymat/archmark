@@ -19,7 +19,7 @@ func Home() echo.HandlerFunc {
 		}
 
 		pageHTML := view.Home()
-		htmlString := view.BasicLayout("archmark", csrfToken, pageHTML)
+		htmlString := view.Layout("archmark", csrfToken, pageHTML)
 
 		//nolint:wrapcheck
 		return c.HTMLBlob(http.StatusOK, []byte(htmlString))

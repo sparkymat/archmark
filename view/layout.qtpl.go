@@ -18,7 +18,7 @@ var (
 )
 
 //line view/layout.qtpl:1
-func StreamLayout(qw422016 *qt422016.Writer, title string, content string) {
+func StreamLayout(qw422016 *qt422016.Writer, title string, csrfToken string, content string) {
 //line view/layout.qtpl:1
 	qw422016.N().S(`
   <!DOCTYPE html>
@@ -26,49 +26,55 @@ func StreamLayout(qw422016 *qt422016.Writer, title string, content string) {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta name="csrf-token" content="`)
+//line view/layout.qtpl:7
+	qw422016.E().S(csrfToken)
+//line view/layout.qtpl:7
+	qw422016.N().S(`">
       <title>`)
-//line view/layout.qtpl:7
+//line view/layout.qtpl:8
 	qw422016.E().S(title)
-//line view/layout.qtpl:7
+//line view/layout.qtpl:8
 	qw422016.N().S(`</title>
        <link rel="stylesheet" type="text/css" href="/css/uikit.min.css">
     </head>
     <body>
       `)
-//line view/layout.qtpl:11
+//line view/layout.qtpl:12
 	qw422016.N().S(content)
-//line view/layout.qtpl:11
+//line view/layout.qtpl:12
 	qw422016.N().S(`
       <script src="/js/uikit.min.js"></script>
       <script src="/js/uikit-icons.min.js"></script>
+      <script src="/js/app/index.js"></script>
     </body>
   </html>
 `)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
 }
 
-//line view/layout.qtpl:16
-func WriteLayout(qq422016 qtio422016.Writer, title string, content string) {
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
+func WriteLayout(qq422016 qtio422016.Writer, title string, csrfToken string, content string) {
+//line view/layout.qtpl:18
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/layout.qtpl:16
-	StreamLayout(qw422016, title, content)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
+	StreamLayout(qw422016, title, csrfToken, content)
+//line view/layout.qtpl:18
 	qt422016.ReleaseWriter(qw422016)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
 }
 
-//line view/layout.qtpl:16
-func Layout(title string, content string) string {
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
+func Layout(title string, csrfToken string, content string) string {
+//line view/layout.qtpl:18
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/layout.qtpl:16
-	WriteLayout(qb422016, title, content)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
+	WriteLayout(qb422016, title, csrfToken, content)
+//line view/layout.qtpl:18
 	qs422016 := string(qb422016.B)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
 	return qs422016
-//line view/layout.qtpl:16
+//line view/layout.qtpl:18
 }
