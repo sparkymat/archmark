@@ -105,10 +105,6 @@ func main() {
 		panic(err)
 	}
 
-	if err = dbDriver.AutoMigrate(); err != nil {
-		panic(err)
-	}
-
 	db := dbx.New(dbDriver.DB())
 
 	mgr := worker.NewManager()

@@ -12,6 +12,10 @@ FROM alpine:3
 
 COPY --from=builder /app/archmark /bin/archmark
 
+WORKDIR /app
+COPY public /app/public
+COPY migrations /app/migrations
+
 ENV MONOLITH_PATH=/bin/monolith
 
 CMD ["/bin/archmark"]
