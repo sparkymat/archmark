@@ -1,3 +1,8 @@
+body {
+  background-color: #333333;
+  min-height: 100vh;
+}
+
 .uk-h1,
 .uk-h2,
 .uk-h3,

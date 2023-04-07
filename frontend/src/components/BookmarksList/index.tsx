@@ -46,7 +46,7 @@ const BookmarksList = () => {
           <div className="uk-flex uk-flex-column uk-margin-bottom">
             <a
               className="uk-link-muted uk-text-large"
-              style={{ fontWeight: 300, color: 'black' }}
+              style={{ fontWeight: 300, color: 'white' }}
               href={b.url}
               target="_blank"
               rel="noreferrer"
