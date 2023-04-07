@@ -40,6 +40,12 @@ const BookmarksList = () => {
 
   return (
     <div className="uk-container">
+      <div className="uk-flex uk-flex-row-reverse uk-margin-top uk-margin-bottom">
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a href="/#/bookmark" className="uk-link-muted">
+          New bookmark
+        </a>
+      </div>
       {bookmarks &&
         bookmarks.map((b, i) => (
           <div className="uk-flex uk-flex-column uk-margin-bottom">

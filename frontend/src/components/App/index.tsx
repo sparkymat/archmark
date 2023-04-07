@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import BookmarksList from '../BookmarksList';
+import NewBookmark from '../NewBookmark';
 
 const App = () => (
   <div>
@@ -18,6 +19,7 @@ const App = () => (
     <Routes>
       <Route index element={<BookmarksList />} />
       <Route path="/page/:page" element={<BookmarksList />} />
+      <Route path="/bookmark" element={<NewBookmark />} />
     </Routes>
   </div>
 );
