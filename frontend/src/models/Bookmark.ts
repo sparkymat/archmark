@@ -1,6 +1,6 @@
 interface Bookmark {
   id: string;
-  title: string;
+  title?: string;
   url: string;
 }
 

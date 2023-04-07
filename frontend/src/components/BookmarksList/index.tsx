@@ -7,6 +7,7 @@ import {
 } from '../../features/BookmarksList/selects';
 import { AppDispatch } from '../../store';
 import fetchBookmarksList from '../../features/BookmarksList/fetchBookmarksList';
+import URLDisplay from '../URLDisplay';
 
 const BookmarksList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -59,7 +60,7 @@ const BookmarksList = () => {
               <span className="uk-text-default">
                 {(pageNumber - 1) * pageSize + i + 1}.{' '}
               </span>
-              <span>{b.title}</span>
+              {b.title ? <span>{b.title}</span> : <URLDisplay value={b.url} />}
             </a>
             <div className="uk-flex uk-flex-row">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

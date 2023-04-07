@@ -15,3 +15,10 @@ SELECT b.*
 SELECT COUNT(*)
   FROM bookmarks b
   WHERE b.user_id = @user_id::bigint;
+
+-- name: CreateBookmark :one
+INSERT INTO bookmarks (
+  user_id, url
+) VALUES (
+  @user_id::bigint, @url::text
+) RETURNING *;

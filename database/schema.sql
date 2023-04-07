@@ -42,7 +42,7 @@ CREATE TABLE public.bookmarks (
     id bigint NOT NULL,
     user_id bigint NOT NULL,
     url text NOT NULL,
-    title text NOT NULL,
+    title text,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

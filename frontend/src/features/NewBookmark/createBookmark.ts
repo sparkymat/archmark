@@ -15,6 +15,9 @@ const createFunction = createAsyncThunk<Bookmark | ErrorResponse, string>(
         { url },
         { headers: { 'X-CSRF-Token': csrf } },
       );
+
+      window.location.href = '/';
+
       return response.data as Bookmark;
     } catch (error) {
       console.error(error);

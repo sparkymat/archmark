@@ -29,6 +29,11 @@ p {
   font-family: "PT Sans", sans-serif;
 }
 
+.uk-input, .uk-input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #aaaaaa;
+}
+
 /* cyrillic-ext */
 @font-face {
   font-family: "Montserrat";

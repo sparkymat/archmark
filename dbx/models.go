@@ -12,7 +12,7 @@ type Bookmark struct {
 	ID        int64
 	UserID    int64
 	Url       string
-	Title     string
+	Title     pgtype.Text
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }

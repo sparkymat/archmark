@@ -16,4 +16,5 @@ func registerAPIRoutes(app *echo.Group, cfg ConfigService, db DatabaseService) {
 	}))
 
 	apiGroup.GET("/bookmarks", api.BookmarksList(cfg, db))
+	apiGroup.POST("/bookmarks", api.BookmarksCreate(cfg, db))
 }

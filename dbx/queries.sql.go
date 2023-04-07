@@ -22,6 +22,33 @@ func (q *Queries) CountBookmarksList(ctx context.Context, userID int64) (int64, 
 	return count, err
 }
 
+const createBookmark = `-- name: CreateBookmark :one
+INSERT INTO bookmarks (
+  user_id, url
+) VALUES (
+  $1::bigint, $2::text
+) RETURNING id, user_id, url, title, created_at, updated_at
+`
+
+type CreateBookmarkParams struct {
+	UserID int64
+	Url    string
+}
+
+func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, createBookmark, arg.UserID, arg.Url)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Url,
+		&i.Title,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const fetchBookmarksList = `-- name: FetchBookmarksList :many
 SELECT b.id, b.user_id, b.url, b.title, b.created_at, b.updated_at
   FROM bookmarks b
