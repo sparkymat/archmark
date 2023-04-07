@@ -27,7 +27,7 @@ INSERT INTO bookmarks (
   user_id, url
 ) VALUES (
   $1::bigint, $2::text
-) RETURNING id, user_id, url, title, created_at, updated_at
+) RETURNING id, user_id, url, title, html, file_path, status, created_at, updated_at
 `
 
 type CreateBookmarkParams struct {
@@ -43,6 +43,33 @@ func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) 
 		&i.UserID,
 		&i.Url,
 		&i.Title,
+		&i.Html,
+		&i.FilePath,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const fetchBookmarkByID = `-- name: FetchBookmarkByID :one
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at
+  FROM bookmarks b
+  WHERE b.id = $1::bigint
+  LIMIT 1
+`
+
+func (q *Queries) FetchBookmarkByID(ctx context.Context, id int64) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, fetchBookmarkByID, id)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Url,
+		&i.Title,
+		&i.Html,
+		&i.FilePath,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -50,7 +77,7 @@ func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) 
 }
 
 const fetchBookmarksList = `-- name: FetchBookmarksList :many
-SELECT b.id, b.user_id, b.url, b.title, b.created_at, b.updated_at
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at
   FROM bookmarks b
   WHERE b.user_id = $1::bigint
   ORDER BY b.created_at DESC
@@ -78,6 +105,9 @@ func (q *Queries) FetchBookmarksList(ctx context.Context, arg FetchBookmarksList
 			&i.UserID,
 			&i.Url,
 			&i.Title,
+			&i.Html,
+			&i.FilePath,
+			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -109,4 +139,20 @@ func (q *Queries) FetchUserByUsername(ctx context.Context, email string) (User, 
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const markBookmarkFetched = `-- name: MarkBookmarkFetched :exec
+UPDATE bookmarks
+  SET status = 'fetched' AND file_path = $1::text
+  WHERE id = $2::bigint
+`
+
+type MarkBookmarkFetchedParams struct {
+	FilePath string
+	ID       int64
+}
+
+func (q *Queries) MarkBookmarkFetched(ctx context.Context, arg MarkBookmarkFetchedParams) error {
+	_, err := q.db.Exec(ctx, markBookmarkFetched, arg.FilePath, arg.ID)
+	return err
 }

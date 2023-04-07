@@ -30,6 +30,17 @@ CREATE EXTENSION IF NOT EXISTS moddatetime WITH SCHEMA public;
 COMMENT ON EXTENSION moddatetime IS 'functions for tracking last modification time';
 
 
+--
+-- Name: bookmark_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.bookmark_status AS ENUM (
+    'pending',
+    'fetched',
+    'archived'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -43,6 +54,9 @@ CREATE TABLE public.bookmarks (
     user_id bigint NOT NULL,
     url text NOT NULL,
     title text,
+    html text,
+    file_path text,
+    status public.bookmark_status DEFAULT 'pending'::public.bookmark_status NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

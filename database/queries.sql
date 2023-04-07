@@ -22,3 +22,14 @@ INSERT INTO bookmarks (
 ) VALUES (
   @user_id::bigint, @url::text
 ) RETURNING *;
+
+-- name: FetchBookmarkByID :one
+SELECT b.*
+  FROM bookmarks b
+  WHERE b.id = @id::bigint
+  LIMIT 1;
+
+-- name: MarkBookmarkFetched :exec
+UPDATE bookmarks
+  SET status = 'fetched' AND file_path = @file_path::text
+  WHERE id = @id::bigint;

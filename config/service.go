@@ -32,6 +32,8 @@ type envValues struct {
 	DatabaseUsername string `env:"DATABASE_USERNAME"`
 	DatabasePassword string `env:"DATABASE_PASSWORD"`
 	DatabaseSSLMode  bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
+	DownloadPath     string `env:"DOWNLOAD_PATH,required"`
+	MonolithPath     string `env:"MONOLITH_PATH,required"`
 }
 
 func (s *Service) JWTSecret() string {
@@ -42,14 +44,14 @@ func (s *Service) SessionSecret() string {
 	return s.envValues.SessionSecret
 }
 
-func (c *Service) DatabaseURL() string {
+func (s *Service) DatabaseURL() string {
 	connString := "postgres://"
 
-	if c.envValues.DatabaseUsername != "" {
-		connString = fmt.Sprintf("%s%s", connString, c.envValues.DatabaseUsername)
+	if s.envValues.DatabaseUsername != "" {
+		connString = fmt.Sprintf("%s%s", connString, s.envValues.DatabaseUsername)
 
-		if c.envValues.DatabasePassword != "" {
-			encodedPassword := url.QueryEscape(c.envValues.DatabasePassword)
+		if s.envValues.DatabasePassword != "" {
+			encodedPassword := url.QueryEscape(s.envValues.DatabasePassword)
 			connString = fmt.Sprintf("%s:%s", connString, encodedPassword)
 		}
 
@@ -57,18 +59,26 @@ func (c *Service) DatabaseURL() string {
 	}
 
 	sslMode := "disable"
-	if c.envValues.DatabaseSSLMode {
+	if s.envValues.DatabaseSSLMode {
 		sslMode = "require"
 	}
 
 	connString = fmt.Sprintf(
 		"%s%s:%s/%s?sslmode=%s",
 		connString,
-		c.envValues.DatabaseHostname,
-		c.envValues.DatabasePort,
-		c.envValues.DatabaseName,
+		s.envValues.DatabaseHostname,
+		s.envValues.DatabasePort,
+		s.envValues.DatabaseName,
 		sslMode,
 	)
 
 	return connString
+}
+
+func (s *Service) DownloadPath() string {
+	return s.envValues.DownloadPath
+}
+
+func (s *Service) MonolithPath() string {
+	return s.envValues.MonolithPath
 }

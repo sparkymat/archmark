@@ -5,14 +5,63 @@
 package dbx
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type BookmarkStatus string
+
+const (
+	BookmarkStatusPending  BookmarkStatus = "pending"
+	BookmarkStatusFetched  BookmarkStatus = "fetched"
+	BookmarkStatusArchived BookmarkStatus = "archived"
+)
+
+func (e *BookmarkStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BookmarkStatus(s)
+	case string:
+		*e = BookmarkStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BookmarkStatus: %T", src)
+	}
+	return nil
+}
+
+type NullBookmarkStatus struct {
+	BookmarkStatus BookmarkStatus
+	Valid          bool // Valid is true if BookmarkStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBookmarkStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.BookmarkStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BookmarkStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBookmarkStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BookmarkStatus), nil
+}
 
 type Bookmark struct {
 	ID        int64
 	UserID    int64
 	Url       string
 	Title     pgtype.Text
+	Html      pgtype.Text
+	FilePath  pgtype.Text
+	Status    BookmarkStatus
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
