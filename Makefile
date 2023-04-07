@@ -13,6 +13,11 @@ start-worker:
 start-faktory:
 	docker run --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 
+archmark:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark archmark.go
+
+archmark-worker:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark-worker worker/cmd/archmark_worker.go
 
 db-migrate:
 	migrate -path ./migrations -database "postgres://localhost:5432/archmark?sslmode=disable" up
