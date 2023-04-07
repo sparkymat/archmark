@@ -9,6 +9,7 @@ import (
 
 func New() (*Service, error) {
 	var envValues envValues
+
 	err := env.Parse(&envValues)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config from env. err: %w", err)

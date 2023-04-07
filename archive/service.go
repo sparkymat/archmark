@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -27,10 +27,9 @@ func New() Service {
 	return Service{}
 }
 
-type Service struct {
-}
+type Service struct{}
 
-func (s *Service) FetchDetails(ctx context.Context, url string) (*ArchivedPage, error) {
+func (*Service) FetchDetails(ctx context.Context, url string) (*ArchivedPage, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request. err: %w", err)
@@ -45,7 +44,7 @@ func (s *Service) FetchDetails(ctx context.Context, url string) (*ArchivedPage, 
 
 	defer resp.Body.Close()
 
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body. err: %w", err)
 	}

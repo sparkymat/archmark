@@ -28,7 +28,7 @@ func Setup(e *echo.Echo, cfg ConfigService, db DatabaseService) {
 
 	app := e.Group("")
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "[${time_rfc3339}] Got ${method} on ${uri} from ${remote_ip}. Responded with ${status} in ${latency_human}.\n", //nolint:revive,lll
+		Format: "[${time_rfc3339}] Got ${method} on ${uri} from ${remote_ip}. Responded with ${status} in ${latency_human}.\n",
 	}))
 	app.Use(middleware.Recover())
 

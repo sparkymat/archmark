@@ -42,7 +42,7 @@ func BookmarksCreate(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 
 		presentedBookmark := presenter.BookmarkFromModel(bookmark)
 
-		return c.JSON(http.StatusCreated, presentedBookmark)
+		return c.JSON(http.StatusCreated, presentedBookmark) //nolint:wrapcheck
 	}
 }
 
