@@ -35,17 +35,38 @@ const BookmarksList = () => {
     );
   }, [dispatch, pageNumber, pageSize]);
 
-  const loading = useSelector(selectLoading);
+  // TODO: Add loading spinner
+  // const loading = useSelector(selectLoading);
   const bookmarks = useSelector(selectBookmarks);
 
   return (
-    <div>
+    <div className="uk-container">
       {bookmarks &&
-        bookmarks.map(b => (
-          <div>
-            <a className="uk-link-muted" href={b.url} target="_blank">
-              {b.title}
+        bookmarks.map((b, i) => (
+          <div className="uk-flex uk-flex-column uk-margin-bottom">
+            <a
+              className="uk-link-muted uk-text-large"
+              style={{ fontWeight: 300, color: 'black' }}
+              href={b.url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="uk-text-default">
+                {(pageNumber - 1) * pageSize + i + 1}.{' '}
+              </span>
+              <span>{b.title}</span>
             </a>
+            <div className="uk-flex uk-flex-row">
+              <a href="#" className="uk-link-muted">
+                cached
+              </a>
+              <span className="uk-margin-small-left uk-margin-small-right">
+                ⚬
+              </span>
+              <a href="#" className="uk-link-muted">
+                add to reading list
+              </a>
+            </div>
           </div>
         ))}
     </div>
