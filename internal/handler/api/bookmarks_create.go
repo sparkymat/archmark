@@ -1,8 +1,10 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
+	faktory "github.com/contribsys/faktory/client"
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/auth"
 	"github.com/sparkymat/archmark/dbx"
@@ -36,8 +38,26 @@ func BookmarksCreate(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
+		_ = queueDownloadJob(bookmark.ID)
+
 		presentedBookmark := presenter.BookmarkFromModel(bookmark)
 
 		return c.JSON(http.StatusCreated, presentedBookmark)
 	}
+}
+
+func queueDownloadJob(bookmarkID int64) error {
+	client, err := faktory.Open()
+	if err != nil {
+		return fmt.Errorf("failed to connect to faktory. err: %w", err)
+	}
+
+	job := faktory.NewJob("SaveWebPage", fmt.Sprintf("%d", bookmarkID))
+
+	err = client.Push(job)
+	if err != nil {
+		return fmt.Errorf("failed to queue job on Faktory. err: %w", err)
+	}
+
+	return nil
 }

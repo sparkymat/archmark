@@ -11,6 +11,7 @@ import (
 
 	worker "github.com/contribsys/faktory_worker_go"
 	"github.com/google/uuid"
+	"github.com/sparkymat/archmark/archive"
 	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/dbx"
@@ -24,6 +25,7 @@ const (
 type DatabaseService interface {
 	FetchBookmarkByID(ctx context.Context, id int64) (dbx.Bookmark, error)
 	MarkBookmarkFetched(ctx context.Context, arg dbx.MarkBookmarkFetchedParams) error
+	UpdateBookmarkDetails(ctx context.Context, arg dbx.UpdateBookmarkDetailsParams) error
 }
 
 type ConfigService interface {
@@ -69,7 +71,29 @@ func saveWebPage(cfg ConfigService, db DatabaseService) func(ctx context.Context
 			return nil
 		}
 
+		// FETCH DETAILS
+		archiver := archive.New()
+		pageInfo, err := archiver.FetchDetails(ctx, bookmark.Url)
+		if err != nil {
+			log.Printf("Failed to fetch page details for job %s\n", help.Jid())
+
+			return fmt.Errorf("failed to fetch page details. err: %w", err)
+		}
+
+		err = db.UpdateBookmarkDetails(ctx, dbx.UpdateBookmarkDetailsParams{
+			ID:    bookmark.ID,
+			Title: pageInfo.Title,
+			Html:  pageInfo.HTMLContent,
+		})
+		if err != nil {
+			log.Printf("Failed to update bookmark details for job %s\n", help.Jid())
+
+			return fmt.Errorf("failed to update bookmark details. err: %w", err)
+		}
+
+		// DOWNLOAD
 		fileName := strings.ReplaceAll(uuid.New().String(), "-", "")
+		fileName = fmt.Sprintf("%s.html", fileName)
 		filePath := filepath.Join(cfg.DownloadPath(), fileName)
 
 		if err = downloadPageWithMonolith(help.Jid(), cfg.MonolithPath(), bookmark.Url, filePath); err != nil {

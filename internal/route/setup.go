@@ -36,6 +36,7 @@ func Setup(e *echo.Echo, cfg ConfigService, db DatabaseService) {
 	app.Static("/css", "public/css")
 	app.Static("/images", "public/images")
 	app.Static("/fonts", "public/fonts")
+	app.Static("/uploads", cfg.DownloadPath())
 
 	app.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.SessionSecret()))))
 

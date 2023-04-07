@@ -8,6 +8,7 @@ import {
 import { AppDispatch } from '../../store';
 import fetchBookmarksList from '../../features/BookmarksList/fetchBookmarksList';
 import URLDisplay from '../URLDisplay';
+import moment from 'moment';
 
 const BookmarksList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -63,17 +64,23 @@ const BookmarksList = () => {
               {b.title ? <span>{b.title}</span> : <URLDisplay value={b.url} />}
             </a>
             <div className="uk-flex uk-flex-row">
+              <span>added {moment(b.created_at).toNow(true)} ago</span>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="#" className="uk-link-muted">
-                cached
-              </a>
-              <span className="uk-margin-small-left uk-margin-small-right">
-                ⚬
-              </span>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="#" className="uk-link-muted">
-                add to reading list
-              </a>
+              {b.file_path && (
+                <>
+                  <span className="uk-margin-small-left uk-margin-small-right">
+                    ⚬
+                  </span>
+                  <a
+                    href={`/uploads/${b.file_path}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="uk-link"
+                  >
+                    cached
+                  </a>
+                </>
+              )}
             </div>
           </div>
         ))}

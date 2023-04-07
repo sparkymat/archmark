@@ -3,6 +3,8 @@ module github.com/sparkymat/archmark
 go 1.20
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1 // indirect
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/caarlos0/env/v7 v7.1.0 // indirect
 	github.com/contribsys/faktory v1.6.0 // indirect
 	github.com/contribsys/faktory_worker_go v1.6.1 // indirect

@@ -171,7 +171,7 @@ func (q *Queries) FetchUserByUsername(ctx context.Context, email string) (User, 
 
 const markBookmarkFetched = `-- name: MarkBookmarkFetched :exec
 UPDATE bookmarks
-  SET status = 'fetched' AND file_path = $1::text
+  SET status = 'fetched', file_path = $1::text
   WHERE id = $2::bigint
 `
 
@@ -182,5 +182,22 @@ type MarkBookmarkFetchedParams struct {
 
 func (q *Queries) MarkBookmarkFetched(ctx context.Context, arg MarkBookmarkFetchedParams) error {
 	_, err := q.db.Exec(ctx, markBookmarkFetched, arg.FilePath, arg.ID)
+	return err
+}
+
+const updateBookmarkDetails = `-- name: UpdateBookmarkDetails :exec
+UPDATE bookmarks
+  SET title = $1::text, html = $2::text
+  WHERE id = $3::bigint
+`
+
+type UpdateBookmarkDetailsParams struct {
+	Title string
+	Html  string
+	ID    int64
+}
+
+func (q *Queries) UpdateBookmarkDetails(ctx context.Context, arg UpdateBookmarkDetailsParams) error {
+	_, err := q.db.Exec(ctx, updateBookmarkDetails, arg.Title, arg.Html, arg.ID)
 	return err
 }

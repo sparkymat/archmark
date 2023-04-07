@@ -29,9 +29,14 @@ SELECT b.*
   WHERE b.id = @id::bigint
   LIMIT 1;
 
+-- name: UpdateBookmarkDetails :exec
+UPDATE bookmarks
+  SET title = @title::text, html = @html::text
+  WHERE id = @id::bigint;
+
 -- name: MarkBookmarkFetched :exec
 UPDATE bookmarks
-  SET status = 'fetched' AND file_path = @file_path::text
+  SET status = 'fetched', file_path = @file_path::text
   WHERE id = @id::bigint;
 
 -- name: CreateUser :one
