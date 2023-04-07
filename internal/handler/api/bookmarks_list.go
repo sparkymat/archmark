@@ -26,12 +26,14 @@ func BookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 		}
 
 		pageSizeString := c.QueryParam("page_size")
+
 		pageSize, err := strconv.ParseInt(pageSizeString, 10, 32)
 		if err != nil {
 			return renderError(c, http.StatusBadRequest, "page_size was invalid", err)
 		}
 
 		pageNumberString := c.QueryParam("page_number")
+
 		pageNumber, err := strconv.ParseInt(pageNumberString, 10, 32)
 		if err != nil {
 			return renderError(c, http.StatusBadRequest, "page_number was invalid", err)
@@ -69,6 +71,6 @@ func BookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 			TotalCount: int(totalCount),
 		}
 
-		return c.JSON(http.StatusOK, response)
+		return c.JSON(http.StatusOK, response) //nolint:wrapcheck
 	}
 }

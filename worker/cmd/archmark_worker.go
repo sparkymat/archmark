@@ -33,6 +33,7 @@ type ConfigService interface {
 	MonolithPath() string
 }
 
+//nolint:funlen,revive
 func saveWebPage(cfg ConfigService, db DatabaseService) func(ctx context.Context, args ...interface{}) error {
 	return func(ctx context.Context, args ...interface{}) error {
 		help := worker.HelperFor(ctx)
@@ -73,6 +74,7 @@ func saveWebPage(cfg ConfigService, db DatabaseService) func(ctx context.Context
 
 		// FETCH DETAILS
 		archiver := archive.New()
+
 		pageInfo, err := archiver.FetchDetails(ctx, bookmark.Url)
 		if err != nil {
 			log.Printf("Failed to fetch page details for job %s\n", help.Jid())
@@ -135,7 +137,7 @@ func main() {
 	mgr.Register("SaveWebPage", saveWebPage(appConfig, db))
 	mgr.Concurrency = 5
 	mgr.ProcessStrictPriorityQueues("critical", "default")
-	mgr.Run()
+	mgr.Run() //nolint:errcheck
 }
 
 func downloadPageWithMonolith(jobID string, monolithPath, url, filePath string) error {
