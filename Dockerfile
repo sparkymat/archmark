@@ -1,8 +1,21 @@
-FROM golang:1.17-stretch
-COPY . /app
+FROM golang:1.20-alpine AS builder
+
+RUN apk update && apk add make
+
+COPY . /app/
+
 WORKDIR /app
-RUN make archmark-linux
-RUN mv archmark-linux /bin/archmark
+RUN go generate ./...
+RUN make archmark
+
+FROM alpine:3
+
+COPY --from=builder /app/archmark /bin/archmark
+
+WORKDIR /app
+COPY public /app/public
+COPY migrations /app/migrations
+
 ENV MONOLITH_PATH=/bin/monolith
-EXPOSE 8080
+
 CMD ["/bin/archmark"]

@@ -1,0 +1,14 @@
+CREATE EXTENSION moddatetime;
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    username TEXT UNIQUE,
+    name TEXT NOT NULL,
+    encrypted_password TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TRIGGER users_updated_at
+  BEFORE UPDATE
+  ON users
+  FOR EACH ROW
+    EXECUTE FUNCTION moddatetime(updated_at);

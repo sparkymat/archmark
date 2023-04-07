@@ -1,59 +1,54 @@
 package database
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-
-	// Importing file driver for migrations.
-	_ "github.com/golang-migrate/migrate/v4/source/file"
-	_ "github.com/jackc/pgx/v4"
-	"github.com/jmoiron/sqlx"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres" // importing postgres driver
+	_ "github.com/golang-migrate/migrate/v4/source/file"       // importing filesystem driver
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var ErrNotFound = errors.New("not found")
-
-const BcryptDefaultCost = 10
-
-type Config struct {
-	ConnectionString string
-}
-
-func New(cfg Config) *Service {
-	dbConn, err := sqlx.Connect("postgres", cfg.ConnectionString)
+func New(connectionString string) (*Service, error) {
+	config, err := pgxpool.ParseConfig(connectionString)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("failed to parse pg conn. err: %w", err)
 	}
 
-	err = dbConn.Ping()
+	config.MinConns = 4
+	config.MaxConns = 100
+
+	dbConn, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("failed to connect to pg. err: %w", err)
+	}
+
+	err = dbConn.Ping(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("failed to ping pg. err: %w", err)
 	}
 
 	return &Service{
-		conn: dbConn,
-	}
+		conn:             dbConn,
+		connectionString: connectionString,
+	}, nil
 }
 
 type Service struct {
-	conn *sqlx.DB
+	conn             *pgxpool.Pool
+	connectionString string
+}
+
+func (s *Service) DB() *pgxpool.Pool {
+	return s.conn
 }
 
 func (s *Service) AutoMigrate() error {
-	driver, err := postgres.WithInstance(s.conn.DB, &postgres.Config{})
+	m, err := migrate.New("file://./migrations", s.connectionString)
 	if err != nil {
-		return fmt.Errorf("failed to create postgres driver. err: %w", err)
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://./migrations",
-		"postgres",
-		driver,
-	)
-	if err != nil {
-		return fmt.Errorf("failed to create migration driver. err: %w", err)
+		return err //nolint:wrapcheck
 	}
 
 	err = m.Up()

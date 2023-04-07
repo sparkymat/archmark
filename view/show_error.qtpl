@@ -1,7 +1,0 @@
-{% func ShowError(message string) %}
-  <div class="container mx-auto">
-    <div class="flex flex-col items-center mt-16">
-      <p class="border border-dashed border-gray-400 py-4 px-8 text-xl text-red-600">{%s message %}</p>
-    </div>
-  </div>
-{% endfunc %}

@@ -2,81 +2,83 @@ package config
 
 import (
 	"fmt"
-	"strings"
+	"net/url"
 
-	"github.com/caarlos0/env/v6"
-	"github.com/sparkymat/archmark/localize"
+	"github.com/caarlos0/env/v7"
 )
 
-func New() *Service {
-	envConfig := envConfig{}
-	if err := env.Parse(&envConfig); err != nil {
-		panic(err)
+func New() (*Service, error) {
+	var envValues envValues
+	err := env.Parse(&envValues)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load config from env. err: %w", err)
 	}
 
 	return &Service{
-		envConfig: envConfig,
-	}
+		envValues: envValues,
+	}, nil
 }
 
 type Service struct {
-	envConfig envConfig
+	envValues envValues
 }
 
-func (s *Service) AdminPassword() string {
-	return s.envConfig.AdminPassword
+type envValues struct {
+	JWTSecret        string `env:"JWT_SECRET,required"`
+	SessionSecret    string `env:"SESSION_SECRET,required"`
+	DatabaseName     string `env:"DATABASE_NAME,required"`
+	DatabaseHostname string `env:"DATABASE_HOSTNAME,required"`
+	DatabasePort     string `env:"DATABASE_PORT,required"`
+	DatabaseUsername string `env:"DATABASE_USERNAME"`
+	DatabasePassword string `env:"DATABASE_PASSWORD"`
+	DatabaseSSLMode  bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
+	DownloadPath     string `env:"DOWNLOAD_PATH,required"`
+	MonolithPath     string `env:"MONOLITH_PATH,required"`
 }
 
-func (s *Service) DBConnectionString() string {
-	connFragments := []string{
-		fmt.Sprintf("host=%s", s.envConfig.DBHostname),
-		fmt.Sprintf("port=%d", s.envConfig.DBPort),
-		fmt.Sprintf("dbname=%s", s.envConfig.DBDatabase),
-	}
-
-	if s.envConfig.DBSSLMode {
-		connFragments = append(connFragments, "sslmode=require")
-	} else {
-		connFragments = append(connFragments, "sslmode=disable")
-	}
-
-	if s.envConfig.DBUsername != "" {
-		connFragments = append(connFragments, fmt.Sprintf("user=%s", s.envConfig.DBUsername))
-	}
-
-	if s.envConfig.DBPassword != "" {
-		connFragments = append(connFragments, fmt.Sprintf("password=%s", s.envConfig.DBPassword))
-	}
-
-	return strings.Join(connFragments, " ")
+func (s *Service) JWTSecret() string {
+	return s.envValues.JWTSecret
 }
 
-func (s *Service) MonolithPath() string {
-	return s.envConfig.MonolithPath
+func (s *Service) SessionSecret() string {
+	return s.envValues.SessionSecret
+}
+
+func (s *Service) DatabaseURL() string {
+	connString := "postgres://"
+
+	if s.envValues.DatabaseUsername != "" {
+		connString = fmt.Sprintf("%s%s", connString, s.envValues.DatabaseUsername)
+
+		if s.envValues.DatabasePassword != "" {
+			encodedPassword := url.QueryEscape(s.envValues.DatabasePassword)
+			connString = fmt.Sprintf("%s:%s", connString, encodedPassword)
+		}
+
+		connString = fmt.Sprintf("%s@", connString)
+	}
+
+	sslMode := "disable"
+	if s.envValues.DatabaseSSLMode {
+		sslMode = "require"
+	}
+
+	connString = fmt.Sprintf(
+		"%s%s:%s/%s?sslmode=%s",
+		connString,
+		s.envValues.DatabaseHostname,
+		s.envValues.DatabasePort,
+		s.envValues.DatabaseName,
+		sslMode,
+	)
+
+	return connString
 }
 
 func (s *Service) DownloadPath() string {
-	return s.envConfig.DownloadPath
+	return s.envValues.DownloadPath
 }
 
-func (s *Service) DefaultLanguage() localize.Language {
-	return localize.LanguageFromString(s.envConfig.DefaultLanguage)
-}
-
-func (s *Service) DefaultTheme() string {
-	return s.envConfig.DefaultTheme
-}
-
-type envConfig struct {
-	DBHostname      string `env:"DB_HOSTNAME,required"`
-	DBPort          int64  `env:"DB_PORT,required"`
-	DBUsername      string `env:"DB_USERNAME"`
-	DBPassword      string `env:"DB_PASSWORD"`
-	DBDatabase      string `env:"DB_DATABASE,required"`
-	DBSSLMode       bool   `env:"DB_SSL_MODE"`
-	AdminPassword   string `env:"ADMIN_PASSWORD,required"`
-	MonolithPath    string `env:"MONOLITH_PATH,required"`
-	DownloadPath    string `env:"DOWNLOAD_PATH,required"`
-	DefaultLanguage string `env:"DEFAULT_LANGUAGE"`
-	DefaultTheme    string `env:"DEFAULT_THEME"`
+func (s *Service) MonolithPath() string {
+	return s.envValues.MonolithPath
 }

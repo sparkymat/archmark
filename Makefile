@@ -1,16 +1,31 @@
-all: archmark-linux archmark-worker-linux
+start-app:
+	# Install reflex with 'go install github.com/cespare/reflex@latest'
+	# Install godotenv with 'go install github.com/joho/godotenv/cmd/godotenv@latest'
+	reflex -s -r '\.go$$' -- godotenv -f .env go run archmark.go
 
-archmark-linux: archmark.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark-linux archmark.go
+start-view:
+	# Install reflex with 'go install github.com/cespare/reflex@latest'
+	reflex -r '\.qtpl$$' -- qtc -dir=view
 
-archmark-worker-linux: worker/cmd/archmark_worker.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark-worker-linux worker/cmd/archmark_worker.go
+start-worker:
+	reflex -s -r '\.go$$' -- godotenv -f .env go run worker/cmd/archmark_worker.go
 
-docker: archmark-linux
-	docker build . -t sparkymat/archmark
+start-faktory:
+	docker run --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 
-docker-worker: archmark-worker-linux
-	docker build . -f Dockerfile_worker -t sparkymat/archmark-worker
+archmark:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark archmark.go
 
-clean:
-	rm -rf archmark-linux archmark-worker-linux
+archmark-worker:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s -w -extldflags "-static"' -o archmark-worker worker/cmd/archmark_worker.go
+
+db-migrate:
+	migrate -path ./migrations -database "postgres://localhost:5432/archmark?sslmode=disable" up
+
+db-schema-dump:
+	pg_dump --schema-only -O archmark > database/schema.sql
+
+sqlc-gen:
+	sqlc --experimental generate
+
+.PHONY: start-app start-view db-migrate db-schema-dump sqlc-gen

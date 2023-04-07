@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -20,33 +18,19 @@ var (
 
 const okStatusPrefix = 2
 
-type Config struct {
-	DownloadFolder string
-}
-
 type ArchivedPage struct {
 	Title       string
 	HTMLContent string
-	FilePath    string
 }
 
-func New(cfg Config) Service {
-	return Service{
-		config: cfg,
-	}
+func New() Service {
+	return Service{}
 }
 
 type Service struct {
-	config Config
 }
 
-func (s *Service) FetchDetails(ctx context.Context, url string, fileName string) (*ArchivedPage, error) {
-	// Check if file already exists
-	filePath := filepath.Join(s.config.DownloadFolder, fileName)
-	if _, err := os.Stat(filePath); err == nil || !os.IsNotExist(err) {
-		return nil, ErrUnableToCreateFile
-	}
-
+func (s *Service) FetchDetails(ctx context.Context, url string) (*ArchivedPage, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request. err: %w", err)
@@ -81,7 +65,7 @@ func (s *Service) FetchDetails(ctx context.Context, url string, fileName string)
 	title := doc.Find("title").Text()
 
 	// Try and extract body text
-	doc.Find("script").Each(func(i int, el *goquery.Selection) {
+	doc.Find("script").Each(func(_ int, el *goquery.Selection) {
 		el.Remove()
 	})
 
@@ -89,25 +73,7 @@ func (s *Service) FetchDetails(ctx context.Context, url string, fileName string)
 	page := &ArchivedPage{
 		Title:       title,
 		HTMLContent: bodyText,
-		FilePath:    filePath,
 	}
 
 	return page, nil
-}
-
-func (s *Service) RemoveArchiveFile(_ context.Context, fileName string) error {
-	filePath := filepath.Join(s.config.DownloadFolder, fileName)
-	if _, err := os.Stat(filePath); err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-
-		return fmt.Errorf("failed to stat file. err: %w", err)
-	}
-
-	if err := os.Remove(filePath); err != nil {
-		return fmt.Errorf("failed to remove file. err: %w", err)
-	}
-
-	return nil
 }

@@ -1,9 +1,18 @@
-FROM golang:1.17-stretch
-COPY . /app
+FROM golang:1.20-alpine AS builder
+
+RUN apk update && apk add make
+
+COPY . /app/
+
 WORKDIR /app
-RUN make archmark-worker-linux
-RUN mv archmark-worker-linux /bin/archmark-worker
-RUN wget https://github.com/Y2Z/monolith/releases/download/v2.6.1/monolith-gnu-linux-x86_64 -O /bin/monolith
+RUN make archmark-worker
+
+FROM alpine:3
+
+COPY --from=builder /app/archmark-worker /bin/archmark-worker
+
+RUN wget https://github.com/Y2Z/monolith/releases/download/v2.7.0/monolith-gnu-linux-x86_64 -o /bin/monolith
 RUN chmod 0755 /bin/monolith
 ENV MONOLITH_PATH=/bin/monolith
+
 CMD ["/bin/archmark-worker"]
