@@ -52,6 +52,34 @@ func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) 
 	return i, err
 }
 
+const createUser = `-- name: CreateUser :one
+INSERT INTO users (
+  name, username, encrypted_password
+) VALUES (
+  $1::text, $2::text, $3::text
+) RETURNING id, username, name, encrypted_password, created_at, updated_at
+`
+
+type CreateUserParams struct {
+	Name              string
+	Username          string
+	EncryptedPassword string
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser, arg.Name, arg.Username, arg.EncryptedPassword)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Name,
+		&i.EncryptedPassword,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const fetchBookmarkByID = `-- name: FetchBookmarkByID :one
 SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at
   FROM bookmarks b

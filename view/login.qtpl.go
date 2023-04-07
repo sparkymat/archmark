@@ -59,34 +59,37 @@ func StreamLogin(qw422016 *qt422016.Writer, csrfToken string, username string, e
 //line view/login.qtpl:18
 	qw422016.N().S(`
       </form>
+      <div class="uk-flex uk-flex-row uk-flex-center">
+        <a class="uk-link-muted" href="/register">register new user</a>
+      </div>
     </div>
   </div>
 `)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 }
 
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 func WriteLogin(qq422016 qtio422016.Writer, csrfToken string, username string, errorMessage string) {
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	StreamLogin(qw422016, csrfToken, username, errorMessage)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	qt422016.ReleaseWriter(qw422016)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 }
 
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 func Login(csrfToken string, username string, errorMessage string) string {
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	WriteLogin(qb422016, csrfToken, username, errorMessage)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	qs422016 := string(qb422016.B)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 	return qs422016
-//line view/login.qtpl:22
+//line view/login.qtpl:25
 }

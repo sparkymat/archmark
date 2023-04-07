@@ -33,3 +33,10 @@ SELECT b.*
 UPDATE bookmarks
   SET status = 'fetched' AND file_path = @file_path::text
   WHERE id = @id::bigint;
+
+-- name: CreateUser :one
+INSERT INTO users (
+  name, username, encrypted_password
+) VALUES (
+  @name::text, @username::text, @encrypted_password::text
+) RETURNING *;
