@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   selectBookmarks,
-  selectLoading,
   selectPageSize,
 } from '../../features/BookmarksList/selects';
 import { AppDispatch } from '../../store';
@@ -57,12 +56,14 @@ const BookmarksList = () => {
               <span>{b.title}</span>
             </a>
             <div className="uk-flex uk-flex-row">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a href="#" className="uk-link-muted">
                 cached
               </a>
               <span className="uk-margin-small-left uk-margin-small-right">
                 ⚬
               </span>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a href="#" className="uk-link-muted">
                 add to reading list
               </a>
