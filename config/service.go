@@ -25,17 +25,20 @@ type Service struct {
 }
 
 type envValues struct {
-	JWTSecret           string `env:"JWT_SECRET,required"`
-	SessionSecret       string `env:"SESSION_SECRET,required"`
-	DatabaseName        string `env:"DATABASE_NAME,required"`
-	DatabaseHostname    string `env:"DATABASE_HOSTNAME,required"`
-	DatabasePort        string `env:"DATABASE_PORT,required"`
-	DatabaseUsername    string `env:"DATABASE_USERNAME"`
-	DatabasePassword    string `env:"DATABASE_PASSWORD"`
-	DatabaseSSLMode     bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
-	DisableRegistration bool   `env:"DISABLE_REGISTRATION" envDefault:"false"`
-	DownloadPath        string `env:"DOWNLOAD_PATH,required"`
-	MonolithPath        string `env:"MONOLITH_PATH,required"`
+	JWTSecret                  string `env:"JWT_SECRET,required"`
+	SessionSecret              string `env:"SESSION_SECRET,required"`
+	DatabaseName               string `env:"DATABASE_NAME,required"`
+	DatabaseHostname           string `env:"DATABASE_HOSTNAME,required"`
+	DatabasePort               string `env:"DATABASE_PORT,required"`
+	DatabaseUsername           string `env:"DATABASE_USERNAME"`
+	DatabasePassword           string `env:"DATABASE_PASSWORD"`
+	DatabaseSSLMode            bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
+	DisableRegistration        bool   `env:"DISABLE_REGISTRATION" envDefault:"false"`
+	DownloadPath               string `env:"DOWNLOAD_PATH,required"`
+	MonolithPath               string `env:"MONOLITH_PATH,required"`
+	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
+	ProxyAuthUsernameHeader    string `env:"PROXY_AUTH_USERNAME_HEADER" envDefault:"Remote-User"`
+	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER" envDefault:"Remote-Name"`
 }
 
 func (s *Service) JWTSecret() string {
@@ -87,4 +90,16 @@ func (s *Service) MonolithPath() string {
 
 func (s *Service) DisableRegistration() bool {
 	return s.envValues.DisableRegistration
+}
+
+func (s *Service) ReverseProxyAuthentication() bool {
+	return s.envValues.ReverseProxyAuthentication
+}
+
+func (s *Service) ProxyAuthUsernameHeader() string {
+	return s.envValues.ProxyAuthUsernameHeader
+}
+
+func (s *Service) ProxyAuthNameHeader() string {
+	return s.envValues.ProxyAuthNameHeader
 }
