@@ -11,6 +11,8 @@ FROM debian:buster
 
 COPY --from=builder /app/archmark-worker /bin/archmark-worker
 
+RUN apt update && apt install -y wget
+
 RUN wget https://github.com/Y2Z/monolith/releases/download/v2.7.0/monolith-gnu-linux-x86_64 -O /bin/monolith
 RUN chmod 0755 /bin/monolith
 ENV MONOLITH_PATH=/bin/monolith
