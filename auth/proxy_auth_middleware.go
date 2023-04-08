@@ -19,7 +19,7 @@ func ProxyAuthMiddleware(cfg ConfigService, db DatabaseService) echo.MiddlewareF
 
 			username := c.Request().Header.Get(cfg.ProxyAuthUsernameHeader())
 			if username == "" {
-				return c.String(http.StatusUnauthorized, "user header missing")
+				return c.String(http.StatusUnauthorized, "user header missing") //nolint:wrapcheck
 			}
 
 			user, err := db.FetchUserByUsername(c.Request().Context(), username)
@@ -33,7 +33,7 @@ func ProxyAuthMiddleware(cfg ConfigService, db DatabaseService) echo.MiddlewareF
 
 			encryptedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(password), defaultBcryptCost)
 			if err != nil {
-				return c.String(http.StatusUnauthorized, "failed to generate password")
+				return c.String(http.StatusUnauthorized, "failed to generate password") //nolint:wrapcheck
 			}
 
 			user, err = db.CreateUser(c.Request().Context(), dbx.CreateUserParams{
@@ -42,7 +42,7 @@ func ProxyAuthMiddleware(cfg ConfigService, db DatabaseService) echo.MiddlewareF
 				EncryptedPassword: string(encryptedPasswordBytes),
 			})
 			if err != nil {
-				return c.String(http.StatusUnauthorized, "failed to add new user")
+				return c.String(http.StatusUnauthorized, "failed to add new user") //nolint:wrapcheck
 			}
 
 			c.Set(UserKey, user)
