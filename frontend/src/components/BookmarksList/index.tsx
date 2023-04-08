@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 import {
   selectBookmarks,
   selectPageSize,
+  selectTotalCount,
 } from '../../features/BookmarksList/selects';
 import { AppDispatch } from '../../store';
 import fetchBookmarksList from '../../features/BookmarksList/fetchBookmarksList';
 import URLDisplay from '../URLDisplay';
-import moment from 'moment';
+import Paginator from '../Paginatior';
 
 const BookmarksList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +28,7 @@ const BookmarksList = () => {
   }
 
   const pageSize = useSelector(selectPageSize);
+  const totalCount = useSelector(selectTotalCount);
 
   useEffect(() => {
     dispatch(
@@ -84,6 +87,15 @@ const BookmarksList = () => {
             </div>
           </div>
         ))}
+      {bookmarks && (
+        <div className="uk-flex uk-flex-row uk-flex-center uk-margin-bottom">
+          <Paginator
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            totalCount={totalCount}
+          />
+        </div>
+      )}
     </div>
   );
 };
