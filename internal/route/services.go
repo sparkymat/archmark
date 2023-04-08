@@ -12,6 +12,9 @@ type ConfigService interface {
 	DatabaseURL() string
 	DisableRegistration() bool
 	DownloadPath() string
+	ReverseProxyAuthentication() bool
+	ProxyAuthUsernameHeader() string
+	ProxyAuthNameHeader() string
 }
 
 type DatabaseService interface {

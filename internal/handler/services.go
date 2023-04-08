@@ -10,6 +10,8 @@ type ConfigService interface {
 	JWTSecret() string
 	SessionSecret() string
 	DisableRegistration() bool
+	ProxyAuthUsernameHeader() string
+	ProxyAuthNameHeader() string
 }
 
 type DatabaseService interface {

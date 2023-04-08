@@ -22,10 +22,13 @@ var ErrTokenMissing = errors.New("token missing")
 
 type ConfigService interface {
 	JWTSecret() string
+	ProxyAuthUsernameHeader() string
+	ProxyAuthNameHeader() string
 }
 
 type DatabaseService interface {
 	FetchUserByUsername(ctx context.Context, username string) (dbx.User, error)
+	CreateUser(ctx context.Context, arg dbx.CreateUserParams) (dbx.User, error)
 }
 
 const ClientNameKey = "client_name"
