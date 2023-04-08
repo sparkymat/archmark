@@ -18,7 +18,7 @@ var (
 )
 
 //line view/login.qtpl:1
-func StreamLogin(qw422016 *qt422016.Writer, csrfToken string, username string, errorMessage string) {
+func StreamLogin(qw422016 *qt422016.Writer, disableRegistration bool, csrfToken string, username string, errorMessage string) {
 //line view/login.qtpl:1
 	qw422016.N().S(`
   <div class="uk-container">
@@ -59,37 +59,47 @@ func StreamLogin(qw422016 *qt422016.Writer, csrfToken string, username string, e
 //line view/login.qtpl:18
 	qw422016.N().S(`
       </form>
-      <div class="uk-flex uk-flex-row uk-flex-center">
-        <a class="uk-link-muted" href="/register">register new user</a>
-      </div>
+      `)
+//line view/login.qtpl:20
+	if !disableRegistration {
+//line view/login.qtpl:20
+		qw422016.N().S(`
+        <div class="uk-flex uk-flex-row uk-flex-center">
+          <a class="uk-link-muted" href="/register">register new user</a>
+        </div>
+      `)
+//line view/login.qtpl:24
+	}
+//line view/login.qtpl:24
+	qw422016.N().S(`
     </div>
   </div>
 `)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
 }
 
-//line view/login.qtpl:25
-func WriteLogin(qq422016 qtio422016.Writer, csrfToken string, username string, errorMessage string) {
-//line view/login.qtpl:25
+//line view/login.qtpl:27
+func WriteLogin(qq422016 qtio422016.Writer, disableRegistration bool, csrfToken string, username string, errorMessage string) {
+//line view/login.qtpl:27
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/login.qtpl:25
-	StreamLogin(qw422016, csrfToken, username, errorMessage)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
+	StreamLogin(qw422016, disableRegistration, csrfToken, username, errorMessage)
+//line view/login.qtpl:27
 	qt422016.ReleaseWriter(qw422016)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
 }
 
-//line view/login.qtpl:25
-func Login(csrfToken string, username string, errorMessage string) string {
-//line view/login.qtpl:25
+//line view/login.qtpl:27
+func Login(disableRegistration bool, csrfToken string, username string, errorMessage string) string {
+//line view/login.qtpl:27
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/login.qtpl:25
-	WriteLogin(qb422016, csrfToken, username, errorMessage)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
+	WriteLogin(qb422016, disableRegistration, csrfToken, username, errorMessage)
+//line view/login.qtpl:27
 	qs422016 := string(qb422016.B)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/login.qtpl:25
+//line view/login.qtpl:27
 	return qs422016
-//line view/login.qtpl:25
+//line view/login.qtpl:27
 }

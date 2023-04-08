@@ -10,6 +10,7 @@ type ConfigService interface {
 	JWTSecret() string
 	SessionSecret() string
 	DatabaseURL() string
+	DisableRegistration() bool
 	DownloadPath() string
 }
 

@@ -25,16 +25,17 @@ type Service struct {
 }
 
 type envValues struct {
-	JWTSecret        string `env:"JWT_SECRET,required"`
-	SessionSecret    string `env:"SESSION_SECRET,required"`
-	DatabaseName     string `env:"DATABASE_NAME,required"`
-	DatabaseHostname string `env:"DATABASE_HOSTNAME,required"`
-	DatabasePort     string `env:"DATABASE_PORT,required"`
-	DatabaseUsername string `env:"DATABASE_USERNAME"`
-	DatabasePassword string `env:"DATABASE_PASSWORD"`
-	DatabaseSSLMode  bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
-	DownloadPath     string `env:"DOWNLOAD_PATH,required"`
-	MonolithPath     string `env:"MONOLITH_PATH,required"`
+	JWTSecret           string `env:"JWT_SECRET,required"`
+	SessionSecret       string `env:"SESSION_SECRET,required"`
+	DatabaseName        string `env:"DATABASE_NAME,required"`
+	DatabaseHostname    string `env:"DATABASE_HOSTNAME,required"`
+	DatabasePort        string `env:"DATABASE_PORT,required"`
+	DatabaseUsername    string `env:"DATABASE_USERNAME"`
+	DatabasePassword    string `env:"DATABASE_PASSWORD"`
+	DatabaseSSLMode     bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
+	DisableRegistration bool   `env:"DISABLE_REGISTRATION" envDefault:"false"`
+	DownloadPath        string `env:"DOWNLOAD_PATH,required"`
+	MonolithPath        string `env:"MONOLITH_PATH,required"`
 }
 
 func (s *Service) JWTSecret() string {
@@ -82,4 +83,8 @@ func (s *Service) DownloadPath() string {
 
 func (s *Service) MonolithPath() string {
 	return s.envValues.MonolithPath
+}
+
+func (s *Service) DisableRegistration() bool {
+	return s.envValues.DisableRegistration
 }

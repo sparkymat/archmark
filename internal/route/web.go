@@ -16,8 +16,11 @@ func registerWebRoutes(app *echo.Group, cfg ConfigService, db DatabaseService) {
 
 	webApp.GET("/login", handler.Login(cfg, db))
 	webApp.POST("/login", handler.DoLogin(cfg, db))
-	webApp.GET("/register", handler.Register(cfg, db))
-	webApp.POST("/register", handler.DoRegister(cfg, db))
+
+	if !cfg.DisableRegistration() {
+		webApp.GET("/register", handler.Register(cfg, db))
+		webApp.POST("/register", handler.DoRegister(cfg, db))
+	}
 
 	authenticatedWebApp := webApp.Group("")
 	authenticatedWebApp.Use(auth.Middleware(cfg, db))
