@@ -7,7 +7,7 @@ COPY . /app/
 WORKDIR /app
 RUN make archmark-worker
 
-FROM alpine:3
+FROM debian:buster
 
 COPY --from=builder /app/archmark-worker /bin/archmark-worker
 
