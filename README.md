@@ -34,7 +34,9 @@ N.B: Everything in the download folder (configured using `DOWNLOAD_FOLDER`) will
 
 Both the app and the worker are configured using environment variables.
 
-| Variable                  | Description                                                    |
-| ------------------------- | -------------------------------------------------------------- |
-| `DISABLE_REGISTRATION`    | Set to 'true' if you want to disable registrations             |
-
+| Variable                       | Description                                                                 |
+| ------------------------------ | ----------------------------------------------------------------------------|
+| `DISABLE_REGISTRATION`         | Set to 'true' if you want to disable registrations                          |
+| `REVERSE_PROXY_AUTHENTICATION` | Enables reverse proxy authentication via forwarded headers                  |
+| `PROXY_AUTH_USERNAME_HEADER`   | The request header where proxy passes the usernamae. Default: `Remote-User` |
+| `PROXY_AUTH_NAME_HEADER`       | The request header where proxy passes the full name. Default: `Remote-Name` |
