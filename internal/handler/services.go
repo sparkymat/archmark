@@ -9,6 +9,7 @@ import (
 type ConfigService interface {
 	JWTSecret() string
 	SessionSecret() string
+	DisableRegistration() bool
 }
 
 type DatabaseService interface {
