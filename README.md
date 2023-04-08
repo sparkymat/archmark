@@ -34,7 +34,7 @@ N.B: Everything in the download folder (configured using `DOWNLOAD_FOLDER`) will
 
 Both the app and the worker are configured using environment variables.
 
-| Variable           | Description                                                    |
-| ------------------ | -------------------------------------------------------------- |
-| `DOWNLOAD_PATH`    | Full path to the folder where archived pages are to be stored  |
+| Variable                  | Description                                                    |
+| ------------------------- | -------------------------------------------------------------- |
+| `DISABLE_REGISTRATION`    | Set to 'true' if you want to disable registrations             |
 
