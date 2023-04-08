@@ -23,7 +23,12 @@ func registerWebRoutes(app *echo.Group, cfg ConfigService, db DatabaseService) {
 	}
 
 	authenticatedWebApp := webApp.Group("")
-	authenticatedWebApp.Use(auth.Middleware(cfg, db))
+
+	if cfg.ReverseProxyAuthentication() {
+		authenticatedWebApp.Use(auth.ProxyAuthMiddleware(cfg, db))
+	} else {
+		authenticatedWebApp.Use(auth.Middleware(cfg, db))
+	}
 
 	authenticatedWebApp.GET("/", handler.Home())
 }

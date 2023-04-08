@@ -9,7 +9,12 @@ import (
 
 func registerAPIRoutes(app *echo.Group, cfg ConfigService, db DatabaseService) {
 	apiGroup := app.Group("api")
-	apiGroup.Use(auth.APIMiddleware(cfg, db))
+
+	if cfg.ReverseProxyAuthentication() {
+		apiGroup.Use(auth.ProxyAuthMiddleware(cfg, db))
+	} else {
+		apiGroup.Use(auth.APIMiddleware(cfg, db))
+	}
 
 	apiGroup.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "header:X-CSRF-Token",
