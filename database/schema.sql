@@ -58,7 +58,8 @@ CREATE TABLE public.bookmarks (
     file_path text,
     status public.bookmark_status DEFAULT 'pending'::public.bookmark_status NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    html_ts tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, html)) STORED
 );
 
 
@@ -168,6 +169,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: html_ts_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX html_ts_idx ON public.bookmarks USING gin (html_ts);
 
 
 --
