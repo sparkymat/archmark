@@ -33,6 +33,7 @@ const slice = createSlice({
     builder.addCase(createBookmark.rejected, (state, action) => {
       state.loading = false;
       state.errorMessage = (action.payload as ErrorResponse).error;
+      state.showError = true;
     });
   },
 });

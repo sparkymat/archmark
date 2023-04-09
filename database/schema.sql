@@ -171,6 +171,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: html_ts_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX html_ts_idx ON public.bookmarks USING gin (html_ts);
+
+
+--
 -- Name: bookmarks bookmarks_updated_at; Type: TRIGGER; Schema: public; Owner: -
 --
 

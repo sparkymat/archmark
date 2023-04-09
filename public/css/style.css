@@ -34,8 +34,9 @@ p {
   color: #aaaaaa;
 }
 
-.uk-link, .uk-link:hover {
+.uk-link, .uk-link:hover, a:hover {
   color: #33669a;
+  text-decoration: none;
 }
 
 /* cyrillic-ext */

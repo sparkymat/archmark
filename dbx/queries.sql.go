@@ -22,6 +22,24 @@ func (q *Queries) CountBookmarksList(ctx context.Context, userID int64) (int64, 
 	return count, err
 }
 
+const countBookmarksSearchResults = `-- name: CountBookmarksSearchResults :one
+SELECT COUNT(*)
+  FROM bookmarks b
+  WHERE b.user_id = $1::bigint AND b.html_ts @@ to_tsquery('english', $2::text)
+`
+
+type CountBookmarksSearchResultsParams struct {
+	UserID int64
+	Query  string
+}
+
+func (q *Queries) CountBookmarksSearchResults(ctx context.Context, arg CountBookmarksSearchResultsParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countBookmarksSearchResults, arg.UserID, arg.Query)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createBookmark = `-- name: CreateBookmark :one
 INSERT INTO bookmarks (
   user_id, url
@@ -183,6 +201,56 @@ type MarkBookmarkFetchedParams struct {
 func (q *Queries) MarkBookmarkFetched(ctx context.Context, arg MarkBookmarkFetchedParams) error {
 	_, err := q.db.Exec(ctx, markBookmarkFetched, arg.FilePath, arg.ID)
 	return err
+}
+
+const searchBookmarks = `-- name: SearchBookmarks :many
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at
+  FROM bookmarks b
+  WHERE b.user_id = $1::bigint AND b.html_ts @@ to_tsquery('english', $2::text)
+  LIMIT $4::int
+  OFFSET $3::int
+`
+
+type SearchBookmarksParams struct {
+	UserID     int64
+	Query      string
+	PageOffset int32
+	PageLimit  int32
+}
+
+func (q *Queries) SearchBookmarks(ctx context.Context, arg SearchBookmarksParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, searchBookmarks,
+		arg.UserID,
+		arg.Query,
+		arg.PageOffset,
+		arg.PageLimit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Url,
+			&i.Title,
+			&i.Html,
+			&i.FilePath,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateBookmarkDetails = `-- name: UpdateBookmarkDetails :exec
