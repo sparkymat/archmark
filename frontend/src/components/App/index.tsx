@@ -1,25 +1,38 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import BookmarksList from '../BookmarksList';
+import Home from '../Home';
 import NewBookmark from '../NewBookmark';
+import Search from '../Search';
 
 const App = () => (
   <div>
     <div className="uk-padding-small uk-flex uk-flex-row uk-flex-center">
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <p className="uk-text-muted uk-text-lead uk-margin-remove">archmark</p>
+    </div>
+    <div className="uk-flex uk-flex-row uk-flex-center">
       <a
-        className="uk-link-muted uk-text-large"
-        style={{ textDecoration: 'none', borderBottom: '1px dashed #999999' }}
-        href="/#/"
+        className="uk-link-muted"
+        style={{ borderBottom: '1px dashed #999999' }}
+        href="/"
       >
-        archmark
+        Home
+      </a>
+      <a
+        className="uk-link-muted uk-margin-left"
+        style={{ borderBottom: '1px dashed #999999' }}
+        href="/#/search"
+      >
+        Search
       </a>
     </div>
     <Routes>
-      <Route index element={<BookmarksList />} />
-      <Route path="/page/:page" element={<BookmarksList />} />
+      <Route index element={<Home />} />
+      <Route path="/page/:page" element={<Home />} />
       <Route path="/bookmark" element={<NewBookmark />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/search/:query" element={<Search />} />
+      <Route path="/search/:query/page/:page" element={<Search />} />
     </Routes>
   </div>
 );
