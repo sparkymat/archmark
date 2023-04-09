@@ -58,8 +58,7 @@ CREATE TABLE public.bookmarks (
     file_path text,
     status public.bookmark_status DEFAULT 'pending'::public.bookmark_status NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    html_ts tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, html)) STORED
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 

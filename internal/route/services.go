@@ -23,4 +23,6 @@ type DatabaseService interface {
 	CountBookmarksList(ctx context.Context, userID int64) (int64, error)
 	CreateBookmark(ctx context.Context, arg dbx.CreateBookmarkParams) (dbx.Bookmark, error)
 	CreateUser(ctx context.Context, arg dbx.CreateUserParams) (dbx.User, error)
+	SearchBookmarks(ctx context.Context, arg dbx.SearchBookmarksParams) ([]dbx.Bookmark, error)
+	CountBookmarksSearchResults(ctx context.Context, arg dbx.CountBookmarksSearchResultsParams) (int64, error)
 }
