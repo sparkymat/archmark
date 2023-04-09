@@ -27,7 +27,7 @@ const slice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    updateQuery: (state, action: PayloadAction<string>) => {
+    updateQueryValue: (state, action: PayloadAction<string>) => {
       state.queryValue = action.payload;
     },
   },
@@ -48,5 +48,7 @@ const slice = createSlice({
     });
   },
 });
+
+export const { updateQueryValue } = slice.actions;
 
 export default slice.reducer;

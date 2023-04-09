@@ -18,12 +18,14 @@ const BookmarksList = ({
   totalCount,
 }: BookmarksListProps) => (
   <div className="uk-container">
-    <div className="uk-flex uk-flex-row-reverse uk-margin-top uk-margin-bottom">
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a href="/#/bookmark" className="uk-link-muted">
-        New bookmark
-      </a>
-    </div>
+    {(!bookmarks || bookmarks.length === 0) && (
+      <div
+        className="uk-padding uk-flex uk-flex-center"
+        style={{ border: '1px dashed #999999' }}
+      >
+        <p className="uk-margin-remove">No bookmarks found</p>
+      </div>
+    )}
     {bookmarks &&
       bookmarks.map((b, i) => (
         <div className="uk-flex uk-flex-column uk-margin-bottom">

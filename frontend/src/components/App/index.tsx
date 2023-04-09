@@ -25,6 +25,13 @@ const App = () => (
       >
         Search
       </a>
+      <a
+        className="uk-link-muted uk-margin-left"
+        style={{ borderBottom: '1px dashed #999999' }}
+        href="/#/bookmark"
+      >
+        New bookmark
+      </a>
     </div>
     <Routes>
       <Route index element={<Home />} />
