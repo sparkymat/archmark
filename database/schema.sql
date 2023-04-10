@@ -57,8 +57,9 @@ CREATE TABLE public.bookmarks (
     html text,
     file_path text,
     status public.bookmark_status DEFAULT 'pending'::public.bookmark_status NOT NULL,
-    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    category text DEFAULT ''::text
 );
 
 
@@ -100,8 +101,8 @@ CREATE TABLE public.users (
     username text,
     name text NOT NULL,
     encrypted_password text NOT NULL,
-    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -168,6 +169,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: bookmarks_category_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX bookmarks_category_idx ON public.bookmarks USING hash (category);
 
 
 --
