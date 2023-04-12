@@ -146,10 +146,8 @@ const BookmarksList = ({
           </div>
           <table className="uk-table">
             <tbody>
-              {categories
-                .sort()
-                .slice(0, 5)
-                .map(c => (
+              {categories &&
+                categories.slice(0, 5).map(c => (
                   <tr className="uk-padding-bottom">
                     <td className="uk-text-large uk-padding-remove">
                       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}

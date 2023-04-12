@@ -52,9 +52,11 @@ const slice = createSlice({
     updateCategoryModalName: (state, action: PayloadAction<string>) => {
       state.categoryModalName = action.payload;
 
-      state.filteredCategories = state.categories.filter(c =>
-        c.toLocaleLowerCase().includes(action.payload.toLocaleLowerCase()),
-      );
+      state.filteredCategories = state.categories
+        .sort()
+        .filter(c =>
+          c.toLocaleLowerCase().includes(action.payload.toLocaleLowerCase()),
+        );
     },
   },
   extraReducers: builder => {
