@@ -25,6 +25,6 @@ func CategoriesList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 		validCategories := lo.Filter(categories, func(ps pgtype.Text, i int) bool { return ps.Valid })
 		categoryStrings := lo.Map(validCategories, func(ps pgtype.Text, i int) string { return ps.String })
 
-		return c.JSON(http.StatusOK, categoryStrings)
+		return c.JSON(http.StatusOK, categoryStrings) //nolint:wrapcheck
 	}
 }
