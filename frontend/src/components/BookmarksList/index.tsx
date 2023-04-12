@@ -113,7 +113,7 @@ const BookmarksList = ({
         style={
           categoryModalOpen
             ? { overscrollBehavior: 'contain', display: 'block' }
-            : {}
+            : { display: 'none' }
         }
       >
         <div className="uk-modal-dialog uk-modal-body uk-margin-top uk-background-secondary uk-border-rounded">
@@ -146,19 +146,22 @@ const BookmarksList = ({
           </div>
           <table className="uk-table">
             <tbody>
-              {categories.slice(0, 5).map(c => (
-                <tr className="uk-padding-bottom">
-                  <td className="uk-text-large uk-padding-remove">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                    <a
-                      className="uk-link-muted"
-                      onClick={() => categoryModalNameChanged(c)}
-                    >
-                      {c}
-                    </a>
-                  </td>
-                </tr>
-              ))}
+              {categories
+                .sort()
+                .slice(0, 5)
+                .map(c => (
+                  <tr className="uk-padding-bottom">
+                    <td className="uk-text-large uk-padding-remove">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                      <a
+                        className="uk-link-muted"
+                        onClick={() => categoryModalNameChanged(c)}
+                      >
+                        {c}
+                      </a>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

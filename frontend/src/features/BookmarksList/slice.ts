@@ -53,7 +53,7 @@ const slice = createSlice({
       state.categoryModalName = action.payload;
 
       state.filteredCategories = state.categories.filter(c =>
-        c.includes(action.payload),
+        c.toLocaleLowerCase().includes(action.payload.toLocaleLowerCase()),
       );
     },
   },
