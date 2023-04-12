@@ -34,6 +34,10 @@ p {
   color: #aaaaaa;
 }
 
+.uk-background-secondary .uk-modal-title {
+  color: #ffffff;
+}
+
 .uk-link, .uk-link:hover, a:hover {
   color: #33669a;
   text-decoration: none;

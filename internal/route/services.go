@@ -3,6 +3,7 @@ package route
 import (
 	"context"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/sparkymat/archmark/dbx"
 )
 
@@ -25,4 +26,6 @@ type DatabaseService interface {
 	CreateUser(ctx context.Context, arg dbx.CreateUserParams) (dbx.User, error)
 	SearchBookmarks(ctx context.Context, arg dbx.SearchBookmarksParams) ([]dbx.Bookmark, error)
 	CountBookmarksSearchResults(ctx context.Context, arg dbx.CountBookmarksSearchResultsParams) (int64, error)
+	FetchCategories(ctx context.Context, userID int64) ([]pgtype.Text, error)
+	UpdateBookmarkCategory(ctx context.Context, arg dbx.UpdateBookmarkCategoryParams) error
 }
