@@ -12,3 +12,19 @@ export const selectTotalCount = (state: RootState): number =>
 
 export const selectPageSize = (state: RootState): number =>
   state.bookmarksList.pageSize;
+
+export const selectCategories = (state: RootState): string[] =>
+  state.bookmarksList.categories;
+
+export const selectCategoryModalOpen = (state: RootState): boolean =>
+  state.bookmarksList.categoryModalOpen;
+
+export const selectCategoryModalName = (state: RootState): string =>
+  state.bookmarksList.categoryModalName;
+
+export const selectFilteredCategories = (state: RootState): string[] =>
+  state.bookmarksList.filteredCategories;
+
+export const selectCategoryModalBookmarkID = (
+  state: RootState,
+): string | undefined => state.bookmarksList.categoryModalBookmarkID;

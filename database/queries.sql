@@ -57,3 +57,14 @@ SELECT b.*
 SELECT COUNT(*)
   FROM bookmarks b
   WHERE b.user_id = @user_id::bigint AND b.html_ts @@ to_tsquery('english', @query::text);
+
+-- name: FetchCategories :many
+SELECT DISTINCT(b.category)
+  FROM bookmarks b
+  WHERE b.category != '' AND b.user_id = @user_id
+  ORDER BY b.category ASC;
+
+-- name: UpdateBookmarkCategory :exec
+UPDATE bookmarks
+  SET category = @category::text
+  WHERE id = @id::bigint;

@@ -62,8 +62,9 @@ type Bookmark struct {
 	Html      pgtype.Text
 	FilePath  pgtype.Text
 	Status    BookmarkStatus
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+	Category  pgtype.Text
 }
 
 type SchemaMigration struct {
@@ -76,6 +77,6 @@ type User struct {
 	Username          pgtype.Text
 	Name              string
 	EncryptedPassword string
-	CreatedAt         pgtype.Timestamptz
-	UpdatedAt         pgtype.Timestamptz
+	CreatedAt         pgtype.Timestamp
+	UpdatedAt         pgtype.Timestamp
 }

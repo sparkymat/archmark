@@ -1,6 +1,7 @@
 interface Bookmark {
   id: string;
   title?: string;
+  category: string;
   url: string;
   file_path?: string;
   status: 'pending' | 'fetched' | 'archived';
