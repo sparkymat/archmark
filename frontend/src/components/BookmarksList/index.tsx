@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback } from 'react';
+import Modal from 'react-modal';
 import moment from 'moment';
 import Bookmark from '../../models/Bookmark';
 import URLDisplay from '../URLDisplay';
@@ -105,65 +106,54 @@ const BookmarksList = ({
           />
         </div>
       )}
-      <div
-        id="update-category-modal"
-        // eslint-disable-next-line react/no-unknown-property
-        uk-modal=""
-        className={categoryModalOpen ? 'uk-modal uk-open' : ''}
-        style={
-          categoryModalOpen
-            ? { overscrollBehavior: 'contain', display: 'block' }
-            : { display: 'none' }
-        }
+      <Modal
+        isOpen={categoryModalOpen}
+        onRequestClose={hideCategoryModal}
+        contentLabel="Category modal"
+        style={{ overlay: { backgroundColor: 'rgba(60,60,60,0.6)' } }}
+        className="uk-container-small uk-background-secondary uk-margin-auto uk-padding-small uk-margin-large-top"
       >
-        <div className="uk-modal-dialog uk-modal-body uk-margin-top uk-background-secondary uk-border-rounded">
-          <div className="uk-flex uk-flex-row uk-flex-between uk-modal-title">
-            <h2 className="uk-modal-title">Choose category</h2>
-            {/* eslint-disable-next-line max-len */}
-            {/* eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-            <a
-              className="uk-icon-button"
-              onClick={hideCategoryModal}
-              // eslint-disable-next-line react/no-unknown-property
-              uk-icon="close"
-            />
-          </div>
-          <div className="uk-flex uk-flex-row">
-            <input
-              type="text"
-              className="uk-input"
-              value={categoryModalName}
-              onChange={nameChange}
-              placeholder="Type new category or choose below"
-            />
-            <button
-              type="button"
-              className="uk-button uk-margin-small-left"
-              onClick={categoryModalSubmitted}
-            >
-              Update
-            </button>
-          </div>
-          <table className="uk-table">
-            <tbody>
-              {categories &&
-                categories.slice(0, 5).map(c => (
-                  <tr className="uk-padding-bottom">
-                    <td className="uk-text-large uk-padding-remove">
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                      <a
-                        className="uk-link-muted"
-                        onClick={() => categoryModalNameChanged(c)}
-                      >
-                        {c}
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+        <div className="uk-container-small uk-flex uk-flex-row uk-flex-between uk-modal-title">
+          <h2 className="uk-modal-title">Choose category</h2>
+          {/* eslint-disable-next-line max-len */}
+          {/* eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
         </div>
-      </div>
+        <div className="uk-flex uk-flex-row">
+          <input
+            type="text"
+            className="uk-input"
+            autoFocus={categoryModalOpen}
+            value={categoryModalName}
+            onChange={nameChange}
+            placeholder="Type new category or choose below"
+          />
+          <button
+            type="button"
+            className="uk-button uk-margin-small-left"
+            onClick={categoryModalSubmitted}
+          >
+            Update
+          </button>
+        </div>
+        <table className="uk-table">
+          <tbody>
+            {categories &&
+              categories.slice(0, 5).map(c => (
+                <tr className="uk-padding-bottom">
+                  <td className="uk-text-large uk-padding-remove">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                    <a
+                      className="uk-link-muted"
+                      onClick={() => categoryModalNameChanged(c)}
+                    >
+                      {c}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
     </div>
   );
 };
