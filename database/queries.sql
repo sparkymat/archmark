@@ -75,13 +75,20 @@ UPDATE bookmarks
   SET category = @category::text
   WHERE id = @id::bigint;
 
--- name: FetchArchivedBookmarks :many
+-- name: FetchArchivedBookmarksList :many
 SELECT b.*
   FROM bookmarks b
-  WHERE b.deleted_at IS NOT NULL
-  ORDER BY b.deleted_at ASC
+  WHERE b.user_id = @user_id::bigint
+    AND b.deleted_at IS NOT NULL
+  ORDER BY b.deleted_at DESC
   LIMIT @page_limit::int
   OFFSET @page_offset::int;
+
+-- name: CountArchivedBookmarksList :one
+SELECT COUNT(*)
+  FROM bookmarks b
+  WHERE b.user_id = @user_id::bigint
+    AND b.deleted_at IS NOT NULL;
 
 -- name: ArchiveBookmark :exec
 UPDATE bookmarks b

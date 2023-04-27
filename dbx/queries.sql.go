@@ -22,6 +22,20 @@ func (q *Queries) ArchiveBookmark(ctx context.Context, id int64) error {
 	return err
 }
 
+const countArchivedBookmarksList = `-- name: CountArchivedBookmarksList :one
+SELECT COUNT(*)
+  FROM bookmarks b
+  WHERE b.user_id = $1::bigint
+    AND b.deleted_at IS NOT NULL
+`
+
+func (q *Queries) CountArchivedBookmarksList(ctx context.Context, userID int64) (int64, error) {
+	row := q.db.QueryRow(ctx, countArchivedBookmarksList, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countBookmarksList = `-- name: CountBookmarksList :one
 SELECT COUNT(*)
   FROM bookmarks b
@@ -126,22 +140,24 @@ func (q *Queries) DeleteBookmarks(ctx context.Context, agehours int32) error {
 	return err
 }
 
-const fetchArchivedBookmarks = `-- name: FetchArchivedBookmarks :many
+const fetchArchivedBookmarksList = `-- name: FetchArchivedBookmarksList :many
 SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category, b.deleted_at
   FROM bookmarks b
-  WHERE b.deleted_at IS NOT NULL
-  ORDER BY b.deleted_at ASC
-  LIMIT $2::int
-  OFFSET $1::int
+  WHERE b.user_id = $1::bigint
+    AND b.deleted_at IS NOT NULL
+  ORDER BY b.deleted_at DESC
+  LIMIT $3::int
+  OFFSET $2::int
 `
 
-type FetchArchivedBookmarksParams struct {
+type FetchArchivedBookmarksListParams struct {
+	UserID     int64
 	PageOffset int32
 	PageLimit  int32
 }
 
-func (q *Queries) FetchArchivedBookmarks(ctx context.Context, arg FetchArchivedBookmarksParams) ([]Bookmark, error) {
-	rows, err := q.db.Query(ctx, fetchArchivedBookmarks, arg.PageOffset, arg.PageLimit)
+func (q *Queries) FetchArchivedBookmarksList(ctx context.Context, arg FetchArchivedBookmarksListParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchArchivedBookmarksList, arg.UserID, arg.PageOffset, arg.PageLimit)
 	if err != nil {
 		return nil, err
 	}

@@ -31,5 +31,6 @@ type DatabaseService interface {
 	UpdateBookmarkCategory(ctx context.Context, arg dbx.UpdateBookmarkCategoryParams) error
 	ArchiveBookmark(ctx context.Context, id int64) error
 	UnarchiveBookmark(ctx context.Context, id int64) error
-	FetchArchivedBookmarks(ctx context.Context, arg dbx.FetchArchivedBookmarksParams) ([]dbx.Bookmark, error)
+	FetchArchivedBookmarksList(ctx context.Context, arg dbx.FetchArchivedBookmarksListParams) ([]dbx.Bookmark, error)
+	CountArchivedBookmarksList(ctx context.Context, userID int64) (int64, error)
 }
