@@ -7,6 +7,7 @@ SELECT u.*
 SELECT b.*
   FROM bookmarks b
   WHERE b.user_id = @user_id::bigint
+    AND b.deleted_at IS NULL
   ORDER BY b.created_at DESC
   LIMIT @page_limit::int
   OFFSET @page_offset::int;
@@ -14,7 +15,8 @@ SELECT b.*
 -- name: CountBookmarksList :one
 SELECT COUNT(*)
   FROM bookmarks b
-  WHERE b.user_id = @user_id::bigint;
+  WHERE b.user_id = @user_id::bigint
+    AND b.deleted_at IS NULL;
 
 -- name: CreateBookmark :one
 INSERT INTO bookmarks (
@@ -49,22 +51,46 @@ INSERT INTO users (
 -- name: SearchBookmarks :many
 SELECT b.*
   FROM bookmarks b
-  WHERE b.user_id = @user_id::bigint AND b.html_ts @@ to_tsquery('english', @query::text)
+  WHERE b.user_id = @user_id::bigint
+    AND b.html_ts @@ to_tsquery('english', @query::text)
+    AND b.deleted_at IS NULL
   LIMIT @page_limit::int
   OFFSET @page_offset::int;
 
 -- name: CountBookmarksSearchResults :one
 SELECT COUNT(*)
   FROM bookmarks b
-  WHERE b.user_id = @user_id::bigint AND b.html_ts @@ to_tsquery('english', @query::text);
+  WHERE b.user_id = @user_id::bigint
+    AND b.html_ts @@ to_tsquery('english', @query::text)
+    AND b.deleted_at IS NULL;
 
 -- name: FetchCategories :many
 SELECT DISTINCT(b.category)
   FROM bookmarks b
-  WHERE b.category != '' AND b.user_id = @user_id
+  WHERE b.category != '' AND b.user_id = @user_id AND b.deleted_at IS NULL
   ORDER BY b.category ASC;
 
 -- name: UpdateBookmarkCategory :exec
 UPDATE bookmarks
   SET category = @category::text
   WHERE id = @id::bigint;
+
+-- name: FetchArchivedBookmarks :many
+SELECT b.*
+  FROM bookmarks b
+  WHERE b.deleted_at IS NOT NULL
+  ORDER BY b.deleted_at ASC;
+
+-- name: ArchiveBookmark :exec
+UPDATE bookmarks b
+  SET deleted_at = now()
+  WHERE id = @id::bigint;
+
+-- name: UnarchiveBookmark :exec
+UPDATE bookmarks b
+  SET deleted_at = NULL
+  WHERE id = @id::bigint;
+
+-- name: DeleteBookmarks :exec
+DELETE FROM bookmarks b
+  WHERE b.deleted_at IS NOT NULL AND b.deleted_at < now() - ('1 hour'::interval * @agehours::int);

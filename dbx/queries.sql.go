@@ -11,10 +11,22 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const archiveBookmark = `-- name: ArchiveBookmark :exec
+UPDATE bookmarks b
+  SET deleted_at = now()
+  WHERE id = $1::bigint
+`
+
+func (q *Queries) ArchiveBookmark(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, archiveBookmark, id)
+	return err
+}
+
 const countBookmarksList = `-- name: CountBookmarksList :one
 SELECT COUNT(*)
   FROM bookmarks b
   WHERE b.user_id = $1::bigint
+    AND b.deleted_at IS NULL
 `
 
 func (q *Queries) CountBookmarksList(ctx context.Context, userID int64) (int64, error) {
@@ -27,7 +39,9 @@ func (q *Queries) CountBookmarksList(ctx context.Context, userID int64) (int64, 
 const countBookmarksSearchResults = `-- name: CountBookmarksSearchResults :one
 SELECT COUNT(*)
   FROM bookmarks b
-  WHERE b.user_id = $1::bigint AND b.html_ts @@ to_tsquery('english', $2::text)
+  WHERE b.user_id = $1::bigint
+    AND b.html_ts @@ to_tsquery('english', $2::text)
+    AND b.deleted_at IS NULL
 `
 
 type CountBookmarksSearchResultsParams struct {
@@ -47,7 +61,7 @@ INSERT INTO bookmarks (
   user_id, url
 ) VALUES (
   $1::bigint, $2::text
-) RETURNING id, user_id, url, title, html, file_path, status, created_at, updated_at, category
+) RETURNING id, user_id, url, title, html, file_path, status, created_at, updated_at, category, deleted_at
 `
 
 type CreateBookmarkParams struct {
@@ -69,6 +83,7 @@ func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) 
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Category,
+		&i.DeletedAt,
 	)
 	return i, err
 }
@@ -101,8 +116,57 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const deleteBookmarks = `-- name: DeleteBookmarks :exec
+DELETE FROM bookmarks b
+  WHERE b.deleted_at IS NOT NULL AND b.deleted_at < now() - ('1 hour'::interval * $1::int)
+`
+
+func (q *Queries) DeleteBookmarks(ctx context.Context, agehours int32) error {
+	_, err := q.db.Exec(ctx, deleteBookmarks, agehours)
+	return err
+}
+
+const fetchArchivedBookmarks = `-- name: FetchArchivedBookmarks :many
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category, b.deleted_at
+  FROM bookmarks b
+  WHERE b.deleted_at IS NOT NULL
+  ORDER BY b.deleted_at ASC
+`
+
+func (q *Queries) FetchArchivedBookmarks(ctx context.Context) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchArchivedBookmarks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Url,
+			&i.Title,
+			&i.Html,
+			&i.FilePath,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Category,
+			&i.DeletedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const fetchBookmarkByID = `-- name: FetchBookmarkByID :one
-SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category, b.deleted_at
   FROM bookmarks b
   WHERE b.id = $1::bigint
   LIMIT 1
@@ -122,14 +186,16 @@ func (q *Queries) FetchBookmarkByID(ctx context.Context, id int64) (Bookmark, er
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Category,
+		&i.DeletedAt,
 	)
 	return i, err
 }
 
 const fetchBookmarksList = `-- name: FetchBookmarksList :many
-SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category, b.deleted_at
   FROM bookmarks b
   WHERE b.user_id = $1::bigint
+    AND b.deleted_at IS NULL
   ORDER BY b.created_at DESC
   LIMIT $3::int
   OFFSET $2::int
@@ -161,6 +227,7 @@ func (q *Queries) FetchBookmarksList(ctx context.Context, arg FetchBookmarksList
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Category,
+			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -175,7 +242,7 @@ func (q *Queries) FetchBookmarksList(ctx context.Context, arg FetchBookmarksList
 const fetchCategories = `-- name: FetchCategories :many
 SELECT DISTINCT(b.category)
   FROM bookmarks b
-  WHERE b.category != '' AND b.user_id = $1
+  WHERE b.category != '' AND b.user_id = $1 AND b.deleted_at IS NULL
   ORDER BY b.category ASC
 `
 
@@ -236,9 +303,11 @@ func (q *Queries) MarkBookmarkFetched(ctx context.Context, arg MarkBookmarkFetch
 }
 
 const searchBookmarks = `-- name: SearchBookmarks :many
-SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category
+SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created_at, b.updated_at, b.category, b.deleted_at
   FROM bookmarks b
-  WHERE b.user_id = $1::bigint AND b.html_ts @@ to_tsquery('english', $2::text)
+  WHERE b.user_id = $1::bigint
+    AND b.html_ts @@ to_tsquery('english', $2::text)
+    AND b.deleted_at IS NULL
   LIMIT $4::int
   OFFSET $3::int
 `
@@ -275,6 +344,7 @@ func (q *Queries) SearchBookmarks(ctx context.Context, arg SearchBookmarksParams
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Category,
+			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -284,6 +354,17 @@ func (q *Queries) SearchBookmarks(ctx context.Context, arg SearchBookmarksParams
 		return nil, err
 	}
 	return items, nil
+}
+
+const unarchiveBookmark = `-- name: UnarchiveBookmark :exec
+UPDATE bookmarks b
+  SET deleted_at = NULL
+  WHERE id = $1::bigint
+`
+
+func (q *Queries) UnarchiveBookmark(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, unarchiveBookmark, id)
+	return err
 }
 
 const updateBookmarkCategory = `-- name: UpdateBookmarkCategory :exec
