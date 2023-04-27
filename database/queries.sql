@@ -79,7 +79,9 @@ UPDATE bookmarks
 SELECT b.*
   FROM bookmarks b
   WHERE b.deleted_at IS NOT NULL
-  ORDER BY b.deleted_at ASC;
+  ORDER BY b.deleted_at ASC
+  LIMIT @page_limit::int
+  OFFSET @page_offset::int;
 
 -- name: ArchiveBookmark :exec
 UPDATE bookmarks b

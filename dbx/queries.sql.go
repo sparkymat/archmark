@@ -131,10 +131,17 @@ SELECT b.id, b.user_id, b.url, b.title, b.html, b.file_path, b.status, b.created
   FROM bookmarks b
   WHERE b.deleted_at IS NOT NULL
   ORDER BY b.deleted_at ASC
+  LIMIT $2::int
+  OFFSET $1::int
 `
 
-func (q *Queries) FetchArchivedBookmarks(ctx context.Context) ([]Bookmark, error) {
-	rows, err := q.db.Query(ctx, fetchArchivedBookmarks)
+type FetchArchivedBookmarksParams struct {
+	PageOffset int32
+	PageLimit  int32
+}
+
+func (q *Queries) FetchArchivedBookmarks(ctx context.Context, arg FetchArchivedBookmarksParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchArchivedBookmarks, arg.PageOffset, arg.PageLimit)
 	if err != nil {
 		return nil, err
 	}
