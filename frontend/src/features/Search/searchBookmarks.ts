@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Bookmark from '../../models/Bookmark';
+import { ErrorResponse } from '../BookmarksList/fetchBookmarksList';
 
 export interface SearchRequest {
   page_size: number;
@@ -13,10 +14,6 @@ export interface SearchResponse {
   page_number: number;
   items: Bookmark[];
   total_count: number;
-}
-
-export interface ErrorResponse {
-  error: string;
 }
 
 const searchBookmarks = createAsyncThunk<

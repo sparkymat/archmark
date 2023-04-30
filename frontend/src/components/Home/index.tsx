@@ -72,9 +72,12 @@ const Home = () => {
     [dispatch],
   );
 
-  const categoryModalNameChanged = useCallback((val: string) => {
-    dispatch(updateCategoryModalName(val));
-  }, []);
+  const categoryModalNameChanged = useCallback(
+    (val: string) => {
+      dispatch(updateCategoryModalName(val));
+    },
+    [dispatch],
+  );
 
   const dismissCategoryModalClicked = useCallback(() => {
     dispatch(hideCategoryModal());
@@ -104,6 +107,7 @@ const Home = () => {
       categoryModalName={categoryModalName}
       categoryModalNameChanged={categoryModalNameChanged}
       categoryModalSubmitted={submitCategoryUpdate}
+      showArchiveButton
     />
   );
 };

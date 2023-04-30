@@ -9,13 +9,13 @@ import updateBookmarkCategory from './updateBookmarkCategory';
 
 interface BookmarksListState {
   bookmarks: Bookmark[];
-  categories: string[];
   errorMessage: string;
   showError?: boolean;
   loading?: boolean;
   pageNumber: number;
   pageSize: number;
   totalCount: number;
+  categories: string[];
   categoryModalOpen: boolean;
   categoryModalBookmarkID?: string;
   categoryModalName: string;
@@ -24,11 +24,11 @@ interface BookmarksListState {
 
 const initialState: BookmarksListState = {
   bookmarks: [],
-  categories: [],
   errorMessage: '',
   pageNumber: 1,
   pageSize: 10,
   totalCount: 0,
+  categories: [],
   categoryModalOpen: false,
   categoryModalName: '',
   filteredCategories: [],

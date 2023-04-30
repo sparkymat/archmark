@@ -13,6 +13,7 @@ interface BookmarksListProps {
   totalCount: number;
   categoryModalOpen: boolean;
   categoryModalName: string;
+  showArchiveButton: boolean;
   // eslint-disable-next-line react/no-unused-prop-types, react/require-default-props
   categoryModalBookmarkID?: string;
   hideCategoryModal(): void;
@@ -33,6 +34,7 @@ const BookmarksList = ({
   categoryModalName,
   categoryModalNameChanged,
   categoryModalSubmitted,
+  showArchiveButton,
 }: BookmarksListProps) => {
   const nameChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +96,15 @@ const BookmarksList = ({
                   </a>
                 </>
               )}
+              {showArchiveButton && (
+                <>
+                  <span className="uk-margin-small-left uk-margin-small-right">
+                    ⚬
+                  </span>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a className="uk-link">Delete</a>
+                </>
+              )}
             </div>
           </div>
         ))}
@@ -122,6 +133,7 @@ const BookmarksList = ({
           <input
             type="text"
             className="uk-input"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={categoryModalOpen}
             value={categoryModalName}
             onChange={nameChange}

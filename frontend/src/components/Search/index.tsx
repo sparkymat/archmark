@@ -6,11 +6,25 @@ import {
   selectPageSize,
   selectQueryValue,
   selectTotalCount,
+  selectCategoryModalBookmarkID,
+  selectCategoryModalName,
+  selectCategoryModalOpen,
+  selectFilteredCategories,
 } from '../../features/Search/selects';
 import searchBookmarks from '../../features/Search/searchBookmarks';
 import { AppDispatch } from '../../store';
 import BookmarksList from '../BookmarksList';
-import { updateQueryValue } from '../../features/Search/slice';
+import fetchCategories from '../../features/Search/fetchCategories';
+import updateBookmarkCategory from '../../features/Search/updateBookmarkCategory';
+
+import {
+  updateQueryValue,
+  hideCategoryModal,
+  showCategoryModal,
+  updateCategoryModalName,
+  updateCurrentQuery,
+  updatePageNumber,
+} from '../../features/Search/slice';
 
 const Search = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,6 +44,11 @@ const Search = () => {
   const totalCount = useSelector(selectTotalCount);
 
   useEffect(() => {
+    dispatch(updatePageNumber(pageNumber));
+    dispatch(updateCurrentQuery(query || ''));
+  }, [dispatch, pageNumber, query]);
+
+  useEffect(() => {
     if (query) {
       dispatch(
         searchBookmarks({
@@ -45,6 +64,10 @@ const Search = () => {
   // TODO: Add loading spinner
   // const loading = useSelector(selectLoading);
   const bookmarks = useSelector(selectBookmarks);
+  const filteredCategories = useSelector(selectFilteredCategories);
+  const categoryModalOpen = useSelector(selectCategoryModalOpen);
+  const categoryModalName = useSelector(selectCategoryModalName);
+  const categoryModalBookmarkID = useSelector(selectCategoryModalBookmarkID);
 
   const queryValue = useSelector(selectQueryValue);
 
@@ -67,6 +90,39 @@ const Search = () => {
     },
     [queryValue],
   );
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch, pageNumber, pageSize, bookmarks]);
+
+  const changeCategoryClicked = useCallback(
+    (bookmarkID: string) => {
+      dispatch(showCategoryModal(bookmarkID));
+    },
+    [dispatch],
+  );
+
+  const categoryModalNameChanged = useCallback(
+    (val: string) => {
+      dispatch(updateCategoryModalName(val));
+    },
+    [dispatch],
+  );
+
+  const dismissCategoryModalClicked = useCallback(() => {
+    dispatch(hideCategoryModal());
+  }, [dispatch]);
+
+  const submitCategoryUpdate = useCallback(() => {
+    if (categoryModalBookmarkID) {
+      dispatch(
+        updateBookmarkCategory({
+          bookmarkID: categoryModalBookmarkID,
+          category: categoryModalName,
+        }),
+      );
+    }
+  }, [categoryModalBookmarkID, categoryModalName, dispatch]);
 
   return (
     <div className="uk-container">
@@ -99,6 +155,14 @@ const Search = () => {
             pageNumber={pageNumber}
             pageSize={pageSize}
             totalCount={totalCount}
+            showArchiveButton
+            categories={filteredCategories}
+            categoryModalOpen={categoryModalOpen}
+            categoryModalName={categoryModalName}
+            hideCategoryModal={dismissCategoryModalClicked}
+            showCategoryModal={changeCategoryClicked}
+            categoryModalNameChanged={categoryModalNameChanged}
+            categoryModalSubmitted={submitCategoryUpdate}
           />
         </>
       )}
