@@ -21,6 +21,7 @@ import {
   updatePageNumber,
 } from '../../features/BookmarksList/slice';
 import updateBookmarkCategory from '../../features/BookmarksList/updateBookmarkCategory';
+import FilterBar from '../FilterBar';
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -95,20 +96,23 @@ const Home = () => {
   }, [categoryModalBookmarkID, categoryModalName, dispatch]);
 
   return (
-    <BookmarkList
-      bookmarks={bookmarks}
-      categories={filteredCategories}
-      pageNumber={pageNumber}
-      pageSize={pageSize}
-      totalCount={totalCount}
-      categoryModalOpen={categoryModalOpen}
-      hideCategoryModal={dismissCategoryModalClicked}
-      showCategoryModal={changeCategoryClicked}
-      categoryModalName={categoryModalName}
-      categoryModalNameChanged={categoryModalNameChanged}
-      categoryModalSubmitted={submitCategoryUpdate}
-      showArchiveButton
-    />
+    <>
+      <FilterBar />
+      <BookmarkList
+        bookmarks={bookmarks}
+        categories={filteredCategories}
+        pageNumber={pageNumber}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        categoryModalOpen={categoryModalOpen}
+        hideCategoryModal={dismissCategoryModalClicked}
+        showCategoryModal={changeCategoryClicked}
+        categoryModalName={categoryModalName}
+        categoryModalNameChanged={categoryModalNameChanged}
+        categoryModalSubmitted={submitCategoryUpdate}
+        showArchiveButton
+      />
+    </>
   );
 };
 
