@@ -31,3 +31,10 @@ export const selectFilteredCategories = (state: RootState): string[] =>
 export const selectCategoryModalBookmarkID = (
   state: RootState,
 ): string | undefined => state.search.categoryModalBookmarkID;
+
+export const selectDeleteModalOpen = (state: RootState): boolean =>
+  state.search.deleteModalOpen;
+
+export const selectDeleteModalBookmarkID = (
+  state: RootState,
+): string | undefined => state.search.deleteModalBookmarkID;

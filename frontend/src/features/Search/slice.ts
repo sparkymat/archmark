@@ -1,9 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import Bookmark from '../../models/Bookmark';
-import searchBookmarks, { SearchResponse } from './searchBookmarks';
+import searchBookmarks, {
+  SearchResponse,
+  ErrorResponse,
+} from './searchBookmarks';
 import fetchCategories from './fetchCategories';
 import updateBookmarkCategory from './updateBookmarkCategory';
-import { ErrorResponse } from '../BookmarksList/fetchBookmarksList';
+import deleteBookmark from './deleteBookmark';
 
 interface SearchState {
   bookmarks: Bookmark[];
@@ -20,6 +23,8 @@ interface SearchState {
   categoryModalBookmarkID?: string;
   categoryModalName: string;
   filteredCategories: string[];
+  deleteModalOpen: boolean;
+  deleteModalBookmarkID?: string;
 }
 
 const initialState: SearchState = {
@@ -34,6 +39,7 @@ const initialState: SearchState = {
   categoryModalOpen: false,
   categoryModalName: '',
   filteredCategories: [],
+  deleteModalOpen: false,
 };
 
 const slice = createSlice({
@@ -65,6 +71,14 @@ const slice = createSlice({
         .filter(c =>
           c.toLocaleLowerCase().includes(action.payload.toLocaleLowerCase()),
         );
+    },
+    showDeleteModal: (state, action: PayloadAction<string>) => {
+      state.deleteModalBookmarkID = action.payload;
+      state.deleteModalOpen = true;
+    },
+    hideDeleteModal: state => {
+      state.deleteModalBookmarkID = undefined;
+      state.deleteModalOpen = false;
     },
   },
   extraReducers: builder => {
@@ -113,6 +127,21 @@ const slice = createSlice({
       state.errorMessage = (action.payload as ErrorResponse).error;
       state.showError = true;
     });
+
+    // deleteBookmark
+    builder.addCase(deleteBookmark.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(deleteBookmark.fulfilled, state => {
+      state.loading = false;
+      state.deleteModalBookmarkID = undefined;
+      state.deleteModalOpen = false;
+    });
+    builder.addCase(deleteBookmark.rejected, (state, action) => {
+      state.loading = false;
+      state.errorMessage = (action.payload as ErrorResponse).error;
+      state.showError = true;
+    });
   },
 });
 
@@ -123,6 +152,8 @@ export const {
   updateCategoryModalName,
   updateCurrentQuery,
   updatePageNumber,
+  showDeleteModal,
+  hideDeleteModal,
 } = slice.actions;
 
 export default slice.reducer;

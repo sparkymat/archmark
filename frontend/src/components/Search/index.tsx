@@ -10,6 +10,8 @@ import {
   selectCategoryModalName,
   selectCategoryModalOpen,
   selectFilteredCategories,
+  selectDeleteModalOpen,
+  selectDeleteModalBookmarkID,
 } from '../../features/Search/selects';
 import searchBookmarks from '../../features/Search/searchBookmarks';
 import { AppDispatch } from '../../store';
@@ -24,7 +26,10 @@ import {
   updateCategoryModalName,
   updateCurrentQuery,
   updatePageNumber,
+  showDeleteModal,
+  hideDeleteModal,
 } from '../../features/Search/slice';
+import deleteBookmark from '../../features/Search/deleteBookmark';
 
 const Search = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -64,8 +69,10 @@ const Search = () => {
   const bookmarks = useSelector(selectBookmarks);
   const filteredCategories = useSelector(selectFilteredCategories);
   const categoryModalOpen = useSelector(selectCategoryModalOpen);
+  const deleteModalOpen = useSelector(selectDeleteModalOpen);
   const categoryModalName = useSelector(selectCategoryModalName);
   const categoryModalBookmarkID = useSelector(selectCategoryModalBookmarkID);
+  const deleteModalBookmarkID = useSelector(selectDeleteModalBookmarkID);
 
   const queryValue = useSelector(selectQueryValue);
 
@@ -108,6 +115,13 @@ const Search = () => {
     [dispatch],
   );
 
+  const deleteClicked = useCallback(
+    (bookmarkID: string) => {
+      dispatch(showDeleteModal(bookmarkID));
+    },
+    [dispatch],
+  );
+
   const categoryModalNameChanged = useCallback(
     (val: string) => {
       dispatch(updateCategoryModalName(val));
@@ -129,6 +143,16 @@ const Search = () => {
       );
     }
   }, [categoryModalBookmarkID, categoryModalName, dispatch]);
+
+  const dismissDeleteModalClicked = useCallback(() => {
+    dispatch(hideDeleteModal());
+  }, []);
+
+  const submitDelete = useCallback(() => {
+    if (deleteModalBookmarkID) {
+      dispatch(deleteBookmark(deleteModalBookmarkID));
+    }
+  }, [deleteModalBookmarkID, dispatch]);
 
   return (
     <div className="uk-container">
@@ -170,6 +194,10 @@ const Search = () => {
         showCategoryModal={changeCategoryClicked}
         categoryModalNameChanged={categoryModalNameChanged}
         categoryModalSubmitted={submitCategoryUpdate}
+        deleteModalOpen={deleteModalOpen}
+        showDeleteModal={deleteClicked}
+        hideDeleteModal={dismissDeleteModalClicked}
+        deleteModalSubmitted={submitDelete}
       />
     </div>
   );

@@ -15,12 +15,16 @@ interface BookmarksListProps {
   categoryModalOpen: boolean;
   categoryModalName: string;
   showArchiveButton: boolean;
+  deleteModalOpen: boolean;
   // eslint-disable-next-line react/no-unused-prop-types, react/require-default-props
   categoryModalBookmarkID?: string;
   hideCategoryModal(): void;
   showCategoryModal(_bookmarkID: string): void;
   categoryModalNameChanged(_val: string): void;
   categoryModalSubmitted(): void;
+  hideDeleteModal(): void;
+  showDeleteModal(_bookmarkID: string): void;
+  deleteModalSubmitted(): void;
 }
 
 const BookmarksList = ({
@@ -31,12 +35,16 @@ const BookmarksList = ({
   pageSize,
   totalCount,
   categoryModalOpen,
+  deleteModalOpen,
   hideCategoryModal,
   showCategoryModal,
+  hideDeleteModal,
+  showDeleteModal,
   categoryModalName,
   categoryModalNameChanged,
   categoryModalSubmitted,
   showArchiveButton,
+  deleteModalSubmitted,
 }: BookmarksListProps) => {
   const nameChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
@@ -103,8 +111,10 @@ const BookmarksList = ({
                   <span className="uk-margin-small-left uk-margin-small-right">
                     ⚬
                   </span>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="uk-link">Delete</a>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                  <a className="uk-link" onClick={() => showDeleteModal(b.id)}>
+                    Delete
+                  </a>
                 </>
               )}
             </div>
@@ -168,6 +178,34 @@ const BookmarksList = ({
               ))}
           </tbody>
         </table>
+      </Modal>
+      <Modal
+        isOpen={deleteModalOpen}
+        onRequestClose={hideDeleteModal}
+        contentLabel="Category modal"
+        style={{ overlay: { backgroundColor: 'rgba(60,60,60,0.6)' } }}
+        className="uk-container-small uk-background-secondary uk-margin-auto uk-padding uk-margin-large-top uk-width-1-1 uk-width-1-3@m uk-width-1-4@l"
+      >
+        <div className="uk-container-small uk-flex uk-flex-row uk-flex-between uk-modal-title">
+          <h2 className="uk-modal-title">Are you sure?</h2>
+        </div>
+        <div className="uk-flex uk-flex-row uk-flex-between uk-margin-top">
+          <button
+            type="button"
+            className="uk-button uk-border-rounded"
+            onClick={() => hideDeleteModal()}
+          >
+            No
+          </button>
+
+          <button
+            type="button"
+            className="uk-button uk-button-danger uk-border-rounded"
+            onClick={() => deleteModalSubmitted()}
+          >
+            Yes
+          </button>
+        </div>
       </Modal>
     </div>
   );

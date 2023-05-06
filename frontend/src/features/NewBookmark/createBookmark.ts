@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Bookmark from '../../models/Bookmark';
-import { ErrorResponse } from '../BookmarksList/fetchBookmarksList';
+import { ErrorResponse } from '../Search/searchBookmarks';
 
 const createFunction = createAsyncThunk<Bookmark | ErrorResponse, string>(
   'features/fetchFunctionDetails',

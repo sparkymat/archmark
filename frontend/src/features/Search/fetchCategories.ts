@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { ErrorResponse } from '../BookmarksList/fetchBookmarksList';
+import { ErrorResponse } from './searchBookmarks';
 
 const fetchCategories = createAsyncThunk<string[] | ErrorResponse>(
   'features/search/fetchCategories',
