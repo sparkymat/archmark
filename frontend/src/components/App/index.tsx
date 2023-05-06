@@ -1,7 +1,5 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-
-import Home from '../Home';
 import NewBookmark from '../NewBookmark';
 import Search from '../Search';
 
@@ -21,21 +19,14 @@ const App = () => (
       <a
         className="uk-link-muted uk-margin-left"
         style={{ borderBottom: '1px dashed #999999' }}
-        href="/#/search"
-      >
-        Search
-      </a>
-      <a
-        className="uk-link-muted uk-margin-left"
-        style={{ borderBottom: '1px dashed #999999' }}
         href="/#/bookmark"
       >
         New bookmark
       </a>
     </div>
     <Routes>
-      <Route index element={<Home />} />
-      <Route path="/page/:page" element={<Home />} />
+      <Route index element={<Search />} />
+      <Route path="/page/:page" element={<Search />} />
       <Route path="/bookmark" element={<NewBookmark />} />
       <Route path="/search" element={<Search />} />
       <Route path="/search/:query" element={<Search />} />

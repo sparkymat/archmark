@@ -77,13 +77,21 @@ const Search = () => {
   );
 
   const searchSubmitted = useCallback(() => {
-    window.location.href = `/#/search/${encodeURIComponent(queryValue)}`;
+    if (queryValue) {
+      window.location.href = `/#/search/${encodeURIComponent(queryValue)}`;
+    } else {
+      window.location.href = '/#/';
+    }
   }, [queryValue]);
 
   const searchFormKeyUp = useCallback(
     (evt: React.KeyboardEvent<HTMLInputElement>) => {
       if (evt.keyCode === 13) {
-        window.location.href = `/#/search/${encodeURIComponent(queryValue)}`;
+        if (queryValue) {
+          window.location.href = `/#/search/${encodeURIComponent(queryValue)}`;
+        } else {
+          window.location.href = '/#/';
+        }
       }
     },
     [queryValue],
@@ -152,6 +160,7 @@ const Search = () => {
         bookmarks={bookmarks}
         pageNumber={pageNumber}
         pageSize={pageSize}
+        query={query}
         totalCount={totalCount}
         showArchiveButton
         categories={filteredCategories}

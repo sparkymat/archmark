@@ -10,6 +10,7 @@ interface BookmarksListProps {
   categories: string[];
   pageNumber: number;
   pageSize: number;
+  query: string | undefined;
   totalCount: number;
   categoryModalOpen: boolean;
   categoryModalName: string;
@@ -23,6 +24,7 @@ interface BookmarksListProps {
 }
 
 const BookmarksList = ({
+  query,
   bookmarks,
   categories,
   pageNumber,
@@ -111,6 +113,7 @@ const BookmarksList = ({
       {bookmarks && bookmarks.length > 0 && (
         <div className="uk-flex uk-flex-row uk-flex-center uk-margin-bottom">
           <Paginator
+            query={query}
             pageNumber={pageNumber}
             pageSize={pageSize}
             totalCount={totalCount}
