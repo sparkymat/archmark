@@ -19,9 +19,6 @@ func BookmarksSearch(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 		}
 
 		query := c.QueryParam("query")
-		if query == "" {
-			return renderError(c, http.StatusBadRequest, "query was empty", nil)
-		}
 
 		pageSizeString := c.QueryParam("page_size")
 
@@ -39,23 +36,44 @@ func BookmarksSearch(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 
 		offset := (pageNumber - 1) * pageSize
 
-		bookmarks, err := db.SearchBookmarks(
-			c.Request().Context(),
-			dbx.SearchBookmarksParams{
-				UserID:     user.ID,
-				Query:      query,
-				PageOffset: int32(offset),
-				PageLimit:  int32(pageSize),
-			},
-		)
+		var bookmarks []dbx.Bookmark
+		var totalCount int64
+
+		//nolint:nestif
+		if query == "" {
+			bookmarks, err = db.FetchBookmarksList(
+				c.Request().Context(),
+				dbx.FetchBookmarksListParams{
+					UserID:     user.ID,
+					PageOffset: int32(offset),
+					PageLimit:  int32(pageSize),
+				},
+			)
+		} else {
+			bookmarks, err = db.SearchBookmarks(
+				c.Request().Context(),
+				dbx.SearchBookmarksParams{
+					UserID:     user.ID,
+					Query:      query,
+					PageOffset: int32(offset),
+					PageLimit:  int32(pageSize),
+				},
+			)
+		}
+
 		if err != nil {
 			return renderError(c, http.StatusInternalServerError, "failed to fetch bookmarks", err)
 		}
 
-		totalCount, err := db.CountBookmarksSearchResults(c.Request().Context(), dbx.CountBookmarksSearchResultsParams{
-			UserID: user.ID,
-			Query:  query,
-		})
+		if query == "" {
+			totalCount, err = db.CountBookmarksList(c.Request().Context(), user.ID)
+		} else {
+			totalCount, err = db.CountBookmarksSearchResults(c.Request().Context(), dbx.CountBookmarksSearchResultsParams{
+				UserID: user.ID,
+				Query:  query,
+			})
+		}
+
 		if err != nil {
 			return renderError(c, http.StatusInternalServerError, "failed to fetch bookmarks count", err)
 		}

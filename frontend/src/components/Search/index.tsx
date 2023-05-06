@@ -49,16 +49,14 @@ const Search = () => {
   }, [dispatch, pageNumber, query]);
 
   useEffect(() => {
-    if (query) {
-      dispatch(
-        searchBookmarks({
-          query,
-          page_number: pageNumber,
-          page_size: pageSize,
-        }),
-      );
-      dispatch(updateQueryValue(query));
-    }
+    dispatch(
+      searchBookmarks({
+        query: query || '',
+        page_number: pageNumber,
+        page_size: pageSize,
+      }),
+    );
+    dispatch(updateQueryValue(query || ''));
   }, [dispatch, pageNumber, pageSize, query]);
 
   // TODO: Add loading spinner
@@ -126,7 +124,7 @@ const Search = () => {
 
   return (
     <div className="uk-container">
-      <div className="uk-margin-top uk-flex uk-flex-row">
+      <div className="uk-margin-top uk-flex uk-flex-row uk-margin-bottom">
         <input
           className="uk-input uk-form uk-border-rounded"
           type="text"
@@ -146,26 +144,24 @@ const Search = () => {
         </button>
       </div>
       {query && (
-        <>
-          <div className="uk-padding-small uk-margin-small-top">
-            <p>{`Showing results for '${query}'`}</p>
-          </div>
-          <BookmarksList
-            bookmarks={bookmarks}
-            pageNumber={pageNumber}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            showArchiveButton
-            categories={filteredCategories}
-            categoryModalOpen={categoryModalOpen}
-            categoryModalName={categoryModalName}
-            hideCategoryModal={dismissCategoryModalClicked}
-            showCategoryModal={changeCategoryClicked}
-            categoryModalNameChanged={categoryModalNameChanged}
-            categoryModalSubmitted={submitCategoryUpdate}
-          />
-        </>
+        <div className="uk-padding-small">
+          <p>{`Showing results for '${query}'`}</p>
+        </div>
       )}
+      <BookmarksList
+        bookmarks={bookmarks}
+        pageNumber={pageNumber}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        showArchiveButton
+        categories={filteredCategories}
+        categoryModalOpen={categoryModalOpen}
+        categoryModalName={categoryModalName}
+        hideCategoryModal={dismissCategoryModalClicked}
+        showCategoryModal={changeCategoryClicked}
+        categoryModalNameChanged={categoryModalNameChanged}
+        categoryModalSubmitted={submitCategoryUpdate}
+      />
     </div>
   );
 };
