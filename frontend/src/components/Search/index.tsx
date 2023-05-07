@@ -198,6 +198,7 @@ const Search = () => {
         showDeleteModal={deleteClicked}
         hideDeleteModal={dismissDeleteModalClicked}
         deleteModalSubmitted={submitDelete}
+        allowCategoryChange
       />
     </div>
   );

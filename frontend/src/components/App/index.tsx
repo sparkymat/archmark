@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import NewBookmark from '../NewBookmark';
 import Search from '../Search';
+import ArchivedList from '../ArchivedList';
 
 const App = () => (
   <div>
@@ -23,6 +24,13 @@ const App = () => (
       >
         New bookmark
       </a>
+      <a
+        className="uk-link-muted uk-margin-left"
+        style={{ borderBottom: '1px dashed #999999' }}
+        href="/#/deleted"
+      >
+        Deleted
+      </a>
     </div>
     <Routes>
       <Route index element={<Search />} />
@@ -31,6 +39,8 @@ const App = () => (
       <Route path="/search" element={<Search />} />
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/:query/page/:page" element={<Search />} />
+      <Route path="/deleted" element={<ArchivedList />} />
+      <Route path="/deleted/page/:page" element={<ArchivedList />} />
     </Routes>
   </div>
 );

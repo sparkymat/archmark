@@ -10,8 +10,10 @@ interface BookmarksListProps {
   categories: string[];
   pageNumber: number;
   pageSize: number;
-  query: string | undefined;
+  // eslint-disable-next-line react/require-default-props
+  query?: string;
   totalCount: number;
+  allowCategoryChange: boolean;
   categoryModalOpen: boolean;
   categoryModalName: string;
   showArchiveButton: boolean;
@@ -34,6 +36,7 @@ const BookmarksList = ({
   pageNumber,
   pageSize,
   totalCount,
+  allowCategoryChange,
   categoryModalOpen,
   deleteModalOpen,
   hideCategoryModal,
@@ -83,14 +86,18 @@ const BookmarksList = ({
               <span className="uk-margin-small-left uk-margin-small-right">
                 ⚬
               </span>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-              <a
-                className="uk-link-muted"
-                onClick={() => showCategoryModal(b.id)}
-              >
-                {b.category ? b.category : 'Uncategorized'}
-              </a>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              {allowCategoryChange && (
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                <a
+                  className="uk-link-muted"
+                  onClick={() => showCategoryModal(b.id)}
+                >
+                  {b.category ? b.category : 'Uncategorized'}
+                </a>
+              )}
+              {!allowCategoryChange && (
+                <span>{b.category ? b.category : 'Uncategorized'}</span>
+              )}
               {b.file_path && (
                 <>
                   <span className="uk-margin-small-left uk-margin-small-right">
