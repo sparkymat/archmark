@@ -45,7 +45,7 @@ func ArchivedBookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc
 			return renderError(c, http.StatusInternalServerError, "failed to fetch archived bookmarks", err)
 		}
 
-		totalCount, err := db.CountBookmarksList(c.Request().Context(), user.ID)
+		totalCount, err := db.CountArchivedBookmarksList(c.Request().Context(), user.ID)
 		if err != nil {
 			return renderError(c, http.StatusInternalServerError, "failed to fetch archived bookmarks count", err)
 		}
