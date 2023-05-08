@@ -6,12 +6,12 @@ import URLDisplay from '../URLDisplay';
 import Paginator from '../Paginatior';
 
 interface BookmarksListProps {
+  basePath: string;
   bookmarks: Bookmark[];
   categories: string[];
   pageNumber: number;
   pageSize: number;
   // eslint-disable-next-line react/require-default-props
-  query?: string;
   totalCount: number;
   allowCategoryChange: boolean;
   categoryModalOpen: boolean;
@@ -32,7 +32,7 @@ interface BookmarksListProps {
 }
 
 const BookmarksList = ({
-  query,
+  basePath,
   bookmarks,
   categories,
   pageNumber,
@@ -145,7 +145,7 @@ const BookmarksList = ({
       {bookmarks && bookmarks.length > 0 && (
         <div className="uk-flex uk-flex-row uk-flex-center uk-margin-bottom">
           <Paginator
-            query={query}
+            basePath={basePath}
             pageNumber={pageNumber}
             pageSize={pageSize}
             totalCount={totalCount}

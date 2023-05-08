@@ -1,14 +1,14 @@
 import React from 'react';
 
 interface PaginatorProps {
-  query: string | undefined;
+  basePath: string;
   pageNumber: number;
   pageSize: number;
   totalCount: number;
 }
 
 const Paginator = ({
-  query,
+  basePath,
   pageNumber,
   pageSize,
   totalCount,
@@ -47,12 +47,6 @@ const Paginator = ({
 
     return '';
   };
-
-  let basePath = '/#/';
-
-  if (query) {
-    basePath = `${basePath}search/${encodeURIComponent(query)}/`;
-  }
 
   return (
     <ul className="uk-pagination">

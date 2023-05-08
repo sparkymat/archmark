@@ -58,6 +58,7 @@ const ArchivedList = () => {
   return (
     <div className="uk-container uk-margin-top">
       <BookmarksList
+        basePath="/#/deleted/"
         bookmarks={bookmarks}
         pageNumber={pageNumber}
         pageSize={pageSize}

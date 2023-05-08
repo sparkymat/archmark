@@ -186,7 +186,7 @@ const Search = () => {
         bookmarks={bookmarks}
         pageNumber={pageNumber}
         pageSize={pageSize}
-        query={query}
+        basePath={query ? `/#/search/${encodeURIComponent(query)}/` : '/#/'}
         totalCount={totalCount}
         showArchiveButton
         showUnarchiveButton={false}
