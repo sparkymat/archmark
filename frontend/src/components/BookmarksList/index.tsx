@@ -124,7 +124,7 @@ const BookmarksList = ({
                   </span>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                   <a className="uk-link" onClick={() => showDeleteModal(b.id)}>
-                    Delete
+                    delete
                   </a>
                 </>
               )}
@@ -135,7 +135,7 @@ const BookmarksList = ({
                   </span>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                   <a className="uk-link" onClick={() => unarchiveClicked(b.id)}>
-                    Restore
+                    restore
                   </a>
                 </>
               )}
