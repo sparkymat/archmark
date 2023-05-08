@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import searchBookmarks, { ErrorResponse } from './searchBookmarks';
 
-const deleteFunction = createAsyncThunk<string | ErrorResponse, string>(
-  'features/deleteBookmark',
+const deleteBookmark = createAsyncThunk<string | ErrorResponse, string>(
+  'features/search/deleteBookmark',
   async (id, thunkAPI) => {
     const csrf = (document.querySelector('meta[name="csrf-token"]') as any)
       .content;
@@ -30,4 +30,4 @@ const deleteFunction = createAsyncThunk<string | ErrorResponse, string>(
   },
 );
 
-export default deleteFunction;
+export default deleteBookmark;

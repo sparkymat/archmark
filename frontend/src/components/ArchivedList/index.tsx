@@ -10,6 +10,7 @@ import { AppDispatch } from '../../store';
 import BookmarksList from '../BookmarksList';
 import { updatePageNumber } from '../../features/ArchivedList/slice';
 import fetchArchivedList from '../../features/ArchivedList/fetchArchivedList';
+import unarchiveBookmark from '../../features/ArchivedList/unarchiveBookmark';
 
 const ArchivedList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +46,13 @@ const ArchivedList = () => {
   // const loading = useSelector(selectLoading);
   const bookmarks = useSelector(selectBookmarks);
 
+  const unarchivedClicked = useCallback(
+    (bookmarkID: string) => {
+      dispatch(unarchiveBookmark(bookmarkID));
+    },
+    [dispatch],
+  );
+
   const noop = useCallback(() => {}, []);
 
   return (
@@ -55,6 +63,7 @@ const ArchivedList = () => {
         pageSize={pageSize}
         totalCount={totalCount}
         showArchiveButton={false}
+        showUnarchiveButton
         allowCategoryChange={false}
         categories={[]}
         categoryModalOpen={false}
@@ -67,6 +76,7 @@ const ArchivedList = () => {
         showDeleteModal={noop}
         hideDeleteModal={noop}
         deleteModalSubmitted={noop}
+        unarchiveClicked={unarchivedClicked}
       />
     </div>
   );

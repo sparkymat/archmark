@@ -154,6 +154,8 @@ const Search = () => {
     }
   }, [deleteModalBookmarkID, dispatch]);
 
+  const noop = useCallback(() => {}, []);
+
   return (
     <div className="uk-container">
       <div className="uk-margin-top uk-flex uk-flex-row uk-margin-bottom">
@@ -187,6 +189,7 @@ const Search = () => {
         query={query}
         totalCount={totalCount}
         showArchiveButton
+        showUnarchiveButton={false}
         categories={filteredCategories}
         categoryModalOpen={categoryModalOpen}
         categoryModalName={categoryModalName}
@@ -199,6 +202,7 @@ const Search = () => {
         hideDeleteModal={dismissDeleteModalClicked}
         deleteModalSubmitted={submitDelete}
         allowCategoryChange
+        unarchiveClicked={noop}
       />
     </div>
   );

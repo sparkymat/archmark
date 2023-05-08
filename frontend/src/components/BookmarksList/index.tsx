@@ -17,6 +17,7 @@ interface BookmarksListProps {
   categoryModalOpen: boolean;
   categoryModalName: string;
   showArchiveButton: boolean;
+  showUnarchiveButton: boolean;
   deleteModalOpen: boolean;
   // eslint-disable-next-line react/no-unused-prop-types, react/require-default-props
   categoryModalBookmarkID?: string;
@@ -27,6 +28,7 @@ interface BookmarksListProps {
   hideDeleteModal(): void;
   showDeleteModal(_bookmarkID: string): void;
   deleteModalSubmitted(): void;
+  unarchiveClicked(_bookmarkID: string): void;
 }
 
 const BookmarksList = ({
@@ -47,7 +49,9 @@ const BookmarksList = ({
   categoryModalNameChanged,
   categoryModalSubmitted,
   showArchiveButton,
+  showUnarchiveButton,
   deleteModalSubmitted,
+  unarchiveClicked,
 }: BookmarksListProps) => {
   const nameChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
@@ -121,6 +125,17 @@ const BookmarksList = ({
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                   <a className="uk-link" onClick={() => showDeleteModal(b.id)}>
                     Delete
+                  </a>
+                </>
+              )}
+              {showUnarchiveButton && (
+                <>
+                  <span className="uk-margin-small-left uk-margin-small-right">
+                    ⚬
+                  </span>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                  <a className="uk-link" onClick={() => unarchiveClicked(b.id)}>
+                    Restore
                   </a>
                 </>
               )}
