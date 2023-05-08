@@ -1,12 +1,18 @@
 import React from 'react';
 
 interface PaginatorProps {
+  query: string | undefined;
   pageNumber: number;
   pageSize: number;
   totalCount: number;
 }
 
-const Paginator = ({ pageNumber, pageSize, totalCount }: PaginatorProps) => {
+const Paginator = ({
+  query,
+  pageNumber,
+  pageSize,
+  totalCount,
+}: PaginatorProps) => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   let middlePages = [pageNumber - 1, pageNumber, pageNumber + 1];
@@ -42,11 +48,21 @@ const Paginator = ({ pageNumber, pageSize, totalCount }: PaginatorProps) => {
     return '';
   };
 
+  let basePath = '/#/';
+
+  if (query) {
+    basePath = `${basePath}search/${encodeURIComponent(query)}/`;
+  }
+
   return (
     <ul className="uk-pagination">
       {pageNumber !== 1 && (
         <li>
-          <a href={pageNumber === 2 ? '/' : `/#/page/${pageNumber - 1}`}>
+          <a
+            href={
+              pageNumber === 2 ? basePath : `${basePath}page/${pageNumber - 1}`
+            }
+          >
             {/* eslint-disable-next-line react/no-unknown-property */}
             <span uk-pagination-previous="" />
           </a>
@@ -55,7 +71,7 @@ const Paginator = ({ pageNumber, pageSize, totalCount }: PaginatorProps) => {
       {pages.map(p => (
         <li className={liClass(p)}>
           {p && p !== pageNumber && (
-            <a href={p === 1 ? '/' : `/#/page/${p}`}>{p}</a>
+            <a href={p === 1 ? basePath : `${basePath}page/${p}`}>{p}</a>
           )}
           {p && p === pageNumber && <span>{p}</span>}
           {!p && <span>...</span>}
@@ -63,7 +79,7 @@ const Paginator = ({ pageNumber, pageSize, totalCount }: PaginatorProps) => {
       ))}
       {pageNumber !== totalPages && (
         <li>
-          <a href={`/#/page/${pageNumber + 1}`}>
+          <a href={`${basePath}page/${pageNumber + 1}`}>
             {/* eslint-disable-next-line react/no-unknown-property */}
             <span uk-pagination-next="" />
           </a>

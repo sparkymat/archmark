@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Bookmark from '../../models/Bookmark';
-import fetchBookmarksList, { ErrorResponse } from './fetchBookmarksList';
+import searchBookmarks, { ErrorResponse } from './searchBookmarks';
 
 interface UpdateBookmarkCategoryRequest {
   bookmarkID: string;
@@ -12,7 +12,7 @@ const updateBookmarkCategory = createAsyncThunk<
   Bookmark | ErrorResponse,
   UpdateBookmarkCategoryRequest
 >(
-  'features/fetchFunctionDetails',
+  'features/search/updateBookmarkCategory',
   async ({ bookmarkID, category }, thunkAPI) => {
     const csrf = (document.querySelector('meta[name="csrf-token"]') as any)
       .content;
@@ -26,9 +26,10 @@ const updateBookmarkCategory = createAsyncThunk<
 
       const rootState = thunkAPI.getState();
       thunkAPI.dispatch(
-        fetchBookmarksList({
-          page_size: rootState.bookmarksList.pageSize,
-          page_number: rootState.bookmarksList.pageNumber,
+        searchBookmarks({
+          page_size: (rootState as any).search.pageSize,
+          page_number: (rootState as any).search.pageNumber,
+          query: (rootState as any).search.currentQuery,
         }),
       );
 

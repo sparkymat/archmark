@@ -10,29 +10,48 @@ interface BookmarksListProps {
   categories: string[];
   pageNumber: number;
   pageSize: number;
+  // eslint-disable-next-line react/require-default-props
+  query?: string;
   totalCount: number;
+  allowCategoryChange: boolean;
   categoryModalOpen: boolean;
   categoryModalName: string;
+  showArchiveButton: boolean;
+  showUnarchiveButton: boolean;
+  deleteModalOpen: boolean;
   // eslint-disable-next-line react/no-unused-prop-types, react/require-default-props
   categoryModalBookmarkID?: string;
   hideCategoryModal(): void;
   showCategoryModal(_bookmarkID: string): void;
   categoryModalNameChanged(_val: string): void;
   categoryModalSubmitted(): void;
+  hideDeleteModal(): void;
+  showDeleteModal(_bookmarkID: string): void;
+  deleteModalSubmitted(): void;
+  unarchiveClicked(_bookmarkID: string): void;
 }
 
 const BookmarksList = ({
+  query,
   bookmarks,
   categories,
   pageNumber,
   pageSize,
   totalCount,
+  allowCategoryChange,
   categoryModalOpen,
+  deleteModalOpen,
   hideCategoryModal,
   showCategoryModal,
+  hideDeleteModal,
+  showDeleteModal,
   categoryModalName,
   categoryModalNameChanged,
   categoryModalSubmitted,
+  showArchiveButton,
+  showUnarchiveButton,
+  deleteModalSubmitted,
+  unarchiveClicked,
 }: BookmarksListProps) => {
   const nameChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
@@ -71,14 +90,18 @@ const BookmarksList = ({
               <span className="uk-margin-small-left uk-margin-small-right">
                 ⚬
               </span>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-              <a
-                className="uk-link-muted"
-                onClick={() => showCategoryModal(b.id)}
-              >
-                {b.category ? b.category : 'Uncategorized'}
-              </a>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              {allowCategoryChange && (
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                <a
+                  className="uk-link-muted"
+                  onClick={() => showCategoryModal(b.id)}
+                >
+                  {b.category ? b.category : 'Uncategorized'}
+                </a>
+              )}
+              {!allowCategoryChange && (
+                <span>{b.category ? b.category : 'Uncategorized'}</span>
+              )}
               {b.file_path && (
                 <>
                   <span className="uk-margin-small-left uk-margin-small-right">
@@ -94,12 +117,35 @@ const BookmarksList = ({
                   </a>
                 </>
               )}
+              {showArchiveButton && (
+                <>
+                  <span className="uk-margin-small-left uk-margin-small-right">
+                    ⚬
+                  </span>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                  <a className="uk-link" onClick={() => showDeleteModal(b.id)}>
+                    Delete
+                  </a>
+                </>
+              )}
+              {showUnarchiveButton && (
+                <>
+                  <span className="uk-margin-small-left uk-margin-small-right">
+                    ⚬
+                  </span>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                  <a className="uk-link" onClick={() => unarchiveClicked(b.id)}>
+                    Restore
+                  </a>
+                </>
+              )}
             </div>
           </div>
         ))}
       {bookmarks && bookmarks.length > 0 && (
         <div className="uk-flex uk-flex-row uk-flex-center uk-margin-bottom">
           <Paginator
+            query={query}
             pageNumber={pageNumber}
             pageSize={pageSize}
             totalCount={totalCount}
@@ -122,6 +168,7 @@ const BookmarksList = ({
           <input
             type="text"
             className="uk-input"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={categoryModalOpen}
             value={categoryModalName}
             onChange={nameChange}
@@ -153,6 +200,34 @@ const BookmarksList = ({
               ))}
           </tbody>
         </table>
+      </Modal>
+      <Modal
+        isOpen={deleteModalOpen}
+        onRequestClose={hideDeleteModal}
+        contentLabel="Category modal"
+        style={{ overlay: { backgroundColor: 'rgba(60,60,60,0.6)' } }}
+        className="uk-container-small uk-background-secondary uk-margin-auto uk-padding uk-margin-large-top uk-width-1-1 uk-width-1-3@m uk-width-1-4@l"
+      >
+        <div className="uk-container-small uk-flex uk-flex-row uk-flex-between uk-modal-title">
+          <h2 className="uk-modal-title">Are you sure?</h2>
+        </div>
+        <div className="uk-flex uk-flex-row uk-flex-between uk-margin-top">
+          <button
+            type="button"
+            className="uk-button uk-border-rounded"
+            onClick={() => hideDeleteModal()}
+          >
+            No
+          </button>
+
+          <button
+            type="button"
+            className="uk-button uk-button-danger uk-border-rounded"
+            onClick={() => deleteModalSubmitted()}
+          >
+            Yes
+          </button>
+        </div>
       </Modal>
     </div>
   );

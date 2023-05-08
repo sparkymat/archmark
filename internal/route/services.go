@@ -18,6 +18,7 @@ type ConfigService interface {
 	ProxyAuthNameHeader() string
 }
 
+//nolint:interfacebloat
 type DatabaseService interface {
 	FetchUserByUsername(ctx context.Context, email string) (dbx.User, error)
 	FetchBookmarksList(ctx context.Context, arg dbx.FetchBookmarksListParams) ([]dbx.Bookmark, error)
@@ -28,4 +29,8 @@ type DatabaseService interface {
 	CountBookmarksSearchResults(ctx context.Context, arg dbx.CountBookmarksSearchResultsParams) (int64, error)
 	FetchCategories(ctx context.Context, userID int64) ([]pgtype.Text, error)
 	UpdateBookmarkCategory(ctx context.Context, arg dbx.UpdateBookmarkCategoryParams) error
+	ArchiveBookmark(ctx context.Context, id int64) error
+	UnarchiveBookmark(ctx context.Context, id int64) error
+	FetchArchivedBookmarksList(ctx context.Context, arg dbx.FetchArchivedBookmarksListParams) ([]dbx.Bookmark, error)
+	CountArchivedBookmarksList(ctx context.Context, userID int64) (int64, error)
 }

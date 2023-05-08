@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import bookmarksListReducer from '../features/BookmarksList/slice';
 import newBookmarkReducer from '../features/NewBookmark/slice';
 import searchReducer from '../features/Search/slice';
+import archivedListReducer from '../features/ArchivedList/slice';
 
 export const store = configureStore({
   reducer: {
-    bookmarksList: bookmarksListReducer,
     newBookmark: newBookmarkReducer,
     search: searchReducer,
+    archivedList: archivedListReducer,
   },
 });
 

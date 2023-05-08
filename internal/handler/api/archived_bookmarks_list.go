@@ -10,15 +10,12 @@ import (
 	"github.com/sparkymat/archmark/internal/handler/api/presenter"
 )
 
-//nolint:funlen
-func BookmarksSearch(_ ConfigService, db DatabaseService) echo.HandlerFunc {
+func ArchivedBookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user, isUser := c.Get(auth.UserKey).(dbx.User)
 		if !isUser {
 			return renderError(c, http.StatusInternalServerError, "failed to load user", nil)
 		}
-
-		query := c.QueryParam("query")
 
 		pageSizeString := c.QueryParam("page_size")
 
@@ -36,46 +33,21 @@ func BookmarksSearch(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 
 		offset := (pageNumber - 1) * pageSize
 
-		var bookmarks []dbx.Bookmark
-		var totalCount int64
-
-		//nolint:nestif
-		if query == "" {
-			bookmarks, err = db.FetchBookmarksList(
-				c.Request().Context(),
-				dbx.FetchBookmarksListParams{
-					UserID:     user.ID,
-					PageOffset: int32(offset),
-					PageLimit:  int32(pageSize),
-				},
-			)
-		} else {
-			bookmarks, err = db.SearchBookmarks(
-				c.Request().Context(),
-				dbx.SearchBookmarksParams{
-					UserID:     user.ID,
-					Query:      query,
-					PageOffset: int32(offset),
-					PageLimit:  int32(pageSize),
-				},
-			)
-		}
-
+		bookmarks, err := db.FetchArchivedBookmarksList(
+			c.Request().Context(),
+			dbx.FetchArchivedBookmarksListParams{
+				UserID:     user.ID,
+				PageOffset: int32(offset),
+				PageLimit:  int32(pageSize),
+			},
+		)
 		if err != nil {
-			return renderError(c, http.StatusInternalServerError, "failed to fetch bookmarks", err)
+			return renderError(c, http.StatusInternalServerError, "failed to fetch archived bookmarks", err)
 		}
 
-		if query == "" {
-			totalCount, err = db.CountBookmarksList(c.Request().Context(), user.ID)
-		} else {
-			totalCount, err = db.CountBookmarksSearchResults(c.Request().Context(), dbx.CountBookmarksSearchResultsParams{
-				UserID: user.ID,
-				Query:  query,
-			})
-		}
-
+		totalCount, err := db.CountBookmarksList(c.Request().Context(), user.ID)
 		if err != nil {
-			return renderError(c, http.StatusInternalServerError, "failed to fetch bookmarks count", err)
+			return renderError(c, http.StatusInternalServerError, "failed to fetch archived bookmarks count", err)
 		}
 
 		presentedBookmarks := []presenter.Bookmark{}

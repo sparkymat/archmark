@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { ErrorResponse } from './fetchBookmarksList';
+import { ErrorResponse } from './searchBookmarks';
 
 const fetchCategories = createAsyncThunk<string[] | ErrorResponse>(
-  'features/bookmarksList/fetchCategories',
+  'features/search/fetchCategories',
   async (request, thunkAPI) => {
     try {
       const response = await axios.get('/api/categories');

@@ -39,6 +39,7 @@ type envValues struct {
 	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
 	ProxyAuthUsernameHeader    string `env:"PROXY_AUTH_USERNAME_HEADER" envDefault:"Remote-User"`
 	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER" envDefault:"Remote-Name"`
+	DeleteTimerHours           int32  `env:"DELETE_TIMER_HOURS" envDefault:"48"`
 }
 
 func (s *Service) JWTSecret() string {
@@ -102,4 +103,8 @@ func (s *Service) ProxyAuthUsernameHeader() string {
 
 func (s *Service) ProxyAuthNameHeader() string {
 	return s.envValues.ProxyAuthNameHeader
+}
+
+func (s *Service) DeleteTimerHours() int32 {
+	return s.envValues.DeleteTimerHours
 }
