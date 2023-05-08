@@ -37,9 +37,9 @@ func BookmarksSearch(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 		offset := (pageNumber - 1) * pageSize
 
 		var bookmarks []dbx.Bookmark
+
 		var totalCount int64
 
-		//nolint:nestif
 		if query == "" {
 			bookmarks, err = db.FetchBookmarksList(
 				c.Request().Context(),

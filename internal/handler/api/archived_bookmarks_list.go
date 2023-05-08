@@ -10,6 +10,7 @@ import (
 	"github.com/sparkymat/archmark/internal/handler/api/presenter"
 )
 
+//nolint:dupl
 func ArchivedBookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user, isUser := c.Get(auth.UserKey).(dbx.User)

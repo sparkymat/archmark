@@ -18,6 +18,7 @@ type BookmarksListResponse struct {
 	TotalCount int                  `json:"total_count"`
 }
 
+//nolint:dupl
 func BookmarksList(_ ConfigService, db DatabaseService) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user, isUser := c.Get(auth.UserKey).(dbx.User)
