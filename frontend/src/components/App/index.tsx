@@ -15,21 +15,21 @@ const App = () => (
         style={{ borderBottom: '1px dashed #999999' }}
         href="/"
       >
-        Home
+        home
       </a>
       <a
         className="uk-link-muted uk-margin-left"
         style={{ borderBottom: '1px dashed #999999' }}
         href="/#/bookmark"
       >
-        New bookmark
+        new
       </a>
       <a
         className="uk-link-muted uk-margin-left"
         style={{ borderBottom: '1px dashed #999999' }}
         href="/#/deleted"
       >
-        Deleted
+        deleted
       </a>
     </div>
     <Routes>
