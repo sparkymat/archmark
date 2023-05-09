@@ -5,6 +5,7 @@ ArchMark is a bookmark manager that archives the bookmarked page using [Monolith
 ## Features
 
 - Allows links to be bookmarked and categorized
+- Support local (password-based) login and registration, and reverse-proxy-based authentication (with forwarded headers)
 - Caches a local copy of the bookmarked page (available via the 'cached' link below the original)
 - Keeps deleted bookmarks in the "deleted" section for a period of time before deleting it (defaults to 48 hours); they can be restored before the timer hits
 - Allows searching across content in the bookmarked links (a copy of the linked page is cached for search indexing)
