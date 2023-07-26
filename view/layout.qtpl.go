@@ -37,13 +37,14 @@ func StreamLayout(qw422016 *qt422016.Writer, title string, csrfToken string, con
 //line view/layout.qtpl:8
 	qw422016.N().S(`</title>
       <link rel="stylesheet" type="text/css" href="/css/uikit.min.css">
+      <link rel="stylesheet" type="text/css" href="/css/fonts.css">
       <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
     <body>
       `)
-//line view/layout.qtpl:13
+//line view/layout.qtpl:14
 	qw422016.N().S(content)
-//line view/layout.qtpl:13
+//line view/layout.qtpl:14
 	qw422016.N().S(`
       <script src="/js/uikit.min.js"></script>
       <script src="/js/uikit-icons.min.js"></script>
@@ -51,31 +52,31 @@ func StreamLayout(qw422016 *qt422016.Writer, title string, csrfToken string, con
     </body>
   </html>
 `)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 }
 
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 func WriteLayout(qq422016 qtio422016.Writer, title string, csrfToken string, content string) {
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	StreamLayout(qw422016, title, csrfToken, content)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qt422016.ReleaseWriter(qw422016)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 }
 
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 func Layout(title string, csrfToken string, content string) string {
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qb422016 := qt422016.AcquireByteBuffer()
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	WriteLayout(qb422016, title, csrfToken, content)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qs422016 := string(qb422016.B)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	qt422016.ReleaseByteBuffer(qb422016)
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 	return qs422016
-//line view/layout.qtpl:19
+//line view/layout.qtpl:20
 }
