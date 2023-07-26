@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Button, Container, Flex, TextInput } from '@mantine/core';
 import {
   selectBookmarks,
   selectPageSize,
@@ -146,7 +147,7 @@ const Search = () => {
 
   const dismissDeleteModalClicked = useCallback(() => {
     dispatch(hideDeleteModal());
-  }, []);
+  }, [dispatch]);
 
   const submitDelete = useCallback(() => {
     if (deleteModalBookmarkID) {
@@ -157,11 +158,10 @@ const Search = () => {
   const noop = useCallback(() => {}, []);
 
   return (
-    <div className="uk-container">
-      <div className="uk-margin-top uk-flex uk-flex-row uk-margin-bottom">
-        <input
-          className="uk-input uk-form uk-border-rounded"
-          type="text"
+    <Container>
+      <Flex my="md">
+        <TextInput
+          sx={{ flex: 1 }}
           value={queryValue}
           onChange={queryValueChanged}
           onKeyUp={searchFormKeyUp}
@@ -169,14 +169,10 @@ const Search = () => {
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
         />
-        <button
-          type="button"
-          onClick={searchSubmitted}
-          className="uk-button uk-margin-small-left uk-border-rounded"
-        >
+        <Button variant="outline" onClick={searchSubmitted} ml="sm">
           Search
-        </button>
-      </div>
+        </Button>
+      </Flex>
       {query && (
         <div className="uk-padding-small">
           <p>{`Showing results for '${query}'`}</p>
@@ -204,7 +200,7 @@ const Search = () => {
         allowCategoryChange
         unarchiveClicked={noop}
       />
-    </div>
+    </Container>
   );
 };
 

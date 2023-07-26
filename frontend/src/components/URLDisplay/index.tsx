@@ -1,10 +1,12 @@
+import { Flex, Title } from '@mantine/core';
 import React from 'react';
 
 interface URLDisplayProps {
   value: string;
+  colorScheme: 'light' | 'dark';
 }
 
-const URLDisplay = ({ value }: URLDisplayProps) => {
+const URLDisplay = ({ value, colorScheme }: URLDisplayProps) => {
   const regex = /(http|https):\/\/([^/]*)\/(.*)/;
   const matches = value.match(regex);
 
@@ -17,13 +19,32 @@ const URLDisplay = ({ value }: URLDisplayProps) => {
   const path = matches[3];
 
   return (
-    <>
-      <span className="uk-text-muted uk-text-default">{protocol}://</span>
-      <span style={{ fontWeight: 400 }} className="uk-text-default">
+    <Flex>
+      <Title
+        order={6}
+        weight={300}
+        size="lg"
+        color={colorScheme === 'dark' ? '#666666' : '#999999'}
+      >
+        {protocol}://
+      </Title>
+      <Title
+        order={6}
+        size="lg"
+        weight={400}
+        color={colorScheme === 'dark' ? '#cccccc' : '#222222'}
+      >
         {host}
-      </span>
-      <span className="uk-text-muted uk-text-default">/{path}</span>
-    </>
+      </Title>
+      <Title
+        order={6}
+        weight={300}
+        size="lg"
+        color={colorScheme === 'dark' ? '#666666' : '#999999'}
+      >
+        /{path}
+      </Title>
+    </Flex>
   );
 };
 

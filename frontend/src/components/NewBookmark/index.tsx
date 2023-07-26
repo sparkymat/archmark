@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Container, Flex, TextInput } from '@mantine/core';
 import { AppDispatch } from '../../store';
 import { selectURL } from '../../features/NewBookmark/selects';
 import { updateURL } from '../../features/NewBookmark/slice';
@@ -21,28 +22,21 @@ const NewBookmark = () => {
   }, [dispatch, urlValue]);
 
   return (
-    <div className="uk-container">
-      <div className="uk-margin-top">
-        <input
-          className="uk-input uk-form-large uk-border-rounded"
-          type="text"
+    <Container>
+      <Flex my="md">
+        <TextInput
+          sx={{ flex: 1 }}
           value={urlValue}
           onChange={urlChanged}
           placeholder="Link"
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
         />
-        <div className="uk-flex uk-flex-row-reverse uk-margin-small-top">
-          <button
-            type="button"
-            onClick={formSubmitted}
-            className="uk-button uk-button-primary uk-border-rounded"
-          >
-            Add
-          </button>
-        </div>
-      </div>
-    </div>
+        <Button variant="outline" onClick={formSubmitted} ml="sm">
+          Add
+        </Button>
+      </Flex>
+    </Container>
   );
 };
 
