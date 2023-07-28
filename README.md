@@ -60,6 +60,10 @@ Both the app and the worker are configured using environment variables.
 
 ![bookmarks](/docs/images/list.png)
 
+### Options
+
+![options](/docs/images/options.png)
+
 ### New bookmark
 
 ![new](/docs/images/new.png)
