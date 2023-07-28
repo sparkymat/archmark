@@ -18,6 +18,8 @@ linters:
     - wastedassign
 
 linters-settings:
+  tagalign:
+    align: false
   lll:
     line-length: 160
   cyclop:
