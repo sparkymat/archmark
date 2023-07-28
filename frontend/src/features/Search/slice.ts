@@ -24,7 +24,7 @@ interface SearchState {
   categoryModalName: string;
   filteredCategories: string[];
   deleteModalOpen: boolean;
-  deleteModalBookmarkID?: string;
+  deleteModalBookmark?: Bookmark;
 }
 
 const initialState: SearchState = {
@@ -72,12 +72,12 @@ const slice = createSlice({
           c.toLocaleLowerCase().includes(action.payload.toLocaleLowerCase()),
         );
     },
-    showDeleteModal: (state, action: PayloadAction<string>) => {
-      state.deleteModalBookmarkID = action.payload;
+    showDeleteModal: (state, action: PayloadAction<Bookmark>) => {
+      state.deleteModalBookmark = action.payload;
       state.deleteModalOpen = true;
     },
     hideDeleteModal: state => {
-      state.deleteModalBookmarkID = undefined;
+      state.deleteModalBookmark = undefined;
       state.deleteModalOpen = false;
     },
   },
@@ -134,7 +134,7 @@ const slice = createSlice({
     });
     builder.addCase(deleteBookmark.fulfilled, state => {
       state.loading = false;
-      state.deleteModalBookmarkID = undefined;
+      state.deleteModalBookmark = undefined;
       state.deleteModalOpen = false;
     });
     builder.addCase(deleteBookmark.rejected, (state, action) => {

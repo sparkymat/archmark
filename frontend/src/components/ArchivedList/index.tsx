@@ -56,30 +56,28 @@ const ArchivedList = () => {
   const noop = useCallback(() => {}, []);
 
   return (
-    <div className="uk-container uk-margin-top">
-      <BookmarksList
-        basePath="/#/deleted/"
-        bookmarks={bookmarks}
-        pageNumber={pageNumber}
-        pageSize={pageSize}
-        totalCount={totalCount}
-        showArchiveButton={false}
-        showUnarchiveButton
-        allowCategoryChange={false}
-        categories={[]}
-        categoryModalOpen={false}
-        categoryModalName=""
-        hideCategoryModal={noop}
-        showCategoryModal={noop}
-        categoryModalNameChanged={noop}
-        categoryModalSubmitted={noop}
-        deleteModalOpen={false}
-        showDeleteModal={noop}
-        hideDeleteModal={noop}
-        deleteModalSubmitted={noop}
-        unarchiveClicked={unarchivedClicked}
-      />
-    </div>
+    <BookmarksList
+      basePath="/#/deleted/"
+      bookmarks={bookmarks}
+      pageNumber={pageNumber}
+      pageSize={pageSize}
+      totalCount={totalCount}
+      showArchiveButton={false}
+      showUnarchiveButton
+      allowCategoryChange={false}
+      categories={[]}
+      categoryModalOpen={false}
+      categoryModalName=""
+      hideCategoryModal={noop}
+      showCategoryModal={noop}
+      categoryModalNameChanged={noop}
+      categoryModalSubmitted={noop}
+      deleteModalOpen={false}
+      showDeleteModal={noop}
+      hideDeleteModal={noop}
+      deleteModalSubmitted={noop}
+      unarchiveClicked={unarchivedClicked}
+    />
   );
 };
 

@@ -35,6 +35,6 @@ export const selectCategoryModalBookmarkID = (
 export const selectDeleteModalOpen = (state: RootState): boolean =>
   state.search.deleteModalOpen;
 
-export const selectDeleteModalBookmarkID = (
+export const selectDeleteModalBookmark = (
   state: RootState,
-): string | undefined => state.search.deleteModalBookmarkID;
+): Bookmark | undefined => state.search.deleteModalBookmark;

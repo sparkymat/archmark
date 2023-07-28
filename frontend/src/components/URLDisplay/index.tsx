@@ -19,7 +19,7 @@ const URLDisplay = ({ value, colorScheme }: URLDisplayProps) => {
   const path = matches[3];
 
   return (
-    <Flex>
+    <Flex wrap="wrap">
       <Title
         order={6}
         weight={300}

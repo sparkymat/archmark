@@ -2,9 +2,11 @@ import React, { ChangeEvent, useCallback, useMemo } from 'react';
 import {
   ActionIcon,
   Anchor,
+  Box,
   Button,
-  Container,
   Flex,
+  MediaQuery,
+  Menu,
   Modal,
   Pagination,
   Space,
@@ -14,7 +16,13 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import moment from 'moment';
-import { IconX } from '@tabler/icons-react';
+import {
+  IconCategory,
+  IconDeviceFloppy,
+  IconRestore,
+  IconTrash,
+  IconX,
+} from '@tabler/icons-react';
 import Bookmark from '../../models/Bookmark';
 import URLDisplay from '../URLDisplay';
 
@@ -39,7 +47,7 @@ interface BookmarksListProps {
   categoryModalNameChanged(_val: string): void;
   categoryModalSubmitted(): void;
   hideDeleteModal(): void;
-  showDeleteModal(_bookmarkID: string): void;
+  showDeleteModal(_bookmark: Bookmark): void;
   deleteModalSubmitted(): void;
   unarchiveClicked(_bookmarkID: string): void;
 }
@@ -80,7 +88,7 @@ const BookmarksList = ({
   );
 
   return (
-    <Container>
+    <>
       {(!bookmarks || bookmarks.length === 0) && (
         <Flex p="xl" justify="center" sx={{ border: '1px dashed #999999' }}>
           <Text>No bookmarks found</Text>
@@ -88,17 +96,19 @@ const BookmarksList = ({
       )}
       {bookmarks &&
         bookmarks.map((b, i) => (
-          <Flex direction="column" mb="lg">
-            <Anchor
-              underline={false}
-              color={theme.colorScheme === 'dark' ? '#dddddd' : '#444444'}
-              href={b.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Flex align="center">
-                <Text size="sm">{(pageNumber - 1) * pageSize + i + 1}.</Text>
-                <Space w="sm" />
+          <Flex direction="row" mb="lg">
+            <Text size="sm" mt="xs">
+              {(pageNumber - 1) * pageSize + i + 1}.
+            </Text>
+            <Space w="sm" />
+            <Flex direction="column" mb="lg">
+              <Anchor
+                underline={false}
+                color={theme.colorScheme === 'dark' ? '#dddddd' : '#444444'}
+                href={b.url}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {b.title ? (
                   <Title order={3} size={24} weight={300}>
                     {b.title}
@@ -106,60 +116,85 @@ const BookmarksList = ({
                 ) : (
                   <URLDisplay colorScheme={theme.colorScheme} value={b.url} />
                 )}
-              </Flex>
-            </Anchor>
-            <Flex>
-              <Text>added {moment(b.created_at).toNow(true)} ago</Text>
-              <Text mx="xs">⚬</Text>
-              {allowCategoryChange && (
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                <Anchor
-                  underline={false}
-                  onClick={() => showCategoryModal(b.id)}
-                >
+              </Anchor>
+              {b.title && (
+                <Box mt="xs">
+                  <URLDisplay colorScheme={theme.colorScheme} value={b.url} />
+                </Box>
+              )}
+              <Flex direction="row" wrap="wrap" mt="xs">
+                <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+                  <Flex>
+                    <Text
+                      color={
+                        theme.colorScheme === 'dark' ? '#999999' : '#555555'
+                      }
+                    >
+                      added {moment(b.created_at).toNow(true)} ago
+                    </Text>
+                    <Text mx="xs">⚬</Text>
+                  </Flex>
+                </MediaQuery>
+                {allowCategoryChange && (
+                  // eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                  <Anchor
+                    underline={false}
+                    onClick={() => showCategoryModal(b.id)}
+                  >
+                    <Text>{b.category ? b.category : 'Uncategorized'}</Text>
+                  </Anchor>
+                )}
+                {!allowCategoryChange && (
                   <Text>{b.category ? b.category : 'Uncategorized'}</Text>
-                </Anchor>
-              )}
-              {!allowCategoryChange && (
-                <Text>{b.category ? b.category : 'Uncategorized'}</Text>
-              )}
-              {b.file_path && (
+                )}
+
                 <>
                   <Text mx="xs">⚬</Text>
-                  <Anchor
-                    underline={false}
-                    href={`/uploads/${b.file_path}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Cached
-                  </Anchor>
+                  <Menu shadow="md" width={200}>
+                    <Menu.Target>
+                      <Anchor underline={false}>Options</Anchor>
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                      {b.file_path && (
+                        <Menu.Item
+                          icon={<IconDeviceFloppy size={14} />}
+                          onClick={() =>
+                            window.open(`/uploads/${b.file_path}`, '_blank')
+                          }
+                        >
+                          Open cached
+                        </Menu.Item>
+                      )}
+                      {allowCategoryChange && (
+                        <Menu.Item
+                          icon={<IconCategory size={14} />}
+                          onClick={() => showCategoryModal(b.id)}
+                        >
+                          Change category
+                        </Menu.Item>
+                      )}
+                      {showArchiveButton && (
+                        <Menu.Item
+                          color="red"
+                          icon={<IconTrash size={14} />}
+                          onClick={() => showDeleteModal(b)}
+                        >
+                          Delete
+                        </Menu.Item>
+                      )}
+                      {showUnarchiveButton && (
+                        <Menu.Item
+                          icon={<IconRestore size={14} />}
+                          onClick={() => unarchiveClicked(b.id)}
+                        >
+                          Restore
+                        </Menu.Item>
+                      )}
+                    </Menu.Dropdown>
+                  </Menu>
                 </>
-              )}
-              {showArchiveButton && (
-                <>
-                  <Text mx="xs">⚬</Text>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                  <Anchor
-                    underline={false}
-                    onClick={() => showDeleteModal(b.id)}
-                  >
-                    Delete
-                  </Anchor>
-                </>
-              )}
-              {showUnarchiveButton && (
-                <>
-                  <Text mx="xs">⚬</Text>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                  <Anchor
-                    underline={false}
-                    onClick={() => unarchiveClicked(b.id)}
-                  >
-                    Restore
-                  </Anchor>
-                </>
-              )}
+              </Flex>
             </Flex>
           </Flex>
         ))}
@@ -259,7 +294,7 @@ const BookmarksList = ({
       >
         <Flex direction="column" align="center" p="md">
           <Title order={3} weight={300} mb="xl">
-            Are you sure?
+            Are you sure you want to delete?
           </Title>
           <Flex justify="space-between">
             <Button
@@ -282,7 +317,7 @@ const BookmarksList = ({
           </Flex>
         </Flex>
       </Modal>
-    </Container>
+    </>
   );
 };
 

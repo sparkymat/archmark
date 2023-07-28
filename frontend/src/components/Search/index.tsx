@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Container, Flex, TextInput } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import {
   selectBookmarks,
   selectPageSize,
@@ -12,7 +12,7 @@ import {
   selectCategoryModalOpen,
   selectFilteredCategories,
   selectDeleteModalOpen,
-  selectDeleteModalBookmarkID,
+  selectDeleteModalBookmark,
 } from '../../features/Search/selects';
 import searchBookmarks from '../../features/Search/searchBookmarks';
 import { AppDispatch } from '../../store';
@@ -31,6 +31,7 @@ import {
   hideDeleteModal,
 } from '../../features/Search/slice';
 import deleteBookmark from '../../features/Search/deleteBookmark';
+import Bookmark from '../../models/Bookmark';
 
 const Search = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -73,7 +74,7 @@ const Search = () => {
   const deleteModalOpen = useSelector(selectDeleteModalOpen);
   const categoryModalName = useSelector(selectCategoryModalName);
   const categoryModalBookmarkID = useSelector(selectCategoryModalBookmarkID);
-  const deleteModalBookmarkID = useSelector(selectDeleteModalBookmarkID);
+  const deleteModalBookmark = useSelector(selectDeleteModalBookmark);
 
   const queryValue = useSelector(selectQueryValue);
 
@@ -117,8 +118,8 @@ const Search = () => {
   );
 
   const deleteClicked = useCallback(
-    (bookmarkID: string) => {
-      dispatch(showDeleteModal(bookmarkID));
+    (bookmark: Bookmark) => {
+      dispatch(showDeleteModal(bookmark));
     },
     [dispatch],
   );
@@ -150,15 +151,15 @@ const Search = () => {
   }, [dispatch]);
 
   const submitDelete = useCallback(() => {
-    if (deleteModalBookmarkID) {
-      dispatch(deleteBookmark(deleteModalBookmarkID));
+    if (deleteModalBookmark) {
+      dispatch(deleteBookmark(deleteModalBookmark.id));
     }
-  }, [deleteModalBookmarkID, dispatch]);
+  }, [deleteModalBookmark, dispatch]);
 
   const noop = useCallback(() => {}, []);
 
   return (
-    <Container>
+    <Flex direction="column">
       <Flex my="md">
         <TextInput
           sx={{ flex: 1 }}
@@ -200,7 +201,7 @@ const Search = () => {
         allowCategoryChange
         unarchiveClicked={noop}
       />
-    </Container>
+    </Flex>
   );
 };
 

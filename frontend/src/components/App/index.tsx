@@ -82,7 +82,7 @@ const App = () => {
         </Header>
       }
     >
-      <Container>
+      <Container size="lg">
         <Routes>
           <Route index element={<Search />} />
           <Route path="/page/:page" element={<Search />} />
