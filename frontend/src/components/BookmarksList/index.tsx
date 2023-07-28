@@ -1,19 +1,22 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useMemo } from 'react';
 import {
+  ActionIcon,
   Anchor,
   Button,
   Container,
   Flex,
   Modal,
+  Pagination,
   Space,
   Text,
+  TextInput,
   Title,
   useMantineTheme,
 } from '@mantine/core';
 import moment from 'moment';
+import { IconX } from '@tabler/icons-react';
 import Bookmark from '../../models/Bookmark';
 import URLDisplay from '../URLDisplay';
-import Paginator from '../Paginatior';
 
 interface BookmarksListProps {
   basePath: string;
@@ -70,6 +73,11 @@ const BookmarksList = ({
     [categoryModalNameChanged],
   );
   const theme = useMantineTheme();
+
+  const pageCount = useMemo(
+    () => Math.ceil(totalCount / pageSize),
+    [pageSize, totalCount],
+  );
 
   return (
     <Container>
@@ -157,72 +165,103 @@ const BookmarksList = ({
         ))}
       {bookmarks && bookmarks.length > 0 && (
         <Flex justify="center" mb="md">
-          <Paginator
-            basePath={basePath}
-            pageNumber={pageNumber}
-            pageSize={pageSize}
-            totalCount={totalCount}
+          <Pagination
+            value={pageNumber}
+            boundaries={1}
+            total={pageCount}
+            position="center"
+            withEdges
+            getItemProps={p => ({
+              component: 'a',
+              href: `${basePath}page/${p}`,
+            })}
+            getControlProps={control => {
+              if (control === 'first') {
+                return { component: 'a', href: `${basePath}page/1` };
+              }
+
+              if (control === 'last') {
+                return {
+                  component: 'a',
+                  href: `${basePath}page/${pageCount}`,
+                };
+              }
+
+              if (control === 'next') {
+                return {
+                  component: 'a',
+                  href:
+                    pageNumber + 1 > pageCount
+                      ? `${basePath}page/${pageNumber}`
+                      : `${basePath}page/${pageNumber + 1}`,
+                };
+              }
+
+              if (control === 'previous') {
+                return {
+                  component: 'a',
+                  href:
+                    pageNumber - 1 < 1
+                      ? `${basePath}page/${pageNumber}`
+                      : `${basePath}page/${pageNumber - 1}`,
+                };
+              }
+
+              return {};
+            }}
           />
         </Flex>
       )}
       <Modal
         opened={categoryModalOpen}
         onClose={hideCategoryModal}
-        title="Category modal"
+        withCloseButton={false}
       >
-        <div className="uk-container-small uk-flex uk-flex-row uk-flex-between uk-modal-title">
-          <h2 className="uk-modal-title">Choose category</h2>
-          {/* eslint-disable-next-line max-len */}
-          {/* eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-        </div>
-        <div className="uk-flex uk-flex-row">
-          <input
-            type="text"
-            className="uk-input"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus={categoryModalOpen}
-            value={categoryModalName}
-            onChange={nameChange}
-            placeholder="Type new category or choose below"
-          />
-          <button
-            type="button"
-            className="uk-button uk-margin-small-left"
-            onClick={categoryModalSubmitted}
-          >
-            Update
-          </button>
-        </div>
-        <table className="uk-table">
-          <tbody>
+        <Flex direction="column" align="stretch" p="lg">
+          <Title align="center" order={3} weight={300} mb="xl">
+            Change category
+          </Title>
+          <Flex>
+            <TextInput
+              sx={{ flex: 1 }}
+              autoFocus={categoryModalOpen}
+              value={categoryModalName}
+              onChange={nameChange}
+              placeholder="Type new category or choose below"
+              rightSection={
+                <ActionIcon onClick={() => categoryModalNameChanged('')}>
+                  <IconX size="1.125rem" />
+                </ActionIcon>
+              }
+            />
+            <Button variant="outline" ml="sm" onClick={categoryModalSubmitted}>
+              Update
+            </Button>
+          </Flex>
+          <Flex direction="column" justify="stretch">
             {categories &&
               categories.slice(0, 5).map(c => (
-                <tr className="uk-padding-bottom">
-                  <td className="uk-text-large uk-padding-remove">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                    <a
-                      className="uk-link-muted"
-                      onClick={() => categoryModalNameChanged(c)}
-                    >
-                      {c}
-                    </a>
-                  </td>
-                </tr>
+                <Button
+                  variant="subtle"
+                  onClick={() => categoryModalNameChanged(c)}
+                  mt="xs"
+                >
+                  {c}
+                </Button>
               ))}
-          </tbody>
-        </table>
+          </Flex>
+        </Flex>
       </Modal>
       <Modal
         opened={deleteModalOpen}
         onClose={hideDeleteModal}
         withCloseButton={false}
-        centered
       >
-        <Flex direction="column" align="center" p="xl">
-          <Title order={3} weight={300} my="lg">
+        <Flex direction="column" align="center" p="md">
+          <Title order={3} weight={300} mb="xl">
             Are you sure?
           </Title>
-          <Flex justify="space-between" my="md">
+          <Flex justify="space-between">
             <Button
               color="red"
               variant="outline"
