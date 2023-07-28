@@ -32,14 +32,14 @@ type envValues struct {
 	DatabasePort               string `env:"DATABASE_PORT,required"`
 	DatabaseUsername           string `env:"DATABASE_USERNAME"`
 	DatabasePassword           string `env:"DATABASE_PASSWORD"`
-	DatabaseSSLMode            bool   `env:"DATABASE_SSL_MODE" envDefault:"true"`
-	DisableRegistration        bool   `env:"DISABLE_REGISTRATION" envDefault:"false"`
+	DatabaseSSLMode            bool   `env:"DATABASE_SSL_MODE"    				envDefault:"true"`
+	DisableRegistration        bool   `env:"DISABLE_REGISTRATION" 				envDefault:"false"`
 	DownloadPath               string `env:"DOWNLOAD_PATH,required"`
 	MonolithPath               string `env:"MONOLITH_PATH,required"`
 	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
-	ProxyAuthUsernameHeader    string `env:"PROXY_AUTH_USERNAME_HEADER" envDefault:"Remote-User"`
-	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER" envDefault:"Remote-Name"`
-	DeleteTimerHours           int32  `env:"DELETE_TIMER_HOURS" envDefault:"48"`
+	ProxyAuthUsernameHeader    string `env:"PROXY_AUTH_USERNAME_HEADER"   envDefault:"Remote-User"`
+	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER"       envDefault:"Remote-Name"`
+	DeleteTimerHours           int32  `env:"DELETE_TIMER_HOURS"           envDefault:"48"`
 }
 
 func (s *Service) JWTSecret() string {
