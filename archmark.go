@@ -8,9 +8,9 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
-	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/dbx"
+	"github.com/sparkymat/archmark/internal/config"
 	"github.com/sparkymat/archmark/internal/jobs"
 	"github.com/sparkymat/archmark/internal/route"
 )

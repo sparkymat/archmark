@@ -12,9 +12,9 @@ import (
 	worker "github.com/contribsys/faktory_worker_go"
 	"github.com/google/uuid"
 	"github.com/sparkymat/archmark/archive"
-	"github.com/sparkymat/archmark/config"
 	"github.com/sparkymat/archmark/database"
 	"github.com/sparkymat/archmark/dbx"
+	"github.com/sparkymat/archmark/internal/config"
 )
 
 const (
