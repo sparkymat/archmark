@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/auth"
-	"github.com/sparkymat/archmark/view"
+	"github.com/sparkymat/archmark/internal/view"
 	"golang.org/x/crypto/bcrypt"
 )
 

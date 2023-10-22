@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/sparkymat/archmark/view"
+	"github.com/sparkymat/archmark/internal/view"
 )
 
 func Home() echo.HandlerFunc {

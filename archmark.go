@@ -1,6 +1,6 @@
 package main
 
-//go:generate go run github.com/valyala/quicktemplate/qtc -dir=view
+//go:generate go run github.com/valyala/quicktemplate/qtc -dir=internal/view
 
 import (
 	"time"
