@@ -7,7 +7,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/sparkymat/archmark/jwt"
 )
 
 var ErrSessionError = errors.New("session error")
@@ -28,7 +27,7 @@ func LoadUsernameFromSession(cfg ConfigService, c echo.Context) (string, error) 
 		return "", ErrSessionError
 	}
 
-	email, err := jwt.ValidateTokenString(cfg.JWTSecret(), token)
+	email, err := ValidateJWTString(cfg.JWTSecret(), token)
 	if err != nil {
 		return "", err //nolint:wrapcheck
 	}
@@ -52,7 +51,7 @@ func SaveUsernameToSession(cfg ConfigService, c echo.Context, username string) e
 		HttpOnly: true,
 	}
 
-	token, err := jwt.GenerateToken(cfg.JWTSecret(), username)
+	token, err := GenerateJWTString(cfg.JWTSecret(), username)
 	if err != nil {
 		return fmt.Errorf("failed to generate token. err: %w", err)
 	}

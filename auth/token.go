@@ -1,4 +1,4 @@
-package jwt
+package auth
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ type Claims struct {
 
 const TokenExpiryLengthHours = 8
 
-func ValidateTokenString(jwtSecret string, tokenString string) (*string, error) {
+func ValidateJWTString(jwtSecret string, tokenString string) (*string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtSecret), nil
 	})
@@ -30,7 +30,7 @@ func ValidateTokenString(jwtSecret string, tokenString string) (*string, error) 
 	return &claims.Username, nil
 }
 
-func GenerateToken(jwtSecret string, username string) (string, error) {
+func GenerateJWTString(jwtSecret string, username string) (string, error) {
 	claims := Claims{
 		Username: username,
 		StandardClaims: jwt.StandardClaims{
