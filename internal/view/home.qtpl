@@ -1,3 +1,0 @@
-{% func Home() %}
-  <div id="archmark-app"></div>
-{% endfunc %}
