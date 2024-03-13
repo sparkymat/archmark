@@ -1,0 +1,17 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "internal/database/queries.sql"
+    schema: "internal/database/schema.sql"
+    gen:
+      go:
+        package: "dbx"
+        out: "internal/dbx"
+        sql_package: "pgx/v5"
+        overrides:
+          - db_type: "uuid"
+            nullable: false
+            go_type: "github.com/google/uuid.UUID"
+          - db_type: "uuid"
+            nullable: true
+            go_type: "github.com/google/uuid.NullUUID"
