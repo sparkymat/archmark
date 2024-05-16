@@ -8,10 +8,11 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/internal"
-	"github.com/sparkymat/archmark/internal/config"
 	"github.com/sparkymat/archmark/internal/database"
 	"github.com/sparkymat/archmark/internal/dbx"
+	"github.com/sparkymat/archmark/internal/provider/config"
 	"github.com/sparkymat/archmark/internal/route"
+	"github.com/sparkymat/archmark/internal/service/features"
 	"github.com/sparkymat/archmark/internal/service/user"
 )
 
@@ -38,10 +39,13 @@ func main() {
 	asynqClient := asynq.NewClient(asynq.RedisClientOpt{Addr: cfg.RedisURL()})
 	defer asynqClient.Close()
 
-	userService := user.New(db)
+	userService := user.New(cfg, db)
+
+	featuresService := features.New(cfg)
 
 	services := internal.Services{
-		User: userService,
+		User:     userService,
+		Features: featuresService,
 	}
 
 	e := echo.New()

@@ -6,7 +6,7 @@ type ConfigService interface {
 	DatabaseURL() string
 	DisableRegistration() bool
 	ReverseProxyAuthentication() bool
-	ProxyAuthUsernameHeader() string
+	ProxyAuthEmailHeader() string
 	ProxyAuthNameHeader() string
 	StorageFolder() string
 }

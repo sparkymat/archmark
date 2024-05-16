@@ -47,12 +47,12 @@ func APIMiddleware(cfg ConfigService, userService UserService) echo.MiddlewareFu
 }
 
 func sessionAuth(c echo.Context, cfg ConfigService, userService UserService) error {
-	email, err := LoadEmailFromSession(cfg, c)
+	userID, err := LoadUserIDFromSession(cfg.JWTSecret(), c)
 	if err != nil {
 		return err
 	}
 
-	user, err := userService.FetchUserByEmail(c.Request().Context(), email)
+	user, err := userService.FetchUserByID(c.Request().Context(), userID)
 	if err != nil {
 		return err //nolint:wrapcheck
 	}

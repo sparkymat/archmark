@@ -16,7 +16,7 @@ func ProxyAuthMiddleware(cfg ConfigService, userService UserService) echo.Middle
 		return func(c echo.Context) error {
 			name := c.Request().Header.Get(cfg.ProxyAuthNameHeader())
 
-			email := c.Request().Header.Get(cfg.ProxyAuthUsernameHeader())
+			email := c.Request().Header.Get(cfg.ProxyAuthEmailHeader())
 			if email == "" {
 				return c.String(http.StatusUnauthorized, "user header missing") //nolint:wrapcheck
 			}

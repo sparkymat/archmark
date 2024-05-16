@@ -6,13 +6,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/sparkymat/archmark/internal"
+	"github.com/sparkymat/archmark/internal/service/user"
 	"github.com/sparkymat/archmark/internal/view"
-	"golang.org/x/crypto/bcrypt"
-)
-
-const (
-	minPasswordLength = 8
-	defaultBcryptCost = 10
 )
 
 func Register(_ internal.Services) echo.HandlerFunc {
@@ -28,35 +23,17 @@ func DoRegister(s internal.Services) echo.HandlerFunc {
 		password := c.FormValue("password")
 		passwordConfirmation := c.FormValue("password_confirmation")
 
-		if password != passwordConfirmation {
-			log.Printf("passwords don't match")
-
-			return renderRegistrationPage(c, name, email, "Passwords don't match")
-		}
-
-		if len(password) < minPasswordLength {
-			log.Printf("password too short")
-
-			return renderRegistrationPage(c, name, email, "Password too short")
-		}
-
-		_, err := s.User.FetchUserByEmail(c.Request().Context(), email)
-		if err == nil {
-			return renderRegistrationPage(c, name, email, "User already registered")
-		}
-
-		encryptedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(password), defaultBcryptCost)
-		if err != nil {
-			log.Printf("password does not match")
-
-			return renderRegistrationPage(c, name, email, "Registration failed")
-		}
-
-		_, err = s.User.CreateUser(c.Request().Context(), name, email, string(encryptedPasswordBytes))
-		if err != nil {
-			log.Printf("failed to create new user. err: %v", err)
-
-			return renderRegistrationPage(c, name, email, "Registration failed")
+		if _, err := s.User.Register(c, name, email, password, passwordConfirmation); err != nil {
+			switch err {
+			case user.ErrPasswordsDontMatch:
+				return renderRegistrationPage(c, name, email, "Passwords don't match")
+			case user.ErrPasswordTooShort:
+				return renderRegistrationPage(c, name, email, "Password too short")
+			case user.ErrUserAlreadyRegistered:
+				return renderRegistrationPage(c, name, email, "User already registered")
+			default:
+				return renderRegistrationPage(c, name, email, "Registration failed")
+			}
 		}
 
 		//nolint:wrapcheck

@@ -7,6 +7,8 @@ package dbx
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -44,6 +46,25 @@ WHERE email = $1::text LIMIT 1
 
 func (q *Queries) FetchUserByEmail(ctx context.Context, email string) (User, error) {
 	row := q.db.QueryRow(ctx, fetchUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.EncryptedPassword,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const fetchUserByID = `-- name: FetchUserByID :one
+SELECT id, name, email, encrypted_password, created_at, updated_at FROM users
+WHERE id = $1::uuid LIMIT 1
+`
+
+func (q *Queries) FetchUserByID(ctx context.Context, userID uuid.UUID) (User, error) {
+	row := q.db.QueryRow(ctx, fetchUserByID, userID)
 	var i User
 	err := row.Scan(
 		&i.ID,

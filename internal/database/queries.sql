@@ -1,3 +1,7 @@
+-- name: FetchUserByID :one
+SELECT * FROM users
+WHERE id = @user_id::uuid LIMIT 1;
+
 -- name: FetchUserByEmail :one
 SELECT * FROM users
 WHERE email = @email::text LIMIT 1;

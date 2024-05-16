@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -11,38 +12,43 @@ import (
 
 var ErrSessionError = errors.New("session error")
 
-func LoadEmailFromSession(cfg ConfigService, c echo.Context) (string, error) {
+func LoadUserIDFromSession(jwtSecret string, c echo.Context) (uuid.UUID, error) {
 	sess, err := session.Get(sessionName, c)
 	if err != nil {
-		return "", err //nolint:wrapcheck
+		return uuid.Nil, err //nolint:wrapcheck
 	}
 
 	tokenInterface, valueExists := sess.Values[tokenKey]
 	if !valueExists {
-		return "", ErrSessionError
+		return uuid.Nil, ErrSessionError
 	}
 
 	token, isString := tokenInterface.(string)
 	if !isString {
-		return "", ErrSessionError
+		return uuid.Nil, ErrSessionError
 	}
 
-	email, err := ValidateJWTString(cfg.JWTSecret(), token)
+	userIDString, err := ParseJWTString(jwtSecret, token)
 	if err != nil {
-		return "", err
+		return uuid.Nil, err
 	}
 
-	if email == nil {
-		return "", ErrSessionError
+	if userIDString == nil {
+		return uuid.Nil, ErrSessionError
 	}
 
-	return *email, nil
+	userID, err := uuid.Parse(*userIDString)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return userID, nil
 }
 
-func SaveEmailToSession(cfg ConfigService, c echo.Context, email string) error {
+func SaveUserIDToSession(jwtSecret string, c echo.Context, userID uuid.UUID) error {
 	sess, err := session.Get(sessionName, c)
 	if err != nil {
-		return fmt.Errorf("failed to initialize session: %w", err)
+		return fmt.Errorf("failed to initialize session. err: %w", err)
 	}
 
 	sess.Options = &sessions.Options{
@@ -51,16 +57,16 @@ func SaveEmailToSession(cfg ConfigService, c echo.Context, email string) error {
 		HttpOnly: true,
 	}
 
-	token, err := GenerateJWTString(cfg.JWTSecret(), email)
+	token, err := GenerateJWTString(jwtSecret, userID)
 	if err != nil {
-		return fmt.Errorf("failed to generate token: %w", err)
+		return fmt.Errorf("failed to generate token. err: %w", err)
 	}
 
 	sess.Values[tokenKey] = token
 
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
-		return fmt.Errorf("failed to save session: %w", err)
+		return fmt.Errorf("failed to save session. err: %w", err)
 	}
 
 	return nil
