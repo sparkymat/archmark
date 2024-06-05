@@ -39,7 +39,7 @@ func LoadUserIDFromSession(jwtSecret string, c echo.Context) (uuid.UUID, error) 
 
 	userID, err := uuid.Parse(*userIDString)
 	if err != nil {
-		return uuid.Nil, err
+		return uuid.Nil, err //nolint:wrapcheck
 	}
 
 	return userID, nil

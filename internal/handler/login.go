@@ -22,14 +22,12 @@ func DoLogin(s internal.Services) echo.HandlerFunc {
 		password := c.FormValue("password")
 
 		err := s.User.Login(c, email, password)
-
 		if err != nil {
 			log.Printf("failed to log user in: %s", err.Error())
 
 			return renderLoginPage(s, c, email, "Authentication failed")
 		}
 
-		//nolint:wrapcheck
 		return c.Redirect(http.StatusSeeOther, "/")
 	}
 }
@@ -44,7 +42,7 @@ func renderLoginPage(s internal.Services, c echo.Context, email string, errorMes
 	}
 
 	pageHTML := view.Login(s.Features.Enabled(features.FeatureFlagRegistrationDisabled), csrfToken, email, errorMessage)
-	htmlString := view.Layout("oxbook | login", csrfToken, pageHTML)
+	htmlString := view.Layout("archmark | login", csrfToken, pageHTML)
 
 	//nolint:wrapcheck
 	return c.HTMLBlob(http.StatusOK, []byte(htmlString))

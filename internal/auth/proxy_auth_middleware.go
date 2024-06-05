@@ -18,7 +18,7 @@ func ProxyAuthMiddleware(cfg ConfigService, userService UserService) echo.Middle
 
 			email := c.Request().Header.Get(cfg.ProxyAuthEmailHeader())
 			if email == "" {
-				return c.String(http.StatusUnauthorized, "user header missing") //nolint:wrapcheck
+				return c.String(http.StatusUnauthorized, "user header missing")
 			}
 
 			user, err := userService.FetchUserByEmail(c.Request().Context(), email)
@@ -32,12 +32,12 @@ func ProxyAuthMiddleware(cfg ConfigService, userService UserService) echo.Middle
 
 			encryptedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(password), defaultBcryptCost)
 			if err != nil {
-				return c.String(http.StatusUnauthorized, "failed to generate password") //nolint:wrapcheck
+				return c.String(http.StatusUnauthorized, "failed to generate password")
 			}
 
 			user, err = userService.CreateUser(c.Request().Context(), name, email, string(encryptedPasswordBytes))
 			if err != nil {
-				return c.String(http.StatusUnauthorized, "failed to add new user") //nolint:wrapcheck
+				return c.String(http.StatusUnauthorized, "failed to add new user")
 			}
 
 			c.Set(UserKey, user)

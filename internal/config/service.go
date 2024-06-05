@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/caarlos0/env/v9"
+	"github.com/caarlos0/env/v11"
 )
 
 func New() (*Service, error) {
@@ -12,7 +12,7 @@ func New() (*Service, error) {
 
 	err := env.Parse(&envValues)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load config from env: %w", err)
+		return nil, fmt.Errorf("failed to load config from env. err: %w", err)
 	}
 
 	return &Service{
@@ -35,7 +35,6 @@ type envValues struct {
 	DatabaseSSLMode            bool   `env:"DATABASE_SSL_MODE"            envDefault:"true"`
 	DisableRegistration        bool   `env:"DISABLE_REGISTRATION"         envDefault:"false"`
 	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
-	ProxyAuthUsernameHeader    string `env:"PROXY_AUTH_USERNAME_HEADER"   envDefault:"Remote-User"`
 	ProxyAuthEmailHeader       string `env:"PROXY_AUTH_EMAIL_HEADER"      envDefault:"Remote-Email"`
 	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER"       envDefault:"Remote-Name"`
 	RedisURL                   string `env:"REDIS_URL,required"`
@@ -61,7 +60,7 @@ func (s *Service) DatabaseURL() string {
 			connString = fmt.Sprintf("%s:%s", connString, encodedPassword)
 		}
 
-		connString = fmt.Sprintf("%s@", connString)
+		connString += "@"
 	}
 
 	sslMode := "disable"
@@ -87,10 +86,6 @@ func (s *Service) DisableRegistration() bool {
 
 func (s *Service) ReverseProxyAuthentication() bool {
 	return s.envValues.ReverseProxyAuthentication
-}
-
-func (s *Service) ProxyAuthUsernameHeader() string {
-	return s.envValues.ProxyAuthUsernameHeader
 }
 
 func (s *Service) ProxyAuthEmailHeader() string {

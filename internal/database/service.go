@@ -14,7 +14,7 @@ import (
 func New(connectionString string) (*Service, error) {
 	config, err := pgxpool.ParseConfig(connectionString)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse pg config: %w", err)
+		return nil, fmt.Errorf("failed to parse pg config. err: %w", err)
 	}
 
 	config.MinConns = 4
@@ -22,12 +22,12 @@ func New(connectionString string) (*Service, error) {
 
 	dbConn, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to pg: %w", err)
+		return nil, fmt.Errorf("failed to connect to pg. err: %w", err)
 	}
 
 	err = dbConn.Ping(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("failed to ping pg: %w", err)
+		return nil, fmt.Errorf("failed to ping pg. err: %w", err)
 	}
 
 	return &Service{

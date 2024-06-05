@@ -14,7 +14,7 @@ type ConfigService interface {
 }
 
 type UserService interface {
-	CreateUser(ctx context.Context, name string, username string, encryptedPassword string) (dbx.User, error)
+	CreateUser(ctx context.Context, name string, email string, encryptedPassword string) (dbx.User, error)
 	FetchUserByEmail(ctx context.Context, email string) (dbx.User, error)
 	FetchUserByID(ctx context.Context, userID uuid.UUID) (dbx.User, error)
 }

@@ -25,6 +25,6 @@ db-schema-dump:
 	pg_dump --schema-only -O archmark > internal/database/schema.sql
 
 sqlc-gen:
-	sqlc --experimental generate
+	sqlc generate
 
 .PHONY: archmark archmark-worker start-app start-worker start-view db-migrate db-schema-dump sqlc-gen

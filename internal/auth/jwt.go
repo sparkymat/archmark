@@ -10,14 +10,15 @@ import (
 
 type Claims struct {
 	jwt.StandardClaims
-	UserID string `json:"username"`
 }
 
-const TokenExpiryLengthHours = 8
-const Issuer = "oxbook"
+const (
+	TokenExpiryLengthHours = 8
+	Issuer                 = "archmark"
+)
 
 func ParseJWTString(jwtSecret string, tokenString string) (*string, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(_ *jwt.Token) (interface{}, error) {
 		return []byte(jwtSecret), nil
 	})
 	if err != nil {
@@ -29,15 +30,15 @@ func ParseJWTString(jwtSecret string, tokenString string) (*string, error) {
 		return nil, fmt.Errorf("unable to obtain claims. err: %w", err)
 	}
 
-	return &claims.UserID, nil
+	return &claims.Subject, nil
 }
 
 func GenerateJWTString(jwtSecret string, userID uuid.UUID) (string, error) {
 	claims := Claims{
-		UserID: userID.String(),
 		StandardClaims: jwt.StandardClaims{
+			Subject:   userID.String(),
 			ExpiresAt: time.Now().Add(time.Hour * TokenExpiryLengthHours).Unix(),
-			Issuer:    "oxbook",
+			Issuer:    "archmark",
 		},
 	}
 

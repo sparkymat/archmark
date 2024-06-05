@@ -7,13 +7,13 @@ import (
 	"github.com/sparkymat/archmark/internal/auth"
 )
 
-func registerAPIRoutes(app *echo.Group, cfg ConfigService, s internal.Services) {
+func registerAPIRoutes(app *echo.Group, cfg ConfigService, services internal.Services) {
 	apiGroup := app.Group("api")
 
 	if cfg.ReverseProxyAuthentication() {
-		apiGroup.Use(auth.ProxyAuthMiddleware(cfg, s.User))
+		apiGroup.Use(auth.ProxyAuthMiddleware(cfg, services.User))
 	} else {
-		apiGroup.Use(auth.APIMiddleware(cfg, s.User))
+		apiGroup.Use(auth.APIMiddleware(cfg, services.User))
 	}
 
 	apiGroup.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{

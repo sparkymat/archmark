@@ -18,7 +18,7 @@ var (
 )
 
 //line internal/view/login.qtpl:1
-func StreamLogin(qw422016 *qt422016.Writer, disableRegistration bool, csrfToken string, username string, errorMessage string) {
+func StreamLogin(qw422016 *qt422016.Writer, disableRegistration bool, csrfToken string, email string, errorMessage string) {
 //line internal/view/login.qtpl:1
 	qw422016.N().S(`
   <div class="uk-container">
@@ -31,9 +31,9 @@ func StreamLogin(qw422016 *qt422016.Writer, disableRegistration bool, csrfToken 
 //line internal/view/login.qtpl:6
 	qw422016.N().S(`">
         <div class="uk-margin">
-          <input class="uk-input" type="text" name="username" placeholder="Username" value="`)
+          <input class="uk-input" type="email" name="email" placeholder="Email" value="`)
 //line internal/view/login.qtpl:8
-	qw422016.E().S(username)
+	qw422016.E().S(email)
 //line internal/view/login.qtpl:8
 	qw422016.N().S(`">
         </div>
@@ -79,22 +79,22 @@ func StreamLogin(qw422016 *qt422016.Writer, disableRegistration bool, csrfToken 
 }
 
 //line internal/view/login.qtpl:27
-func WriteLogin(qq422016 qtio422016.Writer, disableRegistration bool, csrfToken string, username string, errorMessage string) {
+func WriteLogin(qq422016 qtio422016.Writer, disableRegistration bool, csrfToken string, email string, errorMessage string) {
 //line internal/view/login.qtpl:27
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line internal/view/login.qtpl:27
-	StreamLogin(qw422016, disableRegistration, csrfToken, username, errorMessage)
+	StreamLogin(qw422016, disableRegistration, csrfToken, email, errorMessage)
 //line internal/view/login.qtpl:27
 	qt422016.ReleaseWriter(qw422016)
 //line internal/view/login.qtpl:27
 }
 
 //line internal/view/login.qtpl:27
-func Login(disableRegistration bool, csrfToken string, username string, errorMessage string) string {
+func Login(disableRegistration bool, csrfToken string, email string, errorMessage string) string {
 //line internal/view/login.qtpl:27
 	qb422016 := qt422016.AcquireByteBuffer()
 //line internal/view/login.qtpl:27
-	WriteLogin(qb422016, disableRegistration, csrfToken, username, errorMessage)
+	WriteLogin(qb422016, disableRegistration, csrfToken, email, errorMessage)
 //line internal/view/login.qtpl:27
 	qs422016 := string(qb422016.B)
 //line internal/view/login.qtpl:27

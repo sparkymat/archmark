@@ -18,7 +18,7 @@ var (
 )
 
 //line internal/view/register.qtpl:1
-func StreamRegister(qw422016 *qt422016.Writer, csrfToken string, name string, username string, errorMessage string) {
+func StreamRegister(qw422016 *qt422016.Writer, csrfToken string, name string, email string, errorMessage string) {
 //line internal/view/register.qtpl:1
 	qw422016.N().S(`
   <div class="uk-container">
@@ -38,9 +38,9 @@ func StreamRegister(qw422016 *qt422016.Writer, csrfToken string, name string, us
 	qw422016.N().S(`">
         </div>
         <div class="uk-margin">
-          <input class="uk-input" type="text" name="username" placeholder="Username" value="`)
+          <input class="uk-input" type="email" name="email" placeholder="Email" value="`)
 //line internal/view/register.qtpl:11
-	qw422016.E().S(username)
+	qw422016.E().S(email)
 //line internal/view/register.qtpl:11
 	qw422016.N().S(`">
         </div>
@@ -79,22 +79,22 @@ func StreamRegister(qw422016 *qt422016.Writer, csrfToken string, name string, us
 }
 
 //line internal/view/register.qtpl:31
-func WriteRegister(qq422016 qtio422016.Writer, csrfToken string, name string, username string, errorMessage string) {
+func WriteRegister(qq422016 qtio422016.Writer, csrfToken string, name string, email string, errorMessage string) {
 //line internal/view/register.qtpl:31
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line internal/view/register.qtpl:31
-	StreamRegister(qw422016, csrfToken, name, username, errorMessage)
+	StreamRegister(qw422016, csrfToken, name, email, errorMessage)
 //line internal/view/register.qtpl:31
 	qt422016.ReleaseWriter(qw422016)
 //line internal/view/register.qtpl:31
 }
 
 //line internal/view/register.qtpl:31
-func Register(csrfToken string, name string, username string, errorMessage string) string {
+func Register(csrfToken string, name string, email string, errorMessage string) string {
 //line internal/view/register.qtpl:31
 	qb422016 := qt422016.AcquireByteBuffer()
 //line internal/view/register.qtpl:31
-	WriteRegister(qb422016, csrfToken, name, username, errorMessage)
+	WriteRegister(qb422016, csrfToken, name, email, errorMessage)
 //line internal/view/register.qtpl:31
 	qs422016 := string(qb422016.B)
 //line internal/view/register.qtpl:31

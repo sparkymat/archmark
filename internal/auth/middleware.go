@@ -28,7 +28,7 @@ func Middleware(cfg ConfigService, userService UserService) echo.MiddlewareFunc 
 				return next(c)
 			}
 
-			return c.Redirect(http.StatusSeeOther, "/login") //nolint:wrapcheck
+			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 	}
 }
@@ -41,7 +41,7 @@ func APIMiddleware(cfg ConfigService, userService UserService) echo.MiddlewareFu
 				return next(c)
 			}
 
-			return c.Redirect(http.StatusSeeOther, "/login") //nolint:wrapcheck
+			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 	}
 }

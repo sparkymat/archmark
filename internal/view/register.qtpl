@@ -1,4 +1,4 @@
-{% func Register(csrfToken string, name string, username string, errorMessage string) %}
+{% func Register(csrfToken string, name string, email string, errorMessage string) %}
   <div class="uk-container">
     <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-large-top uk-width-1-1 uk-width-1-3@l uk-margin-auto@l">
       <h3 class="uk-card-title">archmark</h3>
@@ -8,7 +8,7 @@
           <input class="uk-input" type="text" name="name" placeholder="Name" value="{%s name %}">
         </div>
         <div class="uk-margin">
-          <input class="uk-input" type="text" name="username" placeholder="Username" value="{%s username %}">
+          <input class="uk-input" type="email" name="email" placeholder="Email" value="{%s email %}">
         </div>
         <div class="uk-margin">
           <input class="uk-input" type="password" name="password" placeholder="Password">

@@ -11,22 +11,20 @@ import (
 	"github.com/sparkymat/archmark/internal/view"
 )
 
-const SiteTitle = "archmark"
-
 func Home(_ internal.Services) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		csrfToken := getCSRFToken(c)
 		if csrfToken == "" {
 			log.Print("error: csrf token not found")
 
-			return c.String(http.StatusInternalServerError, "server error") //nolint:wrapcheck
+			return c.String(http.StatusInternalServerError, "server error")
 		}
 
 		// List js files in app
 
 		files, err := os.ReadDir("./public/js/app")
 		if err != nil {
-			return c.String(http.StatusInternalServerError, "server error") //nolint:wrapcheck
+			return c.String(http.StatusInternalServerError, "server error")
 		}
 
 		filenames := lo.Map(files, func(file os.DirEntry, _ int) string {
@@ -37,8 +35,8 @@ func Home(_ internal.Services) echo.HandlerFunc {
 		cssFilenames := lo.Filter(filenames, func(filename string, _ int) bool { return filename[len(filename)-4:] == ".css" })
 
 		pageHTML := view.Home()
-		htmlString := view.BasicLayout(SiteTitle, csrfToken, cssFilenames, jsFilenames, pageHTML)
+		htmlString := view.BasicLayout("archmark", csrfToken, cssFilenames, jsFilenames, pageHTML)
 
-		return c.HTMLBlob(http.StatusOK, []byte(htmlString)) //nolint:wrapcheck
+		return c.HTMLBlob(http.StatusOK, []byte(htmlString))
 	}
 }
