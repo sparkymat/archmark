@@ -1,7 +1,7 @@
 all: archmark
 
 archmark:
-	CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o archmark archmark.go
+	CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o archmark main.go
 
 archmark-worker:
 	CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o archmark-worker worker/main.go
@@ -9,7 +9,7 @@ archmark-worker:
 start-app:
 	# Install reflex with 'go install github.com/cespare/reflex@latest'
 	# Install godotenv with 'go install github.com/joho/godotenv/cmd/godotenv@latest'
-	reflex -s -r '\.go$$' -- godotenv -f .env go run archmark.go
+	reflex -s -r '\.go$$' -- godotenv -f .env go run main.go
 
 start-worker:
 	reflex -s -r '\.go$$' -- godotenv -f .env go run worker/main.go
