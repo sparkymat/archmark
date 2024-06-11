@@ -2809,9 +2809,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React32 = require_react();
+          var React33 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React32.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React33.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4416,7 +4416,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React32.Children.forEach(props.children, function(child) {
+                  React33.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -23985,7 +23985,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React32 = require_react();
+          var React33 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -24011,7 +24011,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React32.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React33.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error2(format) {
             {
               {
@@ -25670,8 +25670,8 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React32 = require_react();
-          var ReactSharedInternals = React32.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var React33 = require_react();
+          var ReactSharedInternals = React33.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error2(format) {
             {
               {
@@ -25701,13 +25701,13 @@
             return x2 === y2 && (x2 !== 0 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
-          var useState29 = React32.useState, useEffect34 = React32.useEffect, useLayoutEffect11 = React32.useLayoutEffect, useDebugValue3 = React32.useDebugValue;
+          var useState29 = React33.useState, useEffect34 = React33.useEffect, useLayoutEffect11 = React33.useLayoutEffect, useDebugValue3 = React33.useDebugValue;
           var didWarnOld18Alpha = false;
           var didWarnUncachedGetSnapshot = false;
           function useSyncExternalStore4(subscribe, getSnapshot, getServerSnapshot) {
             {
               if (!didWarnOld18Alpha) {
-                if (React32.startTransition !== void 0) {
+                if (React33.startTransition !== void 0) {
                   didWarnOld18Alpha = true;
                   error2("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
                 }
@@ -25772,7 +25772,7 @@
           var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var isServerEnvironment = !canUseDOM2;
           var shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore4;
-          var useSyncExternalStore$2 = React32.useSyncExternalStore !== void 0 ? React32.useSyncExternalStore : shim;
+          var useSyncExternalStore$2 = React33.useSyncExternalStore !== void 0 ? React33.useSyncExternalStore : shim;
           exports.useSyncExternalStore = useSyncExternalStore$2;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
@@ -25804,14 +25804,14 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React32 = require_react();
+          var React33 = require_react();
           var shim = require_shim();
           function is2(x2, y2) {
             return x2 === y2 && (x2 !== 0 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
           }
           var objectIs = typeof Object.is === "function" ? Object.is : is2;
           var useSyncExternalStore4 = shim.useSyncExternalStore;
-          var useRef35 = React32.useRef, useEffect34 = React32.useEffect, useMemo14 = React32.useMemo, useDebugValue3 = React32.useDebugValue;
+          var useRef35 = React33.useRef, useEffect34 = React33.useEffect, useMemo14 = React33.useMemo, useDebugValue3 = React33.useDebugValue;
           function useSyncExternalStoreWithSelector3(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
             var instRef = useRef35(null);
             var inst;
@@ -26179,7 +26179,7 @@
   });
 
   // src/index.tsx
-  var import_react197 = __toESM(require_react());
+  var import_react198 = __toESM(require_react());
   var import_dayjs2 = __toESM(require_dayjs_min());
   var import_relativeTime = __toESM(require_relativeTime());
   var import_utc2 = __toESM(require_utc());
@@ -47359,7 +47359,7 @@
   });
 
   // src/components/App/index.tsx
-  var import_react196 = __toESM(require_react());
+  var import_react197 = __toESM(require_react());
 
   // src/components/App/PathNavLinks.tsx
   var import_react189 = __toESM(require_react());
@@ -47830,7 +47830,7 @@
   };
 
   // src/components/BookmarkPage/index.tsx
-  var import_react195 = __toESM(require_react());
+  var import_react196 = __toESM(require_react());
 
   // src/components/EditableImage/index.tsx
   var import_react193 = __toESM(require_react());
@@ -47942,12 +47942,16 @@
     ), /* @__PURE__ */ import_react194.default.createElement(Button, { variant: "filled", onClick: modalSubmitted }, "Update"))));
   };
 
+  // src/components/AnalysisPanel/index.tsx
+  var import_react195 = __toESM(require_react());
+  var AnalysisPanel = ({}) => /* @__PURE__ */ import_react195.default.createElement(Flex, { direction: "column", gap: "sm" }, /* @__PURE__ */ import_react195.default.createElement(Card, { withBorder: true, p: "sm", radius: 8 }, /* @__PURE__ */ import_react195.default.createElement(Text, null, "This is a test")));
+
   // src/components/BookmarkPage/index.tsx
-  var MultiParagraphText = ({ value }) => /* @__PURE__ */ import_react195.default.createElement(
+  var MultiParagraphText = ({ value }) => /* @__PURE__ */ import_react196.default.createElement(
     Flex,
     { direction: "column", gap: "sm" },
     // eslint-disable-next-line react/prop-types
-    value.split("\n").map((p2) => /* @__PURE__ */ import_react195.default.createElement(Text, null, p2))
+    value.split("\n").map((p2) => /* @__PURE__ */ import_react196.default.createElement(Text, null, p2))
   );
   var BookmarkPage = () => {
     const { id } = useParams();
@@ -47956,13 +47960,13 @@
     const [updateTitle] = useUpdateTitleMutation();
     const [updateTranscript] = useUpdateTranscriptMutation();
     const [destroyItem] = useDestroyMutation();
-    const item = (0, import_react195.useMemo)(() => {
+    const item = (0, import_react196.useMemo)(() => {
       if (itemData) {
         return new Bookmark(itemData);
       }
       return null;
     }, [itemData]);
-    const imageUpdated = (0, import_react195.useCallback)(
+    const imageUpdated = (0, import_react196.useCallback)(
       (file) => {
         const formData = new FormData();
         formData.append("image_file", file);
@@ -47970,19 +47974,19 @@
       },
       [id, uploadImage]
     );
-    const titleUpdated = (0, import_react195.useCallback)(
+    const titleUpdated = (0, import_react196.useCallback)(
       (title) => {
         updateTitle({ id: id || "", title });
       },
       [id, updateTitle]
     );
-    const transcriptUpdated = (0, import_react195.useCallback)(
+    const transcriptUpdated = (0, import_react196.useCallback)(
       (transcript) => {
         updateTranscript({ id: id || "", transcript });
       },
       [id, updateTranscript]
     );
-    const deleteClicked = (0, import_react195.useCallback)(() => {
+    const deleteClicked = (0, import_react196.useCallback)(() => {
       modals.openConfirmModal({
         title: "Are you sure you want to delete?",
         centered: true,
@@ -47995,7 +47999,7 @@
         }
       });
     }, [destroyItem, id]);
-    return /* @__PURE__ */ import_react195.default.createElement(Container, { style: { width: "100%" } }, /* @__PURE__ */ import_react195.default.createElement(Flex, { direction: "column", gap: "md" }, /* @__PURE__ */ import_react195.default.createElement(Paper, { p: "sm", withBorder: true }, /* @__PURE__ */ import_react195.default.createElement(Flex, { wrap: "wrap", justify: "center" }, /* @__PURE__ */ import_react195.default.createElement(Box, { style: { position: "relative" }, w: 160, h: 160 }, /* @__PURE__ */ import_react195.default.createElement(
+    return /* @__PURE__ */ import_react196.default.createElement(Container, { fluid: true }, /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "row", wrap: "wrap", justify: "center", gap: "sm" }, /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", gap: "md", style: { flex: 1 } }, /* @__PURE__ */ import_react196.default.createElement(Paper, { p: "sm", withBorder: true }, /* @__PURE__ */ import_react196.default.createElement(Flex, { wrap: "wrap", justify: "center" }, /* @__PURE__ */ import_react196.default.createElement(Box, { style: { position: "relative" }, w: 160, h: 160 }, /* @__PURE__ */ import_react196.default.createElement(
       EditableImage,
       {
         style: {},
@@ -48004,18 +48008,18 @@
         h: 160,
         onImageUpdated: imageUpdated
       }
-    )), /* @__PURE__ */ import_react195.default.createElement(Flex, { direction: "column", ml: "sm", gap: "md", style: { flex: 1 } }, /* @__PURE__ */ import_react195.default.createElement(Flex, { justify: "space-between" }, /* @__PURE__ */ import_react195.default.createElement(
+    )), /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", ml: "sm", gap: "md", style: { flex: 1 } }, /* @__PURE__ */ import_react196.default.createElement(Flex, { justify: "space-between" }, /* @__PURE__ */ import_react196.default.createElement(
       EditableTextField,
       {
         currentValue: item?.title || "",
         onValueSubmitted: titleUpdated
       },
-      /* @__PURE__ */ import_react195.default.createElement(Title, { order: 1 }, item?.title)
-    ), /* @__PURE__ */ import_react195.default.createElement(Menu, { shadow: "md", width: 200 }, /* @__PURE__ */ import_react195.default.createElement(Menu.Target, null, /* @__PURE__ */ import_react195.default.createElement(ActionIcon, null, /* @__PURE__ */ import_react195.default.createElement(IconSettings, { size: "2rem", stroke: 1.5, color: "gray" }))), /* @__PURE__ */ import_react195.default.createElement(Menu.Dropdown, null, /* @__PURE__ */ import_react195.default.createElement(
+      /* @__PURE__ */ import_react196.default.createElement(Title, { order: 1 }, item?.title)
+    ), /* @__PURE__ */ import_react196.default.createElement(Menu, { shadow: "md", width: 200 }, /* @__PURE__ */ import_react196.default.createElement(Menu.Target, null, /* @__PURE__ */ import_react196.default.createElement(ActionIcon, null, /* @__PURE__ */ import_react196.default.createElement(IconSettings, { size: "2rem", stroke: 1.5, color: "gray" }))), /* @__PURE__ */ import_react196.default.createElement(Menu.Dropdown, null, /* @__PURE__ */ import_react196.default.createElement(
       Menu.Item,
       {
         color: "red",
-        leftSection: /* @__PURE__ */ import_react195.default.createElement(
+        leftSection: /* @__PURE__ */ import_react196.default.createElement(
           IconTrash,
           {
             style: { width: rem(14), height: rem(14) }
@@ -48024,15 +48028,15 @@
         onClick: deleteClicked
       },
       "Delete"
-    ))))))), /* @__PURE__ */ import_react195.default.createElement(Paper, { p: "sm", withBorder: true }, /* @__PURE__ */ import_react195.default.createElement(Flex, { direction: "column", gap: "md" }, /* @__PURE__ */ import_react195.default.createElement(Title, { order: 4 }, "Transcript"), /* @__PURE__ */ import_react195.default.createElement(
+    ))))))), /* @__PURE__ */ import_react196.default.createElement(Paper, { p: "sm", withBorder: true }, /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", gap: "md" }, /* @__PURE__ */ import_react196.default.createElement(Title, { order: 4 }, "Transcript"), /* @__PURE__ */ import_react196.default.createElement(
       EditableTextField,
       {
         currentValue: item?.transcript || "",
         multiline: true,
         onValueSubmitted: transcriptUpdated
       },
-      /* @__PURE__ */ import_react195.default.createElement(MultiParagraphText, { value: item?.transcript || "" })
-    )))), /* @__PURE__ */ import_react195.default.createElement(LoadingOverlay, { visible: isLoading }));
+      /* @__PURE__ */ import_react196.default.createElement(MultiParagraphText, { value: item?.transcript || "" })
+    )))), /* @__PURE__ */ import_react196.default.createElement(Paper, { withBorder: true, p: "sm" }, /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", gap: "sm" }, /* @__PURE__ */ import_react196.default.createElement(Title, { order: 4, w: 240 }, "Analysis"), /* @__PURE__ */ import_react196.default.createElement(AnalysisPanel, null)))), /* @__PURE__ */ import_react196.default.createElement(LoadingOverlay, { visible: isLoading }));
   };
 
   // src/components/App/index.tsx
@@ -48045,10 +48049,10 @@
     const computedColorScheme = useComputedColorScheme("light", {
       getInitialValueInEffect: true
     });
-    (0, import_react196.useEffect)(() => {
+    (0, import_react197.useEffect)(() => {
       dispatch(updatePath(location.pathname));
     }, [dispatch, location]);
-    return /* @__PURE__ */ import_react196.default.createElement("div", null, /* @__PURE__ */ import_react196.default.createElement(
+    return /* @__PURE__ */ import_react197.default.createElement("div", null, /* @__PURE__ */ import_react197.default.createElement(
       AppShell,
       {
         padding: "md",
@@ -48058,13 +48062,13 @@
           }
         })
       },
-      /* @__PURE__ */ import_react196.default.createElement(AppShell.Main, null, /* @__PURE__ */ import_react196.default.createElement(Flex, { align: "stretch", direction: "column", gap: "md" }, /* @__PURE__ */ import_react196.default.createElement(Flex, { justify: "center" }, /* @__PURE__ */ import_react196.default.createElement(UnstyledButton, { component: "a", href: "/#/" }, /* @__PURE__ */ import_react196.default.createElement(Title, { order: 1 }, "archmark"))), /* @__PURE__ */ import_react196.default.createElement(Flex, { gap: "md", justify: "center" }, /* @__PURE__ */ import_react196.default.createElement(PathNavLinks, null)), /* @__PURE__ */ import_react196.default.createElement(Routes, null, /* @__PURE__ */ import_react196.default.createElement(Route, { index: true, element: /* @__PURE__ */ import_react196.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react196.default.createElement(Route, { path: "/b", element: /* @__PURE__ */ import_react196.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react196.default.createElement(Route, { path: "/b/p/:page", element: /* @__PURE__ */ import_react196.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react196.default.createElement(Route, { path: "/b/search/:query", element: /* @__PURE__ */ import_react196.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react196.default.createElement(
+      /* @__PURE__ */ import_react197.default.createElement(AppShell.Main, null, /* @__PURE__ */ import_react197.default.createElement(Flex, { align: "stretch", direction: "column", gap: "md" }, /* @__PURE__ */ import_react197.default.createElement(Flex, { justify: "center" }, /* @__PURE__ */ import_react197.default.createElement(UnstyledButton, { component: "a", href: "/#/" }, /* @__PURE__ */ import_react197.default.createElement(Title, { order: 1 }, "archmark"))), /* @__PURE__ */ import_react197.default.createElement(Flex, { gap: "md", justify: "center" }, /* @__PURE__ */ import_react197.default.createElement(PathNavLinks, null)), /* @__PURE__ */ import_react197.default.createElement(Routes, null, /* @__PURE__ */ import_react197.default.createElement(Route, { index: true, element: /* @__PURE__ */ import_react197.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react197.default.createElement(Route, { path: "/b", element: /* @__PURE__ */ import_react197.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react197.default.createElement(Route, { path: "/b/p/:page", element: /* @__PURE__ */ import_react197.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react197.default.createElement(Route, { path: "/b/search/:query", element: /* @__PURE__ */ import_react197.default.createElement(BookmarksPage, null) }), /* @__PURE__ */ import_react197.default.createElement(
         Route,
         {
           path: "/b/search/:query/p/:page",
-          element: /* @__PURE__ */ import_react196.default.createElement(BookmarksPage, null)
+          element: /* @__PURE__ */ import_react197.default.createElement(BookmarksPage, null)
         }
-      ), /* @__PURE__ */ import_react196.default.createElement(Route, { path: "/a/:id", element: /* @__PURE__ */ import_react196.default.createElement(BookmarkPage, null) }))))
+      ), /* @__PURE__ */ import_react197.default.createElement(Route, { path: "/a/:id", element: /* @__PURE__ */ import_react197.default.createElement(BookmarkPage, null) }))))
     ));
   };
 
@@ -48103,12 +48107,12 @@
   // src/index.tsx
   import_dayjs2.default.extend(import_relativeTime.default);
   import_dayjs2.default.extend(import_utc2.default);
-  var StyledApp = () => /* @__PURE__ */ import_react197.default.createElement(MantineProvider, { defaultColorScheme: "auto", theme }, /* @__PURE__ */ import_react197.default.createElement(ModalsProvider, null, /* @__PURE__ */ import_react197.default.createElement(Notifications, { position: "bottom-right" }), /* @__PURE__ */ import_react197.default.createElement(App, null)));
+  var StyledApp = () => /* @__PURE__ */ import_react198.default.createElement(MantineProvider, { defaultColorScheme: "auto", theme }, /* @__PURE__ */ import_react198.default.createElement(ModalsProvider, null, /* @__PURE__ */ import_react198.default.createElement(Notifications, { position: "bottom-right" }), /* @__PURE__ */ import_react198.default.createElement(App, null)));
   var element = document.getElementById("archmark-app");
   if (element) {
     const root = (0, import_client.createRoot)(element);
     root.render(
-      /* @__PURE__ */ import_react197.default.createElement(Provider_default, { store }, /* @__PURE__ */ import_react197.default.createElement(HashRouter, null, /* @__PURE__ */ import_react197.default.createElement(import_react197.StrictMode, null, /* @__PURE__ */ import_react197.default.createElement(StyledApp, null))))
+      /* @__PURE__ */ import_react198.default.createElement(Provider_default, { store }, /* @__PURE__ */ import_react198.default.createElement(HashRouter, null, /* @__PURE__ */ import_react198.default.createElement(import_react198.StrictMode, null, /* @__PURE__ */ import_react198.default.createElement(StyledApp, null))))
     );
   }
 })();

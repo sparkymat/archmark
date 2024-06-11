@@ -24,6 +24,7 @@ import {
   useUpdateTranscriptMutation,
   useDestroyMutation,
 } from '../../slices/Bookmark';
+import { AnalysisPanel } from '../AnalysisPanel';
 
 // eslint-disable-next-line react/prop-types
 const MultiParagraphText = ({ value }: { value: string }) => (
@@ -93,62 +94,72 @@ export const BookmarkPage = () => {
   }, [destroyItem, id]);
 
   return (
-    <Container style={{ width: '100%' }}>
-      <Flex direction="column" gap="md">
-        <Paper p="sm" withBorder>
-          <Flex wrap="wrap" justify="center">
-            <Box style={{ position: 'relative' }} w={160} h={160}>
-              <EditableImage
-                style={{}}
-                src={item?.image || ''}
-                w={160}
-                h={160}
-                onImageUpdated={imageUpdated}
-              />
-            </Box>
-            <Flex direction="column" ml="sm" gap="md" style={{ flex: 1 }}>
-              <Flex justify="space-between">
-                <EditableTextField
-                  currentValue={item?.title || ''}
-                  onValueSubmitted={titleUpdated}
-                >
-                  <Title order={1}>{item?.title}</Title>
-                </EditableTextField>
-                <Menu shadow="md" width={200}>
-                  <Menu.Target>
-                    <ActionIcon>
-                      <IconSettings size="2rem" stroke={1.5} color="gray" />
-                    </ActionIcon>
-                  </Menu.Target>
+    <Container fluid>
+      <Flex direction="row" wrap="wrap" justify="center" gap="sm">
+        <Flex direction="column" gap="md" style={{ flex: 1 }}>
+          <Paper p="sm" withBorder>
+            <Flex wrap="wrap" justify="center">
+              <Box style={{ position: 'relative' }} w={160} h={160}>
+                <EditableImage
+                  style={{}}
+                  src={item?.image || ''}
+                  w={160}
+                  h={160}
+                  onImageUpdated={imageUpdated}
+                />
+              </Box>
+              <Flex direction="column" ml="sm" gap="md" style={{ flex: 1 }}>
+                <Flex justify="space-between">
+                  <EditableTextField
+                    currentValue={item?.title || ''}
+                    onValueSubmitted={titleUpdated}
+                  >
+                    <Title order={1}>{item?.title}</Title>
+                  </EditableTextField>
+                  <Menu shadow="md" width={200}>
+                    <Menu.Target>
+                      <ActionIcon>
+                        <IconSettings size="2rem" stroke={1.5} color="gray" />
+                      </ActionIcon>
+                    </Menu.Target>
 
-                  <Menu.Dropdown>
-                    <Menu.Item
-                      color="red"
-                      leftSection={
-                        <IconTrash
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
-                      onClick={deleteClicked}
-                    >
-                      Delete
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                    <Menu.Dropdown>
+                      <Menu.Item
+                        color="red"
+                        leftSection={
+                          <IconTrash
+                            style={{ width: rem(14), height: rem(14) }}
+                          />
+                        }
+                        onClick={deleteClicked}
+                      >
+                        Delete
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-        </Paper>
-        <Paper p="sm" withBorder>
-          <Flex direction="column" gap="md">
-            <Title order={4}>Transcript</Title>
-            <EditableTextField
-              currentValue={item?.transcript || ''}
-              multiline
-              onValueSubmitted={transcriptUpdated}
-            >
-              <MultiParagraphText value={item?.transcript || ''} />
-            </EditableTextField>
+          </Paper>
+          <Paper p="sm" withBorder>
+            <Flex direction="column" gap="md">
+              <Title order={4}>Transcript</Title>
+              <EditableTextField
+                currentValue={item?.transcript || ''}
+                multiline
+                onValueSubmitted={transcriptUpdated}
+              >
+                <MultiParagraphText value={item?.transcript || ''} />
+              </EditableTextField>
+            </Flex>
+          </Paper>
+        </Flex>
+        <Paper withBorder p="sm">
+          <Flex direction="column" gap="sm">
+            <Title order={4} w={240}>
+              Analysis
+            </Title>
+            <AnalysisPanel />
           </Flex>
         </Paper>
       </Flex>
