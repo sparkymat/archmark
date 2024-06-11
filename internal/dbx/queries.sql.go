@@ -9,7 +9,79 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const countRecentBookmarks = `-- name: CountRecentBookmarks :one
+SELECT COUNT(id)
+  FROM bookmarks t
+  WHERE t.user_id = $1::uuid
+`
+
+func (q *Queries) CountRecentBookmarks(ctx context.Context, userID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentBookmarks, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSearchedBookmarks = `-- name: CountSearchedBookmarks :one
+SELECT COUNT(id)
+  FROM bookmarks t
+  WHERE t.title ILIKE '%' || $1::text || '%'
+    AND t.user_id = $2::uuid
+`
+
+type CountSearchedBookmarksParams struct {
+	Query  string
+	UserID uuid.UUID
+}
+
+func (q *Queries) CountSearchedBookmarks(ctx context.Context, arg CountSearchedBookmarksParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countSearchedBookmarks, arg.Query, arg.UserID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const createBookmark = `-- name: CreateBookmark :one
+INSERT INTO bookmarks
+(title, url, description, image, user_id)
+VALUES
+($1::text, $2::text, $3::text, $4::text, $5::uuid)
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type CreateBookmarkParams struct {
+	Title       string
+	Url         string
+	Description string
+	Image       string
+	UserID      uuid.UUID
+}
+
+func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, createBookmark,
+		arg.Title,
+		arg.Url,
+		arg.Description,
+		arg.Image,
+		arg.UserID,
+	)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
@@ -37,6 +109,121 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const deleteBookmark = `-- name: DeleteBookmark :exec
+DELETE FROM bookmarks t
+  WHERE id = $1::uuid
+`
+
+func (q *Queries) DeleteBookmark(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteBookmark, id)
+	return err
+}
+
+const fetchBookmarkByID = `-- name: FetchBookmarkByID :one
+SELECT id, title, url, description, transcript, image, user_id, created_at, updated_at
+  FROM bookmarks t
+  WHERE id = $1::uuid
+  LIMIT 1
+`
+
+func (q *Queries) FetchBookmarkByID(ctx context.Context, id uuid.UUID) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, fetchBookmarkByID, id)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const fetchBookmarksByIDs = `-- name: FetchBookmarksByIDs :many
+SELECT id, title, url, description, transcript, image, user_id, created_at, updated_at
+  FROM bookmarks t
+  WHERE id = ANY($1::uuid[])
+`
+
+func (q *Queries) FetchBookmarksByIDs(ctx context.Context, ids []uuid.UUID) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchBookmarksByIDs, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Url,
+			&i.Description,
+			&i.Transcript,
+			&i.Image,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const fetchRecentBookmarks = `-- name: FetchRecentBookmarks :many
+SELECT id, title, url, description, transcript, image, user_id, created_at, updated_at
+  FROM bookmarks t
+  WHERE t.user_id = $1::uuid
+  ORDER BY t.updated_at DESC
+  LIMIT $3::int
+  OFFSET $2::int
+`
+
+type FetchRecentBookmarksParams struct {
+	UserID     uuid.UUID
+	PageOffset int32
+	PageLimit  int32
+}
+
+func (q *Queries) FetchRecentBookmarks(ctx context.Context, arg FetchRecentBookmarksParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, fetchRecentBookmarks, arg.UserID, arg.PageOffset, arg.PageLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Url,
+			&i.Description,
+			&i.Transcript,
+			&i.Image,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const fetchUserByEmail = `-- name: FetchUserByEmail :one
@@ -71,6 +258,203 @@ func (q *Queries) FetchUserByID(ctx context.Context, userID uuid.UUID) (User, er
 		&i.Name,
 		&i.Email,
 		&i.EncryptedPassword,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const searchBookmarks = `-- name: SearchBookmarks :many
+SELECT id, title, url, description, transcript, image, user_id, created_at, updated_at
+  FROM bookmarks t
+  WHERE t.title ILIKE '%' || $1::text || '%'
+    AND t.user_id = $2::uuid
+  ORDER BY t.title ASC
+  LIMIT $4::int
+  OFFSET $3::int
+`
+
+type SearchBookmarksParams struct {
+	Query      string
+	UserID     uuid.UUID
+	PageOffset int32
+	PageLimit  int32
+}
+
+func (q *Queries) SearchBookmarks(ctx context.Context, arg SearchBookmarksParams) ([]Bookmark, error) {
+	rows, err := q.db.Query(ctx, searchBookmarks,
+		arg.Query,
+		arg.UserID,
+		arg.PageOffset,
+		arg.PageLimit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookmark
+	for rows.Next() {
+		var i Bookmark
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Url,
+			&i.Description,
+			&i.Transcript,
+			&i.Image,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateBookmarkDescription = `-- name: UpdateBookmarkDescription :one
+UPDATE bookmarks t
+SET description = $1::text
+WHERE id = $2::uuid
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type UpdateBookmarkDescriptionParams struct {
+	Description string
+	ID          uuid.UUID
+}
+
+func (q *Queries) UpdateBookmarkDescription(ctx context.Context, arg UpdateBookmarkDescriptionParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, updateBookmarkDescription, arg.Description, arg.ID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateBookmarkImage = `-- name: UpdateBookmarkImage :one
+UPDATE bookmarks t
+SET image = $1
+WHERE id = $2::uuid
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type UpdateBookmarkImageParams struct {
+	Image pgtype.Text
+	ID    uuid.UUID
+}
+
+func (q *Queries) UpdateBookmarkImage(ctx context.Context, arg UpdateBookmarkImageParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, updateBookmarkImage, arg.Image, arg.ID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateBookmarkTitle = `-- name: UpdateBookmarkTitle :one
+UPDATE bookmarks t
+SET title = $1::text
+WHERE id = $2::uuid
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type UpdateBookmarkTitleParams struct {
+	Title string
+	ID    uuid.UUID
+}
+
+func (q *Queries) UpdateBookmarkTitle(ctx context.Context, arg UpdateBookmarkTitleParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, updateBookmarkTitle, arg.Title, arg.ID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateBookmarkTranscript = `-- name: UpdateBookmarkTranscript :one
+UPDATE bookmarks t
+SET transcript = $1::text
+WHERE id = $2::uuid
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type UpdateBookmarkTranscriptParams struct {
+	Transcript string
+	ID         uuid.UUID
+}
+
+func (q *Queries) UpdateBookmarkTranscript(ctx context.Context, arg UpdateBookmarkTranscriptParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, updateBookmarkTranscript, arg.Transcript, arg.ID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateBookmarkUrl = `-- name: UpdateBookmarkUrl :one
+UPDATE bookmarks t
+SET url = $1::text
+WHERE id = $2::uuid
+RETURNING id, title, url, description, transcript, image, user_id, created_at, updated_at
+`
+
+type UpdateBookmarkUrlParams struct {
+	Url string
+	ID  uuid.UUID
+}
+
+func (q *Queries) UpdateBookmarkUrl(ctx context.Context, arg UpdateBookmarkUrlParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, updateBookmarkUrl, arg.Url, arg.ID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Url,
+		&i.Description,
+		&i.Transcript,
+		&i.Image,
+		&i.UserID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

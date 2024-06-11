@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sparkymat/archmark/internal"
 	"github.com/sparkymat/archmark/internal/auth"
+	"github.com/sparkymat/archmark/internal/handler/api"
 )
 
 func registerAPIRoutes(app *echo.Group, cfg ConfigService, services internal.Services) {
@@ -19,4 +20,15 @@ func registerAPIRoutes(app *echo.Group, cfg ConfigService, services internal.Ser
 	apiGroup.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup: "header:X-CSRF-Token",
 	}))
+
+	apiGroup.POST("/bookmarks", api.BookmarksCreate(services))
+	apiGroup.GET("/bookmarks/search", api.BookmarksSearch(services))
+	apiGroup.GET("/bookmarks/recent", api.BookmarksFetchRecent(services))
+	apiGroup.GET("/bookmarks/:id", api.BookmarksShow(services))
+	apiGroup.DELETE("/bookmarks/:id", api.BookmarksDestroy(services))
+	apiGroup.PATCH("/bookmarks/:id/update_title", api.BookmarksUpdateTitle(services))
+	apiGroup.PATCH("/bookmarks/:id/update_url", api.BookmarksUpdateUrl(services))
+	apiGroup.PATCH("/bookmarks/:id/update_description", api.BookmarksUpdateDescription(services))
+	apiGroup.PATCH("/bookmarks/:id/update_transcript", api.BookmarksUpdateTranscript(services))
+	apiGroup.PATCH("/bookmarks/:id/upload_image", api.BookmarksUploadImage(services))
 }

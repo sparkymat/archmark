@@ -1,53 +1,37 @@
-import React, { useCallback } from 'react';
-import { NavLink } from '@mantine/core';
-import { IconBooks, IconDashboard, IconSettings } from '@tabler/icons-react';
+import React from 'react';
+import { Menu, UnstyledButton, useMantineColorScheme } from '@mantine/core';
+import { IconBrightness } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { selectApp } from '../../store/selectors';
-import { AppDispatch } from '../../store';
-import { updatePath } from '../../slices/App';
 
 interface Path {
-  href: string;
   label: string;
   icon?: React.JSX.Element;
+  onClick();
 }
 
 interface PathGroup {
   label: string;
-  icon: React.JSX.Element;
   paths: Path[];
 }
 
-export interface PathNavLinksProps {
-  toggleNav(): void;
-}
-
-export const PathNavLinks = ({ toggleNav }: PathNavLinksProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { path } = useSelector(selectApp);
+export const PathNavLinks = () => {
   const navigate = useNavigate();
-
-  const onNavClick = useCallback(
-    (p: string) => {
-      dispatch(updatePath(p));
-      navigate(p);
-      toggleNav();
-    },
-    [dispatch, navigate, toggleNav],
-  );
-
-  const isActive = useCallback(
-    (newPath: string): boolean => newPath === path,
-    [path],
-  );
+  const { toggleColorScheme } = useMantineColorScheme();
 
   const pathEntries: (Path | PathGroup)[] = [
     {
-      href: '/',
-      label: 'Dashboard',
-      icon: <IconDashboard size="1rem" stroke={1.5} />,
+      onClick: () => navigate('/'),
+      label: 'home',
+    },
+    {
+      label: 'settings',
+      paths: [
+        {
+          label: 'toggle color',
+          onClick: toggleColorScheme,
+          icon: <IconBrightness strokeWidth={1} size={14} />,
+        },
+      ],
     },
   ];
 
@@ -55,35 +39,34 @@ export const PathNavLinks = ({ toggleNav }: PathNavLinksProps) => {
     <>
       {pathEntries.map(pe =>
         (pe as PathGroup).paths !== undefined ? (
-          <NavLink
-            key={pe.label}
-            label={pe.label}
-            variant="subtle"
-            tt="uppercase"
-            leftSection={(pe as PathGroup).icon}
-            childrenOffset={20}
-          >
-            {(pe as PathGroup).paths.map(c => (
-              <NavLink
-                key={c.href}
-                label={c.label}
-                active={isActive(c.href)}
-                variant="subtle"
-                tt="uppercase"
-                onClick={() => onNavClick(c.href)}
-              />
-            ))}
-          </NavLink>
+          <Menu shadow="md" width={200} key={pe.label}>
+            <Menu.Target>
+              <UnstyledButton component="a">{pe.label}</UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+              {(pe as PathGroup).paths.map(c => (
+                <Menu.Item
+                  key={c.label}
+                  variant="subtle"
+                  tt="lowercase"
+                  onClick={c.onClick}
+                  leftSection={c.icon}
+                >
+                  {c.label}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
         ) : (
-          <NavLink
+          <UnstyledButton
+            component="a"
             key={pe.label}
-            label={pe.label}
-            active={isActive((pe as Path).href)}
             variant="subtle"
-            tt="uppercase"
-            leftSection={(pe as Path).icon}
-            onClick={() => onNavClick((pe as Path).href)}
-          />
+            tt="lowercase"
+            onClick={(pe as Path).onClick}
+          >
+            {pe.label}
+          </UnstyledButton>
         ),
       )}
     </>

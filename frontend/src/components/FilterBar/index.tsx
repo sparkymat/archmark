@@ -28,7 +28,7 @@ export const FilterBar = ({
     <Paper>
       <Flex p="sm">
         <TextInput
-          placeholder="Search by name"
+          placeholder="Search"
           value={query}
           onChange={onQueryChanged}
           onKeyDown={searchSubmitted}

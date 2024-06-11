@@ -9,6 +9,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Bookmark struct {
+	ID          uuid.UUID
+	Title       string
+	Url         string
+	Description string
+	Transcript  string
+	Image       pgtype.Text
+	UserID      uuid.UUID
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
 type SchemaMigration struct {
 	Version int64
 	Dirty   bool

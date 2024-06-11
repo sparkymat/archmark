@@ -1,15 +1,25 @@
-import { ActionIcon, Button, Flex, Input, Modal } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Flex,
+  Input,
+  Modal,
+  Textarea,
+} from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 export interface EditableFieldProps {
   currentValue: string;
+  // eslint-disable-next-line react/require-default-props
+  multiline?: boolean;
   onValueSubmitted(_val: string);
 }
 
 export const EditableTextField = ({
   children,
   currentValue,
+  multiline,
   onValueSubmitted,
 }: React.PropsWithChildren<EditableFieldProps>) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -22,6 +32,13 @@ export const EditableTextField = ({
   const valueChanged = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
     setNewValue(evt.target.value);
   }, []);
+
+  const multilineValueChanged = useCallback(
+    (evt: ChangeEvent<HTMLTextAreaElement>) => {
+      setNewValue(evt.target.value);
+    },
+    [],
+  );
 
   const modalOpened = useCallback(() => {
     setModalOpen(true);
@@ -46,11 +63,22 @@ export const EditableTextField = ({
       </>
       <Modal title="Edit" opened={modalOpen} onClose={modalClosed}>
         <Flex direction="column" gap="md">
-          <Input
-            placeholder="Set new value"
-            value={newValue}
-            onChange={valueChanged}
-          />
+          {multiline ? (
+            <Textarea
+              placeholder="Set new value"
+              value={newValue}
+              resize="vertical"
+              rows={12}
+              onChange={multilineValueChanged}
+            />
+          ) : (
+            <Input
+              placeholder="Set new value"
+              value={newValue}
+              onChange={valueChanged}
+            />
+          )}
+
           <Button variant="filled" onClick={modalSubmitted}>
             Update
           </Button>
