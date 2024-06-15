@@ -24,7 +24,12 @@ import {
   useUpdateTranscriptMutation,
   useDestroyMutation,
 } from '../../slices/Bookmark';
+import {
+  useCreateMutation as useCreateNoteMutation,
+  useRecentQuery as useRecentNotesQuery,
+} from '../../slices/AnalysisNote';
 import { AnalysisPanel } from '../AnalysisPanel';
+import { AnalysisNote } from '../../models/AnalysisNote';
 
 // eslint-disable-next-line react/prop-types
 const MultiParagraphText = ({ value }: { value: string }) => (
@@ -41,12 +46,20 @@ const MultiParagraphText = ({ value }: { value: string }) => (
 export const BookmarkPage = () => {
   const { id } = useParams();
 
-  const { data: itemData, isLoading } = useShowQuery(id || '');
+  const { data: itemData, isLoading: itemLoading } = useShowQuery(id || '');
+  const { data: notesData, isLoading: notesLoading } = useRecentNotesQuery(
+    id || '',
+  );
 
+  const isLoading = useMemo(
+    () => itemLoading || notesLoading,
+    [itemLoading, notesLoading],
+  );
   const [uploadImage] = useUploadImageMutation();
   const [updateTitle] = useUpdateTitleMutation();
   const [updateTranscript] = useUpdateTranscriptMutation();
   const [destroyItem] = useDestroyMutation();
+  const [createNote] = useCreateNoteMutation();
 
   const item = useMemo(() => {
     if (itemData) {
@@ -55,6 +68,14 @@ export const BookmarkPage = () => {
 
     return null;
   }, [itemData]);
+
+  const notes = useMemo(() => {
+    if (notesData) {
+      return notesData.items.map(n => new AnalysisNote(n)).reverse();
+    }
+
+    return [] as AnalysisNote[];
+  }, [notesData]);
 
   const imageUpdated = useCallback(
     (file: File) => {
@@ -92,6 +113,16 @@ export const BookmarkPage = () => {
       },
     });
   }, [destroyItem, id]);
+
+  const newNoteCreateClicked = useCallback(
+    async (content: string) => {
+      createNote({
+        content,
+        bookmarkID: id || '',
+      });
+    },
+    [createNote, id],
+  );
 
   return (
     <Container fluid>
@@ -154,12 +185,16 @@ export const BookmarkPage = () => {
             </Flex>
           </Paper>
         </Flex>
-        <Paper withBorder p="sm">
-          <Flex direction="column" gap="sm">
+        <Paper
+          withBorder
+          p="sm"
+          style={{ display: 'flex', flexDirection: 'column' }}
+        >
+          <Flex direction="column" gap="sm" style={{ flex: 1 }}>
             <Title order={4} w={240}>
               Analysis
             </Title>
-            <AnalysisPanel />
+            <AnalysisPanel notes={notes} createNote={newNoteCreateClicked} />
           </Flex>
         </Paper>
       </Flex>

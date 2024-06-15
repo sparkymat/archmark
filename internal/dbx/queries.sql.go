@@ -12,6 +12,19 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countRecentAnalysisNotes = `-- name: CountRecentAnalysisNotes :one
+SELECT COUNT(id)
+  FROM analysis_notes t
+  WHERE t.bookmark_id = $1::uuid
+`
+
+func (q *Queries) CountRecentAnalysisNotes(ctx context.Context, parentID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentAnalysisNotes, parentID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countRecentBookmarks = `-- name: CountRecentBookmarks :one
 SELECT COUNT(id)
   FROM bookmarks t
@@ -42,6 +55,41 @@ func (q *Queries) CountSearchedBookmarks(ctx context.Context, arg CountSearchedB
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const createAnalysisNote = `-- name: CreateAnalysisNote :one
+INSERT INTO analysis_notes
+(content, source, bookmark_id, state)
+VALUES
+($1::text, $2::analysis_note_source, $3::uuid, $4::analysis_note_state)
+RETURNING id, content, source, state, bookmark_id, created_at, updated_at
+`
+
+type CreateAnalysisNoteParams struct {
+	Content    string
+	Source     AnalysisNoteSource
+	BookmarkID uuid.UUID
+	State      AnalysisNoteState
+}
+
+func (q *Queries) CreateAnalysisNote(ctx context.Context, arg CreateAnalysisNoteParams) (AnalysisNote, error) {
+	row := q.db.QueryRow(ctx, createAnalysisNote,
+		arg.Content,
+		arg.Source,
+		arg.BookmarkID,
+		arg.State,
+	)
+	var i AnalysisNote
+	err := row.Scan(
+		&i.ID,
+		&i.Content,
+		&i.Source,
+		&i.State,
+		&i.BookmarkID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const createBookmark = `-- name: CreateBookmark :one
@@ -111,6 +159,16 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const deleteAnalysisNote = `-- name: DeleteAnalysisNote :exec
+DELETE FROM analysis_notes t
+  WHERE id = $1::uuid
+`
+
+func (q *Queries) DeleteAnalysisNote(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteAnalysisNote, id)
+	return err
+}
+
 const deleteBookmark = `-- name: DeleteBookmark :exec
 DELETE FROM bookmarks t
   WHERE id = $1::uuid
@@ -119,6 +177,62 @@ DELETE FROM bookmarks t
 func (q *Queries) DeleteBookmark(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteBookmark, id)
 	return err
+}
+
+const fetchAnalysisNoteByID = `-- name: FetchAnalysisNoteByID :one
+SELECT id, content, source, state, bookmark_id, created_at, updated_at
+  FROM analysis_notes t
+  WHERE id = $1::uuid
+  LIMIT 1
+`
+
+func (q *Queries) FetchAnalysisNoteByID(ctx context.Context, id uuid.UUID) (AnalysisNote, error) {
+	row := q.db.QueryRow(ctx, fetchAnalysisNoteByID, id)
+	var i AnalysisNote
+	err := row.Scan(
+		&i.ID,
+		&i.Content,
+		&i.Source,
+		&i.State,
+		&i.BookmarkID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const fetchAnalysisNotesByIDs = `-- name: FetchAnalysisNotesByIDs :many
+SELECT id, content, source, state, bookmark_id, created_at, updated_at
+  FROM analysis_notes t
+  WHERE id = ANY($1::uuid[])
+`
+
+func (q *Queries) FetchAnalysisNotesByIDs(ctx context.Context, ids []uuid.UUID) ([]AnalysisNote, error) {
+	rows, err := q.db.Query(ctx, fetchAnalysisNotesByIDs, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AnalysisNote
+	for rows.Next() {
+		var i AnalysisNote
+		if err := rows.Scan(
+			&i.ID,
+			&i.Content,
+			&i.Source,
+			&i.State,
+			&i.BookmarkID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const fetchBookmarkByID = `-- name: FetchBookmarkByID :one
@@ -168,6 +282,41 @@ func (q *Queries) FetchBookmarksByIDs(ctx context.Context, ids []uuid.UUID) ([]B
 			&i.Transcript,
 			&i.Image,
 			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const fetchRecentAnalysisNotes = `-- name: FetchRecentAnalysisNotes :many
+SELECT id, content, source, state, bookmark_id, created_at, updated_at
+  FROM analysis_notes t
+  WHERE t.bookmark_id = $1::uuid
+  ORDER BY t.updated_at DESC
+`
+
+func (q *Queries) FetchRecentAnalysisNotes(ctx context.Context, parentID uuid.UUID) ([]AnalysisNote, error) {
+	rows, err := q.db.Query(ctx, fetchRecentAnalysisNotes, parentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AnalysisNote
+	for rows.Next() {
+		var i AnalysisNote
+		if err := rows.Scan(
+			&i.ID,
+			&i.Content,
+			&i.Source,
+			&i.State,
+			&i.BookmarkID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -314,6 +463,33 @@ func (q *Queries) SearchBookmarks(ctx context.Context, arg SearchBookmarksParams
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateAnalysisNoteContent = `-- name: UpdateAnalysisNoteContent :one
+UPDATE analysis_notes t
+SET content = $1::text
+WHERE id = $2::uuid
+RETURNING id, content, source, state, bookmark_id, created_at, updated_at
+`
+
+type UpdateAnalysisNoteContentParams struct {
+	Content string
+	ID      uuid.UUID
+}
+
+func (q *Queries) UpdateAnalysisNoteContent(ctx context.Context, arg UpdateAnalysisNoteContentParams) (AnalysisNote, error) {
+	row := q.db.QueryRow(ctx, updateAnalysisNoteContent, arg.Content, arg.ID)
+	var i AnalysisNote
+	err := row.Scan(
+		&i.ID,
+		&i.Content,
+		&i.Source,
+		&i.State,
+		&i.BookmarkID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateBookmarkDescription = `-- name: UpdateBookmarkDescription :one

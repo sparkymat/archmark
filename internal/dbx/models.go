@@ -5,9 +5,107 @@
 package dbx
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type AnalysisNoteSource string
+
+const (
+	AnalysisNoteSourceUser    AnalysisNoteSource = "user"
+	AnalysisNoteSourceService AnalysisNoteSource = "service"
+)
+
+func (e *AnalysisNoteSource) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AnalysisNoteSource(s)
+	case string:
+		*e = AnalysisNoteSource(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AnalysisNoteSource: %T", src)
+	}
+	return nil
+}
+
+type NullAnalysisNoteSource struct {
+	AnalysisNoteSource AnalysisNoteSource
+	Valid              bool // Valid is true if AnalysisNoteSource is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAnalysisNoteSource) Scan(value interface{}) error {
+	if value == nil {
+		ns.AnalysisNoteSource, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AnalysisNoteSource.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAnalysisNoteSource) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AnalysisNoteSource), nil
+}
+
+type AnalysisNoteState string
+
+const (
+	AnalysisNoteStateReady   AnalysisNoteState = "ready"
+	AnalysisNoteStatePending AnalysisNoteState = "pending"
+	AnalysisNoteStateFailed  AnalysisNoteState = "failed"
+)
+
+func (e *AnalysisNoteState) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = AnalysisNoteState(s)
+	case string:
+		*e = AnalysisNoteState(s)
+	default:
+		return fmt.Errorf("unsupported scan type for AnalysisNoteState: %T", src)
+	}
+	return nil
+}
+
+type NullAnalysisNoteState struct {
+	AnalysisNoteState AnalysisNoteState
+	Valid             bool // Valid is true if AnalysisNoteState is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullAnalysisNoteState) Scan(value interface{}) error {
+	if value == nil {
+		ns.AnalysisNoteState, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.AnalysisNoteState.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullAnalysisNoteState) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.AnalysisNoteState), nil
+}
+
+type AnalysisNote struct {
+	ID         uuid.UUID
+	Content    string
+	Source     AnalysisNoteSource
+	State      AnalysisNoteState
+	BookmarkID uuid.UUID
+	CreatedAt  pgtype.Timestamp
+	UpdatedAt  pgtype.Timestamp
+}
 
 type Bookmark struct {
 	ID          uuid.UUID

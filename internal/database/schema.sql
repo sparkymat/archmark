@@ -30,9 +30,45 @@ CREATE EXTENSION IF NOT EXISTS moddatetime WITH SCHEMA public;
 COMMENT ON EXTENSION moddatetime IS 'functions for tracking last modification time';
 
 
+--
+-- Name: analysis_note_source; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.analysis_note_source AS ENUM (
+    'user',
+    'service'
+);
+
+
+--
+-- Name: analysis_note_state; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.analysis_note_state AS ENUM (
+    'ready',
+    'pending',
+    'failed'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: analysis_notes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analysis_notes (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    content text NOT NULL,
+    source public.analysis_note_source NOT NULL,
+    state public.analysis_note_state DEFAULT 'ready'::public.analysis_note_state NOT NULL,
+    bookmark_id uuid NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
 -- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
@@ -76,6 +112,14 @@ CREATE TABLE public.users (
 
 
 --
+-- Name: analysis_notes analysis_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_notes
+    ADD CONSTRAINT analysis_notes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: bookmarks bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -108,6 +152,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: analysis_notes analysis_notes_updated_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER analysis_notes_updated_at BEFORE UPDATE ON public.analysis_notes FOR EACH ROW EXECUTE FUNCTION public.moddatetime('updated_at');
+
+
+--
 -- Name: bookmarks bookmarks_updated_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -119,6 +170,14 @@ CREATE TRIGGER bookmarks_updated_at BEFORE UPDATE ON public.bookmarks FOR EACH R
 --
 
 CREATE TRIGGER users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.moddatetime('updated_at');
+
+
+--
+-- Name: analysis_notes analysis_notes_bookmark_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_notes
+    ADD CONSTRAINT analysis_notes_bookmark_id_fkey FOREIGN KEY (bookmark_id) REFERENCES public.bookmarks(id);
 
 
 --

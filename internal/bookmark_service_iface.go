@@ -20,4 +20,10 @@ type BookmarkService interface {
 	UpdateBookmarkUrl(ctx context.Context, id uuid.UUID, value string) (dbx.Bookmark, error)
 	UpdateBookmarkDescription(ctx context.Context, id uuid.UUID, value string) (dbx.Bookmark, error)
 	UploadBookmarkImage(ctx context.Context, id uuid.UUID, filename string, attachmentFile io.Reader) (dbx.Bookmark, error)
+
+	CreateAnalysisNote(ctx context.Context, params bookmark.CreateAnalysisNoteParams) (dbx.AnalysisNote, error)
+	FetchRecentAnalysisNotes(ctx context.Context, parentID uuid.UUID) ([]dbx.AnalysisNote, int64, error)
+	FetchAnalysisNote(ctx context.Context, id uuid.UUID) (dbx.AnalysisNote, error)
+	DestroyAnalysisNote(ctx context.Context, id uuid.UUID) error
+	UpdateAnalysisNoteContent(ctx context.Context, id uuid.UUID, value string) (dbx.AnalysisNote, error)
 }

@@ -31,4 +31,10 @@ func registerAPIRoutes(app *echo.Group, cfg ConfigService, services internal.Ser
 	apiGroup.PATCH("/bookmarks/:id/update_description", api.BookmarksUpdateDescription(services))
 	apiGroup.PATCH("/bookmarks/:id/update_transcript", api.BookmarksUpdateTranscript(services))
 	apiGroup.PATCH("/bookmarks/:id/upload_image", api.BookmarksUploadImage(services))
+
+	apiGroup.POST("/analysis_notes", api.AnalysisNotesCreate(services))
+	apiGroup.GET("/bookmarks/:parent_id/analysis_notes/recent", api.AnalysisNotesFetchRecent(services))
+	apiGroup.GET("/analysis_notes/:id", api.AnalysisNotesShow(services))
+	apiGroup.DELETE("/analysis_notes/:id", api.AnalysisNotesDestroy(services))
+	apiGroup.PATCH("/analysis_notes/:id/update_content", api.AnalysisNotesUpdateContent(services))
 }

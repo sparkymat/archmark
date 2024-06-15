@@ -93,3 +93,43 @@ UPDATE bookmarks t
 SET image = sqlc.narg('image')
 WHERE id = @id::uuid
 RETURNING *;
+
+-- name: CreateAnalysisNote :one
+INSERT INTO analysis_notes
+(content, source, bookmark_id, state)
+VALUES
+(@content::text, @source::analysis_note_source, @bookmark_id::uuid, @state::analysis_note_state)
+RETURNING *;
+
+-- name: FetchRecentAnalysisNotes :many
+SELECT *
+  FROM analysis_notes t
+  WHERE t.bookmark_id = @parent_id::uuid
+  ORDER BY t.updated_at DESC;
+
+-- name: CountRecentAnalysisNotes :one
+SELECT COUNT(id)
+  FROM analysis_notes t
+  WHERE t.bookmark_id = @parent_id::uuid
+;
+
+-- name: FetchAnalysisNoteByID :one
+SELECT *
+  FROM analysis_notes t
+  WHERE id = @id::uuid
+  LIMIT 1;
+
+-- name: FetchAnalysisNotesByIDs :many
+SELECT *
+  FROM analysis_notes t
+  WHERE id = ANY(@ids::uuid[]);
+
+-- name: DeleteAnalysisNote :exec
+DELETE FROM analysis_notes t
+  WHERE id = @id::uuid;
+
+-- name: UpdateAnalysisNoteContent :one
+UPDATE analysis_notes t
+SET content = @content::text
+WHERE id = @id::uuid
+RETURNING *;

@@ -11,10 +11,15 @@ export class Bookmark {
   public updatedAt: dayjs.Dayjs;
 
   public title: string;
+
   public transcript: string;
+
   public url: string;
+
   public description: string;
+
   public image?: string;
+
   public userId: string;
 
   constructor(json: any) {

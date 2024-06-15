@@ -26,4 +26,12 @@ type DatabaseProvider interface {
 	UpdateBookmarkUrl(ctx context.Context, arg dbx.UpdateBookmarkUrlParams) (dbx.Bookmark, error)
 	UpdateBookmarkDescription(ctx context.Context, arg dbx.UpdateBookmarkDescriptionParams) (dbx.Bookmark, error)
 	UpdateBookmarkImage(ctx context.Context, arg dbx.UpdateBookmarkImageParams) (dbx.Bookmark, error)
+
+	CountRecentAnalysisNotes(ctx context.Context, parentID uuid.UUID) (int64, error)
+	CreateAnalysisNote(ctx context.Context, params dbx.CreateAnalysisNoteParams) (dbx.AnalysisNote, error)
+	DeleteAnalysisNote(ctx context.Context, id uuid.UUID) error
+	FetchAnalysisNoteByID(ctx context.Context, id uuid.UUID) (dbx.AnalysisNote, error)
+	FetchAnalysisNotesByIDs(ctx context.Context, ids []uuid.UUID) ([]dbx.AnalysisNote, error)
+	FetchRecentAnalysisNotes(ctx context.Context, parentID uuid.UUID) ([]dbx.AnalysisNote, error)
+	UpdateAnalysisNoteContent(ctx context.Context, arg dbx.UpdateAnalysisNoteContentParams) (dbx.AnalysisNote, error)
 }
