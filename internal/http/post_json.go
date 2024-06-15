@@ -43,10 +43,6 @@ func PostJSON[R any, Q any](ctx context.Context, httpClient Client, url string, 
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != httplib.StatusOK {
-		return response, fmt.Errorf("failed to fetch response. err: %w", ErrRequestFailed)
-	}
-
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return response, fmt.Errorf("failed to read response. err: %w", err)

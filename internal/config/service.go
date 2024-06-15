@@ -26,6 +26,7 @@ func New() (*Service, error) {
 	switch envValues.LLMEngine {
 	case string(llm.EngineTypeGPT3):
 		s.llmEngine = llm.EngineTypeGPT3
+		s.llmKey = envValues.LLMKey
 	default:
 		return nil, fmt.Errorf("invalid LLM engine %s: %w", envValues.LLMEngine, ErrInvalidLLMEngine)
 	}

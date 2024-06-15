@@ -94,6 +94,7 @@ func (s *Service) AskQuestion(ctx context.Context, questionContext string, conve
 
 	headers := map[string]string{
 		"Authorization": "Bearer " + s.apiKey,
+		"Content-Type": "application/json",
 	}
 
 	response, err := http.PostJSON[OpenAIResponse](ctx, httplib.DefaultClient, endpoint, headers, request)
