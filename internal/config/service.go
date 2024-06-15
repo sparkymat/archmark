@@ -1,11 +1,15 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 
 	"github.com/caarlos0/env/v11"
+	"github.com/sparkymat/archmark/internal/providers/llm"
 )
+
+var ErrInvalidLLMEngine = errors.New("invalid LLM engine")
 
 func New() (*Service, error) {
 	var envValues envValues
@@ -15,13 +19,24 @@ func New() (*Service, error) {
 		return nil, fmt.Errorf("failed to load config from env. err: %w", err)
 	}
 
-	return &Service{
+	s := &Service{
 		envValues: envValues,
-	}, nil
+	}
+
+	switch envValues.LLMEngine {
+	case string(llm.EngineTypeGPT3):
+		s.llmEngine = llm.EngineTypeGPT3
+	default:
+		return nil, fmt.Errorf("invalid LLM engine %s: %w", envValues.LLMEngine, ErrInvalidLLMEngine)
+	}
+
+	return s, nil
 }
 
 type Service struct {
 	envValues envValues
+	llmEngine llm.EngineType
+	llmKey    string
 }
 
 type envValues struct {
@@ -39,6 +54,8 @@ type envValues struct {
 	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER"       envDefault:"Remote-Name"`
 	RedisURL                   string `env:"REDIS_URL,required"`
 	StorageFolder              string `env:"STORAGE_FOLDER,required"`
+	LLMEngine                  string `env:"LLM_ENGINE,required"`
+	LLMKey                     string `env:"LLM_KEY"`
 }
 
 func (s *Service) JWTSecret() string {
@@ -102,4 +119,12 @@ func (s *Service) RedisURL() string {
 
 func (s *Service) StorageFolder() string {
 	return s.envValues.StorageFolder
+}
+
+func (s *Service) LLMEngine() llm.EngineType {
+	return s.llmEngine
+}
+
+func (s *Service) LLMKey() string {
+	return s.llmKey
 }
