@@ -48142,7 +48142,7 @@
         p: "sm",
         style: { display: "flex", flexDirection: "column" }
       },
-      /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", gap: "sm", style: { flex: 1 } }, /* @__PURE__ */ import_react196.default.createElement(Title, { order: 4, w: 240 }, "Analysis"), /* @__PURE__ */ import_react196.default.createElement(AnalysisPanel, { notes, createNote: newNoteCreateClicked }))
+      /* @__PURE__ */ import_react196.default.createElement(Flex, { direction: "column", gap: "sm", style: { flex: 1 }, w: 320 }, /* @__PURE__ */ import_react196.default.createElement(Title, { order: 4, w: 240 }, "Analysis"), /* @__PURE__ */ import_react196.default.createElement(AnalysisPanel, { notes, createNote: newNoteCreateClicked }))
     )), /* @__PURE__ */ import_react196.default.createElement(LoadingOverlay, { visible: isLoading }));
   };
 

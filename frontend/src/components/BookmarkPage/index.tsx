@@ -190,7 +190,7 @@ export const BookmarkPage = () => {
           p="sm"
           style={{ display: 'flex', flexDirection: 'column' }}
         >
-          <Flex direction="column" gap="sm" style={{ flex: 1 }}>
+          <Flex direction="column" gap="sm" style={{ flex: 1 }} w={320}>
             <Title order={4} w={240}>
               Analysis
             </Title>
