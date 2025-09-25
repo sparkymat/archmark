@@ -4,8 +4,8 @@
   "main": "src/index.tsx",
   "license": "AGLPv3",
   "scripts": {
-    "build": "esbuild src/index.tsx --bundle --minify --sourcemap --outfile=../public/js/app/index.js",
-    "watch": "esbuild src/index.tsx --bundle --minify --sourcemap --outfile=../public/js/app/index.js --watch",
+    "build": "esbuild src/index.tsx --bundle --minify --sourcemap --outfile=../public/js/app/index.js --public-path=/js/app",
+    "watch": "esbuild src/index.tsx --bundle --minify --sourcemap --outfile=../public/js/app/index.js --watch --public-path=/js/app",
     "lint": "eslint --ext .ts --ext .tsx src",
     "prettier": "prettier -w .",
     "prettier-check": "prettier -c ."
